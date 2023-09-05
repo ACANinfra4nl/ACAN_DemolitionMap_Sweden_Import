@@ -1,4 +1,4 @@
-import { FC, useCallback, useRef } from "react";
+import { FC, useCallback, useRef, useState } from "react";
 import ReactMapGl, {
   MapLayerMouseEvent,
   Source,
@@ -7,6 +7,7 @@ import ReactMapGl, {
   MapRef,
   SymbolLayer,
   MapGeoJSONFeature,
+  Marker,
 } from "react-map-gl/maplibre";
 
 // Include style sheet
@@ -18,23 +19,29 @@ const DOUBLE_CLICK_TIMEOUT = 500;
 
 interface MapProps {
   features: FeatureCollection;
-  onAddMarker: (latLng: Pick<MarkerType, "lat" | "lng">) => void;
+  isAdding: boolean;
+  onAddMarker: (latLng: LatLng) => void;
   onClickFeature: (marker: MapGeoJSONFeature) => void;
   className?: string;
 }
 
 export const Map: FC<MapProps> = ({
   features,
+  isAdding,
   onAddMarker,
   onClickFeature,
   className,
 }) => {
-  const dblClickRef = useRef(false);
+  const [addingMarker, setAddingMarker] = useState<LatLng>();
   const mapRef = useRef<MapRef>(null);
   const handleClickMap: (e: MapLayerMouseEvent) => void = useCallback(
     (e) => {
       e.originalEvent.preventDefault();
-      if (e.features?.length === 1) {
+      if (isAdding) {
+        const coords = { lat: e.lngLat.lat, lng: e.lngLat.lng };
+        setAddingMarker(coords);
+        onAddMarker(coords);
+      } else if (e.features?.length === 1) {
         // clicked an existing building, show info
         console.log("clicked feature", e.features);
         const feature = e.features[0];
@@ -48,19 +55,10 @@ export const Map: FC<MapProps> = ({
           // show info panel for feature
           onClickFeature(feature);
         }
-      } else
-        setTimeout(() => {
-          if (dblClickRef.current) return;
-          onAddMarker({ lat: e.lngLat.lat, lng: e.lngLat.lng });
-        }, DOUBLE_CLICK_TIMEOUT);
+      }
     },
     [onAddMarker]
   );
-  const handleDblClickMap = useCallback((e: MapLayerMouseEvent) => {
-    dblClickRef.current = true;
-    clearSelection();
-    setTimeout(() => (dblClickRef.current = false), DOUBLE_CLICK_TIMEOUT);
-  }, []);
   const clusteredLayerStyle: CircleLayer = {
     id: "cluster",
     source: "annotations",
@@ -109,7 +107,6 @@ export const Map: FC<MapProps> = ({
         mapStyle="https://demotiles.maplibre.org/style.json"
         initialViewState={{ latitude: 59.3293, longitude: 18.0686, zoom: 5 }}
         onClick={handleClickMap}
-        onDblClick={handleDblClickMap}
         ref={mapRef}
         interactiveLayerIds={["cluster", "unclustered-points"]}
       >
@@ -125,6 +122,9 @@ export const Map: FC<MapProps> = ({
           <Layer {...clusterCountLayerStyle} />
           <Layer {...unclusteredLayerStyle} />
         </Source>
+        {isAdding && addingMarker && (
+          <Marker latitude={addingMarker.lat} longitude={addingMarker.lng} />
+        )}
       </ReactMapGl>
     </div>
   );

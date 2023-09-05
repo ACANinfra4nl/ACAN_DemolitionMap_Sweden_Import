@@ -14,6 +14,7 @@ interface MarkerType extends LatLng {
 // }
 
 interface SanityBuilding<T extends LatLng> {
+  _id: string;
   name: string;
   description: string;
   location: T;
