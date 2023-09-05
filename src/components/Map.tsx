@@ -1,5 +1,5 @@
 import { FC, useCallback, useRef } from "react";
-import MapGl, {
+import ReactMapGl, {
   MapLayerMouseEvent,
   Source,
   Layer,
@@ -12,6 +12,9 @@ import MapGl, {
 // Include style sheet
 import "maplibre-gl/dist/maplibre-gl.css";
 import { FeatureCollection } from "geojson";
+import { clearSelection } from "@/lib/clearSelection";
+
+const DOUBLE_CLICK_TIMEOUT = 500;
 
 interface MapProps {
   features: FeatureCollection;
@@ -26,9 +29,11 @@ export const Map: FC<MapProps> = ({
   onClickFeature,
   className,
 }) => {
+  const dblClickRef = useRef(false);
   const mapRef = useRef<MapRef>(null);
   const handleClickMap: (e: MapLayerMouseEvent) => void = useCallback(
     (e) => {
+      e.originalEvent.preventDefault();
       if (e.features?.length === 1) {
         // clicked an existing building, show info
         console.log("clicked feature", e.features);
@@ -43,10 +48,19 @@ export const Map: FC<MapProps> = ({
           // show info panel for feature
           onClickFeature(feature);
         }
-      } else onAddMarker({ lat: e.lngLat.lat, lng: e.lngLat.lng });
+      } else
+        setTimeout(() => {
+          if (dblClickRef.current) return;
+          onAddMarker({ lat: e.lngLat.lat, lng: e.lngLat.lng });
+        }, DOUBLE_CLICK_TIMEOUT);
     },
     [onAddMarker]
   );
+  const handleDblClickMap = useCallback((e: MapLayerMouseEvent) => {
+    dblClickRef.current = true;
+    clearSelection();
+    setTimeout(() => (dblClickRef.current = false), DOUBLE_CLICK_TIMEOUT);
+  }, []);
   const clusteredLayerStyle: CircleLayer = {
     id: "cluster",
     source: "annotations",
@@ -90,11 +104,12 @@ export const Map: FC<MapProps> = ({
 
   return (
     <div className={className}>
-      <MapGl
+      <ReactMapGl
         mapLib={import("maplibre-gl")}
         mapStyle="https://demotiles.maplibre.org/style.json"
         initialViewState={{ latitude: 59.3293, longitude: 18.0686, zoom: 5 }}
         onClick={handleClickMap}
+        onDblClick={handleDblClickMap}
         ref={mapRef}
         interactiveLayerIds={["cluster", "unclustered-points"]}
       >
@@ -110,7 +125,7 @@ export const Map: FC<MapProps> = ({
           <Layer {...clusterCountLayerStyle} />
           <Layer {...unclusteredLayerStyle} />
         </Source>
-      </MapGl>
+      </ReactMapGl>
     </div>
   );
 };

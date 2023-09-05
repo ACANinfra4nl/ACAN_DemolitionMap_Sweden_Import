@@ -35,6 +35,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
             layout: "radio",
           },
         },
+        { name: "image", type: "image", title: "Image" },
       ],
     },
   ],

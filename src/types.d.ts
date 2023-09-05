@@ -18,4 +18,5 @@ interface SanityBuilding<T extends LatLng> {
   description: string;
   location: T;
   state: string;
+  image: { _type: string; asset: { _type: string; _ref: string } };
 }

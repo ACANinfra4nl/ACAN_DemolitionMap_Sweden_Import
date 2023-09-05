@@ -25,7 +25,7 @@ export default function Home() {
     fetchBuildings().then((b) =>
       setFeatures({
         type: "FeatureCollection",
-        features: b.map(buildingToFeature),
+        features: b,
       })
     );
   }, []);
@@ -57,7 +57,7 @@ export default function Home() {
     () => setSelectedFeature(undefined),
     []
   );
-  console.log(features);
+  console.log(selectedFeature);
   return (
     <main className="min-h-screen w-full grid grid-cols-2 grid-rows-1">
       <Map
@@ -71,6 +71,7 @@ export default function Home() {
           <DetailsPanel
             name={selectedFeature.properties.name}
             description={selectedFeature.properties.description}
+            image={selectedFeature.properties.image}
             onClose={clearSelectedFeature}
           />
         </div>

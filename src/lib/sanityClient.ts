@@ -5,7 +5,7 @@ const client = createClient({
   apiVersion: process.env.NEXT_PUBLIC_SANITY_API_VERSION,
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
   token: process.env.SANITY_AUTH_TOKEN,
-  useCdn: false,
+  useCdn: true,
 });
 
 export { client };

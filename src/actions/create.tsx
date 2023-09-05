@@ -3,10 +3,13 @@
 import { buildingToFeature } from "@/lib/buildingToFeature";
 import { client } from "@/lib/sanityClient";
 import { revalidateTag } from "next/cache";
+import imageUrlBuilder from "@sanity/image-url";
 
 export const create = async (formData: FormData) => {
   //   TODO: validate input!
   // save info from form
+  const formImage = formData.get("image") as File;
+  const imageAsset = await client.assets.upload("image", formImage);
   const createdBuilding = await client.create(
     {
       _type: "building",
@@ -18,11 +21,19 @@ export const create = async (formData: FormData) => {
         lng: Number(formData.get("lng")),
       },
       state: "threatened", // TODO: add to form
+      image: {
+        _type: "image",
+        asset: {
+          _type: "reference",
+          _ref: imageAsset._id,
+        },
+      },
     },
     { returnDocuments: true }
   );
+
   // TODO: handle errors
   // invalidate cache
   revalidateTag("buildings");
-  return buildingToFeature(createdBuilding);
+  return buildingToFeature(createdBuilding, imageUrlBuilder(client));
 };

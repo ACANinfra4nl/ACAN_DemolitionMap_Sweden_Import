@@ -15,6 +15,17 @@ export const NewFeatureForm: FC<NewFeatureFormProps> = ({
     <input type="hidden" name="lat" value={latLng.lat} />
     <input type="hidden" name="lng" value={latLng.lng} />
     <div className="mb-4">
+      <label htmlFor="image" className="block">
+        Image
+      </label>
+      <input
+        type="file"
+        name="image"
+        id="image"
+        accept="image/jpeg, image/png"
+      />
+    </div>
+    <div className="mb-4">
       <label htmlFor="name" className="block">
         Name
       </label>
