@@ -4,29 +4,29 @@ import { DetailsPanel } from "@/components/DetailsPanel";
 import { Map } from "@/components/Map";
 import { Navigation } from "@/components/Navigation";
 import { NewFeatureForm } from "@/components/NewFeatureForm";
-import { fetchBuildings } from "@/lib/fetchBuildings";
 import { appendFeature } from "@/lib/geo";
+import {
+  ACTIONS,
+  BuildingsContext,
+  BuildingsDispatchContext,
+} from "@/state/buildings";
 import classNames from "classnames";
-import { FeatureCollection } from "geojson";
 import { MapGeoJSONFeature } from "maplibre-gl";
-import { MouseEventHandler, useCallback, useEffect, useState } from "react";
+import {
+  MouseEventHandler,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 export default function MapPage() {
   const [selectedFeature, setSelectedFeature] = useState<MapGeoJSONFeature>();
   const [isAdding, setIsAdding] = useState(false);
   const [addingLocation, setAddingLocation] = useState<LatLng>();
-  const [features, setFeatures] = useState<FeatureCollection>({
-    type: "FeatureCollection",
-    features: [],
-  });
-  useEffect(() => {
-    fetchBuildings().then((b) =>
-      setFeatures({
-        type: "FeatureCollection",
-        features: b,
-      })
-    );
-  }, []);
+  const features = useContext(BuildingsContext);
+  const dispatch = useContext(BuildingsDispatchContext);
+
   const handleAddMarker = useCallback((latLng: LatLng) => {
     // show popup with form
     setAddingLocation(latLng);
@@ -41,7 +41,7 @@ export default function MapPage() {
 
     console.log(feature);
     // add new marker
-    setFeatures((old) => appendFeature(old, feature));
+    dispatch({ type: ACTIONS.ADD_BUILDING, payload: feature });
     setAddingLocation(undefined);
     setIsAdding(false);
   }, []);

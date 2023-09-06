@@ -4,7 +4,7 @@ import { type ImageUrlBuilder } from "sanity";
 export const buildingToFeature = <T extends LatLng>(
   building: SanityBuilding<T>,
   imageUrlBuilder: ImageUrlBuilder
-): Feature<Point> => ({
+): Feature<Point, FeatureBuilding> => ({
   type: "Feature",
   geometry: {
     type: "Point",

@@ -9,7 +9,10 @@ export const create = async (formData: FormData) => {
   //   TODO: validate input!
   // save info from form
   const formImage = formData.get("image") as File;
-  const imageAsset = await client.assets.upload("image", formImage);
+  const imageAsset =
+    formImage && formImage.size > 0
+      ? await client.assets.upload("image", formImage)
+      : undefined;
   const createdBuilding = await client.create(
     {
       _type: "building",
@@ -21,13 +24,15 @@ export const create = async (formData: FormData) => {
         lng: Number(formData.get("lng")),
       },
       state: "threatened", // TODO: add to form
-      image: {
-        _type: "image",
-        asset: {
-          _type: "reference",
-          _ref: imageAsset._id,
-        },
-      },
+      image: imageAsset
+        ? {
+            _type: "image",
+            asset: {
+              _type: "reference",
+              _ref: imageAsset._id,
+            },
+          }
+        : undefined,
     },
     { returnDocuments: true }
   );

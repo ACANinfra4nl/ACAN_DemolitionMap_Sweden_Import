@@ -19,5 +19,14 @@ interface SanityBuilding<T extends LatLng> {
   description: string;
   location: T;
   state: string;
-  image: { _type: string; asset: { _type: string; _ref: string } };
+  image?: { _type: string; asset: { _type: string; _ref: string } };
+}
+
+interface FeatureBuilding {
+  _id: string;
+  name: string;
+  description: string;
+  location: LatLng;
+  state: string;
+  image?: string;
 }

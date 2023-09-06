@@ -1,27 +1,29 @@
 "use client";
 import { Navigation } from "@/components/Navigation";
 import { fetchBuildings } from "@/lib/fetchBuildings";
+import { BuildingsContext } from "@/state/buildings";
 import classNames from "classnames";
 import type { Feature, Point } from "geojson";
 import Link from "next/link";
-import { ChangeEventHandler, useCallback, useEffect, useState } from "react";
+import {
+  ChangeEventHandler,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 const matchesIgnoreCase = (haystack: string, needle: string) =>
   haystack.toLowerCase().includes(needle.toLowerCase());
 
 const filterBuildings =
-  (filter: string) => (feature: Feature<Point, SanityBuilding<LatLng>>) =>
+  (filter: string) => (feature: Feature<Point, FeatureBuilding>) =>
     matchesIgnoreCase(feature.properties.name, filter) ||
     matchesIgnoreCase(feature.properties.description, filter);
 
 export default function ListPage() {
   const [filter, setFilter] = useState("");
-  const [buildings, setBuildings] = useState<
-    Awaited<ReturnType<typeof fetchBuildings>>
-  >([]);
-  useEffect(() => {
-    fetchBuildings().then(setBuildings);
-  }, []);
+  const buildings = useContext(BuildingsContext);
   const handleFilterChange: ChangeEventHandler<HTMLInputElement> = useCallback(
     (e) => {
       const value = e.target.value;
@@ -45,15 +47,17 @@ export default function ListPage() {
           />
         </div>
         <ul>
-          {buildings.filter(filterBuildings(filter)).map((building) => (
-            <li key={building.properties._id} className="mb-2">
-              <details>
-                <summary>{building.properties.name}</summary>
+          {buildings.features
+            .filter(filterBuildings(filter))
+            .map((building) => (
+              <li key={building.properties._id} className="mb-2">
+                <details>
+                  <summary>{building.properties.name}</summary>
 
-                <pre>{JSON.stringify(building.properties, null, 2)}</pre>
-              </details>
-            </li>
-          ))}
+                  <pre>{JSON.stringify(building.properties, null, 2)}</pre>
+                </details>
+              </li>
+            ))}
         </ul>
       </main>
     </>
