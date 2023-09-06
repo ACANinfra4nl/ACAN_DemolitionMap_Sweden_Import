@@ -35,7 +35,7 @@ export const NewFeatureForm: FC<NewFeatureFormProps> = ({
         name="name"
         required
         autoComplete="false"
-        className="border border-gray-200 w-full p-2"
+        className="border border-gray-200 w-full px-2 py-2"
       />
     </div>
     <div className="mb-4">
@@ -48,7 +48,7 @@ export const NewFeatureForm: FC<NewFeatureFormProps> = ({
         rows={10}
         required
         autoComplete="false"
-        className="border border-gray-200 w-full p-2"
+        className="border border-gray-200 w-full px-2 py-2"
       ></textarea>
     </div>
     <div className="flex justify-between">

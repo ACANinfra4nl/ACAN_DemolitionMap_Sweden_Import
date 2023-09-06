@@ -20,6 +20,7 @@ const DOUBLE_CLICK_TIMEOUT = 500;
 interface MapProps {
   features: FeatureCollection;
   isAdding: boolean;
+  addingLocation?: LatLng;
   onAddMarker: (latLng: LatLng) => void;
   onClickFeature: (marker: MapGeoJSONFeature) => void;
   className?: string;
@@ -28,22 +29,21 @@ interface MapProps {
 export const Map: FC<MapProps> = ({
   features,
   isAdding,
+  addingLocation,
   onAddMarker,
   onClickFeature,
   className,
 }) => {
-  const [addingMarker, setAddingMarker] = useState<LatLng>();
   const mapRef = useRef<MapRef>(null);
   const handleClickMap: (e: MapLayerMouseEvent) => void = useCallback(
     (e) => {
-      e.originalEvent.preventDefault();
+      e.preventDefault();
       if (isAdding) {
         const coords = { lat: e.lngLat.lat, lng: e.lngLat.lng };
-        setAddingMarker(coords);
         onAddMarker(coords);
+        mapRef.current?.flyTo({ center: coords });
       } else if (e.features?.length === 1) {
         // clicked an existing building, show info
-        console.log("clicked feature", e.features);
         const feature = e.features[0];
         if (feature.properties.cluster === true) {
           // clicked cluster, zoom in
@@ -57,7 +57,7 @@ export const Map: FC<MapProps> = ({
         }
       }
     },
-    [onAddMarker]
+    [isAdding, onAddMarker]
   );
   const clusteredLayerStyle: CircleLayer = {
     id: "cluster",
@@ -122,8 +122,11 @@ export const Map: FC<MapProps> = ({
           <Layer {...clusterCountLayerStyle} />
           <Layer {...unclusteredLayerStyle} />
         </Source>
-        {isAdding && addingMarker && (
-          <Marker latitude={addingMarker.lat} longitude={addingMarker.lng} />
+        {addingLocation && (
+          <Marker
+            latitude={addingLocation.lat}
+            longitude={addingLocation.lng}
+          />
         )}
       </ReactMapGl>
     </div>

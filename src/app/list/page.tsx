@@ -1,6 +1,9 @@
 "use client";
+import { Navigation } from "@/components/Navigation";
 import { fetchBuildings } from "@/lib/fetchBuildings";
+import classNames from "classnames";
 import type { Feature, Point } from "geojson";
+import Link from "next/link";
 import { ChangeEventHandler, useCallback, useEffect, useState } from "react";
 
 const matchesIgnoreCase = (haystack: string, needle: string) =>
@@ -19,7 +22,7 @@ export default function ListPage() {
   useEffect(() => {
     fetchBuildings().then(setBuildings);
   }, []);
-  const handleChange: ChangeEventHandler<HTMLInputElement> = useCallback(
+  const handleFilterChange: ChangeEventHandler<HTMLInputElement> = useCallback(
     (e) => {
       const value = e.target.value;
       setFilter(value);
@@ -28,20 +31,31 @@ export default function ListPage() {
   );
 
   return (
-    <main className="p-4">
-      <div>
-        <label>
-          Filter
-          <input onChange={handleChange} />
-        </label>
-      </div>
-      <ul>
-        {buildings.filter(filterBuildings(filter)).map((building) => (
-          <li key={building.properties._id} className="mb-2">
-            {building.properties.name}
-          </li>
-        ))}
-      </ul>
-    </main>
+    <>
+      <Navigation />
+      <main className="p-4">
+        <div className="mb-4 flex gap-2 items-center">
+          <label htmlFor="filter">Filter</label>
+          <input
+            id="filter"
+            type="text"
+            name="filter"
+            className="border border-gray-200 flex-grow px-2 py-1"
+            onChange={handleFilterChange}
+          />
+        </div>
+        <ul>
+          {buildings.filter(filterBuildings(filter)).map((building) => (
+            <li key={building.properties._id} className="mb-2">
+              <details>
+                <summary>{building.properties.name}</summary>
+
+                <pre>{JSON.stringify(building.properties, null, 2)}</pre>
+              </details>
+            </li>
+          ))}
+        </ul>
+      </main>
+    </>
   );
 }

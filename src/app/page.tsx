@@ -1,16 +1,9 @@
-import Link from "next/link";
+import { Navigation } from "@/components/Navigation";
 
 export default function HomePage() {
   return (
     <main>
-      <ul>
-        <li>
-          <Link href="/map">Map</Link>
-        </li>
-        <li>
-          <Link href="/list">List</Link>
-        </li>
-      </ul>
+      <Navigation />
     </main>
   );
 }
