@@ -1,4 +1,4 @@
-import type { Feature, FeatureCollection } from "geojson";
+/// <reference types="geojson" />
 
 interface LatLng {
   lat: number;
@@ -56,5 +56,8 @@ interface ReverseGeocodeResult {
   city: string;
 }
 
-type BuildingFeature = Feature<Point, FeatureBuilding>;
-type BuildingCollection = FeatureCollection<Point, FeatureBuilding>;
+type BuildingFeature = GeoJSON.Feature<GeoJSON.Point, FeatureBuilding>;
+type BuildingCollection = GeoJSON.FeatureCollection<
+  GeoJSON.Point,
+  FeatureBuilding
+>;

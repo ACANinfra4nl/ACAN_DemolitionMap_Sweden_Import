@@ -4,7 +4,6 @@ import { DetailsPanel } from "@/components/DetailsPanel";
 import { Map } from "@/components/Map";
 import { Navigation } from "@/components/Navigation";
 import { NewFeatureForm } from "@/components/NewFeatureForm";
-import { appendFeature } from "@/lib/geo";
 import {
   ACTIONS,
   BuildingsContext,
@@ -12,14 +11,7 @@ import {
 } from "@/state/buildings";
 import classNames from "classnames";
 import { Feature, Point } from "geojson";
-import { MapGeoJSONFeature } from "maplibre-gl";
-import {
-  MouseEventHandler,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { MouseEventHandler, useCallback, useContext, useState } from "react";
 
 export default function MapPage() {
   const [selectedFeature, setSelectedFeature] =
@@ -41,7 +33,6 @@ export default function MapPage() {
     // save info from form
     const feature = await create(formData);
 
-    console.log(feature);
     // add new marker
     dispatch({ type: ACTIONS.ADD_BUILDING, payload: feature });
     setAddingLocation(undefined);
@@ -60,7 +51,7 @@ export default function MapPage() {
       e.stopPropagation();
       setIsAdding(true);
     }, []);
-  console.log(selectedFeature, isAdding, addingLocation);
+
   return (
     <main className="min-h-screen w-full grid grid-cols-2 grid-rows-1">
       <div className="absolute top-0 left-0 z-10">

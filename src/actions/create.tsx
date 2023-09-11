@@ -76,6 +76,5 @@ export const create = async (formData: FormData) => {
 
   // TODO: handle errors
   // invalidate cache
-  revalidateTag("buildings");
-  return buildingToFeature(createdBuilding, imageUrlBuilder(client));
+  return buildingToFeature(createdBuilding);
 };

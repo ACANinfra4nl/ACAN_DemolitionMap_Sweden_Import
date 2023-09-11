@@ -8,13 +8,7 @@ export const Navigation: FC = () => {
   const path = usePathname();
   return (
     <nav className="flex">
-      <Link
-        className={classNames(
-          "p-4",
-          !path.includes("/karta") && !path.includes("/lista") && "underline"
-        )}
-        href="/"
-      >
+      <Link className={classNames("p-4", path === "/" && "underline")} href="/">
         Hem
       </Link>
       <Link
@@ -28,6 +22,12 @@ export const Navigation: FC = () => {
         href="/lista"
       >
         Lista
+      </Link>
+      <Link
+        className={classNames("p-4", path.includes("/manifest") && "underline")}
+        href="/manifest"
+      >
+        Manifest
       </Link>
     </nav>
   );

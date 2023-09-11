@@ -9,7 +9,6 @@ import ReactMapGl, {
   Marker,
 } from "react-map-gl/maplibre";
 import { Feature, FeatureCollection, Point } from "geojson";
-import type { FeatureBuilding, LatLng } from "@/types";
 
 // Include style sheet
 import "maplibre-gl/dist/maplibre-gl.css";

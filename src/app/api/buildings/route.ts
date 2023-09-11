@@ -29,17 +29,9 @@ export async function GET(request: NextRequest) {
     undefined,
     { perspective: "published" }
   );
-  console.log(
-    JSON.stringify(
-      buildings.map((b) => b.images),
-      null,
-      2
-    )
-  );
+
   // transform to features
-  const builder = imageUrlBuilder(client);
-  const features = buildings.map((b) => buildingToFeature(b, builder));
-  console.log(JSON.stringify(features, null, 2));
+  const features = buildings.map((b) => buildingToFeature(b));
 
   // return
   return NextResponse.json(features);

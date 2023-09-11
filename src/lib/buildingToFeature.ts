@@ -1,9 +1,8 @@
 import { Feature, Point } from "geojson";
-import { type ImageUrlBuilder } from "sanity";
+import { urlForImage } from "../../sanity/lib/image";
 
 export const buildingToFeature = <T extends LatLng>(
-  building: SanityBuilding<T>,
-  imageUrlBuilder: ImageUrlBuilder
+  building: SanityBuilding<T>
 ): Feature<Point, FeatureBuilding> => ({
   type: "Feature",
   geometry: {
@@ -13,11 +12,7 @@ export const buildingToFeature = <T extends LatLng>(
   properties: {
     ...building,
     images: building.images
-      ?.map((image) =>
-        image.asset?._ref
-          ? imageUrlBuilder.image(image.asset?._ref).url()
-          : undefined
-      )
+      ?.map((image) => urlForImage(image).url())
       .filter(Boolean) as string[],
   },
 });

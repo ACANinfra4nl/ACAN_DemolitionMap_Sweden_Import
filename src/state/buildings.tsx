@@ -1,6 +1,5 @@
 "use client";
 import { fetchBuildings } from "@/lib/fetchBuildings";
-import type { BuildingCollection, BuildingFeature } from "@/types";
 import {
   Dispatch,
   FC,

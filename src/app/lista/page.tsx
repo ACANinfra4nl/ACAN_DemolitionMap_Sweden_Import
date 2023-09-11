@@ -1,7 +1,6 @@
 "use client";
 import { Navigation } from "@/components/Navigation";
 import { BuildingsContext } from "@/state/buildings";
-import { BuildingFeature } from "@/types";
 import classNames from "classnames";
 import type { Feature, Point } from "geojson";
 import Link from "next/link";
