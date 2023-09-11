@@ -1,6 +1,6 @@
 "use client";
 import { fetchBuildings } from "@/lib/fetchBuildings";
-import { Feature, FeatureCollection, Point } from "geojson";
+import type { BuildingCollection, BuildingFeature } from "@/types";
 import {
   Dispatch,
   FC,
@@ -10,9 +10,6 @@ import {
   useEffect,
   useReducer,
 } from "react";
-
-type BuildingFeature = Feature<Point, FeatureBuilding>;
-type BuildingCollection = FeatureCollection<Point, FeatureBuilding>;
 
 const INITIAL_STATE: BuildingCollection = {
   type: "FeatureCollection",
@@ -50,7 +47,7 @@ const reducer: Reducer<BuildingCollection, Action> = (
 };
 
 export const BuildingsContext =
-  createContext<typeof INITIAL_STATE>(INITIAL_STATE); // ts-ignore-line
+  createContext<BuildingCollection>(INITIAL_STATE); // ts-ignore-line
 export const BuildingsDispatchContext = createContext<Dispatch<Action>>(
   () => null
 );

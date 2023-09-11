@@ -1,3 +1,5 @@
+import { Feature, FeatureCollection } from "geojson";
+
 interface LatLng {
   lat: number;
   lng: number;
@@ -53,3 +55,6 @@ interface ReverseGeocodeResult {
   postcode: string;
   city: string;
 }
+
+type BuildingFeature = Feature<Point, FeatureBuilding>;
+type BuildingCollection = FeatureCollection<Point, FeatureBuilding>;
