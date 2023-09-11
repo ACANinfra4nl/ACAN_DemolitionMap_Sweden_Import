@@ -6,6 +6,7 @@ const client = createClient({
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
   token: process.env.SANITY_AUTH_TOKEN,
   useCdn: true,
+  //   perspective: "published", // TODO: should depend on whether this is preview mode?
 });
 
 export { client };

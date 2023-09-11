@@ -12,8 +12,12 @@ export const buildingToFeature = <T extends LatLng>(
   },
   properties: {
     ...building,
-    image: building.image?.asset?._ref
-      ? imageUrlBuilder.image(building.image?.asset?._ref).url()
-      : undefined,
+    images: building.images
+      ?.map((image) =>
+        image.asset?._ref
+          ? imageUrlBuilder.image(image.asset?._ref).url()
+          : undefined
+      )
+      .filter(Boolean) as string[],
   },
 });

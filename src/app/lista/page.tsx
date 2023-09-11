@@ -13,13 +13,16 @@ import {
   useState,
 } from "react";
 
-const matchesIgnoreCase = (haystack: string, needle: string) =>
-  haystack.toLowerCase().includes(needle.toLowerCase());
+const matchesIgnoreCase = (haystack: string | undefined, needle: string) =>
+  haystack?.toLowerCase().includes(needle.toLowerCase());
 
 const filterBuildings =
   (filter: string) => (feature: Feature<Point, FeatureBuilding>) =>
-    matchesIgnoreCase(feature.properties.name, filter) ||
-    matchesIgnoreCase(feature.properties.description, filter);
+    matchesIgnoreCase(feature.properties.description, filter) ||
+    matchesIgnoreCase(feature.properties.demolitionCause, filter) ||
+    matchesIgnoreCase(feature.properties.address, filter) ||
+    matchesIgnoreCase(feature.properties.city, filter) ||
+    matchesIgnoreCase(feature.properties.category, filter);
 
 export default function ListPage() {
   const [filter, setFilter] = useState("");
@@ -27,7 +30,7 @@ export default function ListPage() {
   const handleFilterChange: ChangeEventHandler<HTMLInputElement> = useCallback(
     (e) => {
       const value = e.target.value;
-      setFilter(value);
+      setFilter(value.trim());
     },
     []
   );
@@ -51,11 +54,7 @@ export default function ListPage() {
             .filter(filterBuildings(filter))
             .map((building) => (
               <li key={building.properties._id} className="mb-2">
-                <details>
-                  <summary>{building.properties.name}</summary>
-
-                  <pre>{JSON.stringify(building.properties, null, 2)}</pre>
-                </details>
+                <pre>{JSON.stringify(building.properties, null, 2)}</pre>
               </li>
             ))}
         </ul>

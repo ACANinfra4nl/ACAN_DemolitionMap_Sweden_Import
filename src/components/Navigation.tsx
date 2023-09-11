@@ -11,23 +11,23 @@ export const Navigation: FC = () => {
       <Link
         className={classNames(
           "p-4",
-          !path.includes("/map") && !path.includes("/list") && "underline"
+          !path.includes("/karta") && !path.includes("/lista") && "underline"
         )}
         href="/"
       >
-        Home
+        Hem
       </Link>
       <Link
-        className={classNames("p-4", path.includes("/map") && "underline")}
-        href="/map"
+        className={classNames("p-4", path.includes("/karta") && "underline")}
+        href="/karta"
       >
-        Map
+        Karta
       </Link>
       <Link
-        className={classNames("p-4", path.includes("/list") && "underline")}
-        href="/list"
+        className={classNames("p-4", path.includes("/lista") && "underline")}
+        href="/lista"
       >
-        List
+        Lista
       </Link>
     </nav>
   );

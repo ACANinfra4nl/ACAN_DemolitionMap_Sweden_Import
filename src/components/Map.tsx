@@ -12,7 +12,7 @@ import ReactMapGl, {
 
 // Include style sheet
 import "maplibre-gl/dist/maplibre-gl.css";
-import { FeatureCollection } from "geojson";
+import { Feature, FeatureCollection, Point } from "geojson";
 import { clearSelection } from "@/lib/clearSelection";
 
 const DOUBLE_CLICK_TIMEOUT = 500;
@@ -22,7 +22,7 @@ interface MapProps {
   isAdding: boolean;
   addingLocation?: LatLng;
   onAddMarker: (latLng: LatLng) => void;
-  onClickFeature: (marker: MapGeoJSONFeature) => void;
+  onClickFeature: (id: string) => void;
   className?: string;
 }
 
@@ -53,7 +53,10 @@ export const Map: FC<MapProps> = ({
           });
         } else {
           // show info panel for feature
-          onClickFeature(feature);
+          onClickFeature(
+            (feature as unknown as Feature<Point, FeatureBuilding>).properties
+              ._id
+          );
         }
       }
     },

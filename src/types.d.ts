@@ -3,30 +3,53 @@ interface LatLng {
   lng: number;
 }
 
-interface MarkerType extends LatLng {
-  id: number;
-}
-
-// interface GeoJson<T extends Record<string, unknown>> {
-//   type: "Feature";
-//   geometry: { type: "Point"; coordinates: [number, number] };
-//   properties: T;
-// }
-
 interface SanityBuilding<T extends LatLng> {
   _id: string;
-  name: string;
-  description: string;
   location: T;
+  category: string;
   state: string;
-  image?: { _type: string; asset: { _type: string; _ref: string } };
+  address?: string;
+  postcode?: string;
+  city?: string;
+  blockName?: string;
+  propertyDesignation?: string;
+  size?: number;
+  boundCO2?: number;
+  architect?: string;
+  propertyOwner?: string;
+  buildYear: number;
+  demolitionYear: number;
+  description: string;
+  demolitionCause: string;
+  images?: {
+    _type: string;
+    asset: { _type: string; _ref: string; url?: string };
+  }[];
 }
 
 interface FeatureBuilding {
   _id: string;
-  name: string;
-  description: string;
   location: LatLng;
+  category: string;
   state: string;
-  image?: string;
+  address?: string;
+  postcode?: string;
+  city?: string;
+  blockName?: string;
+  propertyDesignation?: string;
+  size?: number;
+  boundCO2?: number;
+  architect?: string;
+  propertyOwner?: string;
+  buildYear: number;
+  demolitionYear: number;
+  description: string;
+  demolitionCause: string;
+  images?: string[];
+}
+
+interface ReverseGeocodeResult {
+  address: string;
+  postcode: string;
+  city: string;
 }

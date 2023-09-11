@@ -11,6 +11,7 @@ import {
   BuildingsDispatchContext,
 } from "@/state/buildings";
 import classNames from "classnames";
+import { Feature, Point } from "geojson";
 import { MapGeoJSONFeature } from "maplibre-gl";
 import {
   MouseEventHandler,
@@ -21,7 +22,8 @@ import {
 } from "react";
 
 export default function MapPage() {
-  const [selectedFeature, setSelectedFeature] = useState<MapGeoJSONFeature>();
+  const [selectedFeature, setSelectedFeature] =
+    useState<Feature<Point, FeatureBuilding>>();
   const [isAdding, setIsAdding] = useState(false);
   const [addingLocation, setAddingLocation] = useState<LatLng>();
   const features = useContext(BuildingsContext);
@@ -45,13 +47,10 @@ export default function MapPage() {
     setAddingLocation(undefined);
     setIsAdding(false);
   }, []);
-  const handleClickMarker: (feature: MapGeoJSONFeature) => void = useCallback(
-    (feature) => {
-      console.log("clicked feature", feature.properties);
-      setSelectedFeature(feature);
-    },
-    []
-  );
+  const handleClickFeature: (id: string) => void = useCallback((id) => {
+    const feature = features.features.find((f) => f.properties._id === id);
+    setSelectedFeature(feature);
+  }, []);
   const clearSelectedFeature = useCallback(
     () => setSelectedFeature(undefined),
     []
@@ -81,14 +80,12 @@ export default function MapPage() {
         isAdding={isAdding}
         addingLocation={addingLocation}
         onAddMarker={handleAddMarker}
-        onClickFeature={handleClickMarker}
+        onClickFeature={handleClickFeature}
       />
       {selectedFeature && (
         <div className="col-span-1 col-start-1 row-start-1 z-10 relative grid">
           <DetailsPanel
-            name={selectedFeature.properties.name}
-            description={selectedFeature.properties.description}
-            image={selectedFeature.properties.image}
+            properties={selectedFeature.properties}
             onClose={clearSelectedFeature}
           />
         </div>
