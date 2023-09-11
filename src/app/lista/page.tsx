@@ -83,30 +83,38 @@ export default function ListPage() {
     <>
       <Navigation />
       <main className="p-4">
-        <div className="mb-4 flex gap-2 items-center">
-          <label htmlFor="filter">Filtrera</label>
-          <input
-            id="filter"
-            type="text"
-            name="filter"
-            className="border border-gray-200 flex-grow px-2 py-1"
-            onChange={handleFilterChange}
-          />
-        </div>
-        <div className="mb-4 flex gap-2">
-          <span>Sortera</span>{" "}
-          <button onClick={handleSortBy("buildYear")}>
-            Byggår
-            <SortArrow
-              descending={sortBy === "buildYear" ? sortDesc : undefined}
+        <div className="flex gap-4 items-center w-full">
+          <div className="mb-4 flex gap-2 items-center flex-grow">
+            <label htmlFor="filter">Filtrera</label>
+            <input
+              id="filter"
+              type="text"
+              name="filter"
+              className="border border-gray-200 flex-grow px-2 py-1"
+              onChange={handleFilterChange}
             />
-          </button>{" "}
-          <button onClick={handleSortBy("demolitionYear")}>
-            Rivningsår
-            <SortArrow
-              descending={sortBy === "demolitionYear" ? sortDesc : undefined}
-            />
-          </button>
+          </div>
+          <div className="mb-4 flex gap-2">
+            <span>Sortera</span>{" "}
+            <button
+              onClick={handleSortBy("buildYear")}
+              className={classNames(sortBy === "buildYear" && "underline")}
+            >
+              Byggår
+              <SortArrow
+                descending={sortBy === "buildYear" ? sortDesc : undefined}
+              />
+            </button>{" "}
+            <button
+              onClick={handleSortBy("demolitionYear")}
+              className={classNames(sortBy === "demolitionYear" && "underline")}
+            >
+              Rivningsår
+              <SortArrow
+                descending={sortBy === "demolitionYear" ? sortDesc : undefined}
+              />
+            </button>
+          </div>
         </div>
         {buildings.loading ? (
           <span>Loading&hellip;</span>
