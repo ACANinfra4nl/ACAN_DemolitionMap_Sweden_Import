@@ -7,6 +7,7 @@ import type { Feature, Point } from "geojson";
 import Link from "next/link";
 import {
   ChangeEventHandler,
+  FC,
   MouseEvent,
   useCallback,
   useContext,
@@ -38,11 +39,27 @@ const SORTERS = {
   demolitionYear: demolitionYearSorter,
 };
 
+const StateIndicator: FC<{ state: string }> = ({ state }) => (
+  <div
+    className={classNames("rounded-full w-4 h-4", {
+      "bg-yellow-400": state === "hotad",
+      "bg-green-500": state === "räddad",
+      "bg-red-600": state === "riven",
+    })}
+  />
+);
+
+const SortArrow: FC<{ descending?: boolean }> = ({ descending }) => (
+  <span className="inline-block w-4 text-center">
+    {typeof descending === "boolean" && (descending ? "↓" : "↑")}
+  </span>
+);
+
 export default function ListPage() {
   const [filter, setFilter] = useState("");
   const buildings = useContext(BuildingsContext);
   const [sortBy, setSortBy] = useState<keyof typeof SORTERS>("buildYear");
-  const [sortDir, setSortDir] = useState(false);
+  const [sortDesc, setSortDesc] = useState(false);
   const handleFilterChange: ChangeEventHandler<HTMLInputElement> = useCallback(
     (e) => {
       const value = e.target.value;
@@ -52,15 +69,15 @@ export default function ListPage() {
   );
 
   const handleSortBy = (key: keyof typeof SORTERS) => (e: MouseEvent) => {
-    if (sortBy === key) setSortDir((old) => !old);
-    else setSortDir(false);
+    if (sortBy === key) setSortDesc((old) => !old);
+    else setSortDesc(false);
     setSortBy(key);
   };
 
   let rows = buildings.features
     .filter(filterBuildings(filter))
     .sort(SORTERS[sortBy]);
-  if (sortDir) rows.reverse();
+  if (sortDesc) rows.reverse();
 
   return (
     <>
@@ -80,28 +97,37 @@ export default function ListPage() {
           <span>Sortera</span>{" "}
           <button onClick={handleSortBy("buildYear")}>
             Byggår
-            {sortBy === "buildYear" &&
-              (sortDir ? <span>↓</span> : <span>↑</span>)}
+            <SortArrow
+              descending={sortBy === "buildYear" ? sortDesc : undefined}
+            />
           </button>{" "}
           <button onClick={handleSortBy("demolitionYear")}>
             Rivningsår
-            {sortBy === "demolitionYear" &&
-              (sortDir ? <span>↓</span> : <span>↑</span>)}
+            <SortArrow
+              descending={sortBy === "demolitionYear" ? sortDesc : undefined}
+            />
           </button>
         </div>
-        <ul>
-          {rows.map((building) => (
-            <li key={building.properties._id} className="mb-2">
-              <details>
-                <summary>
-                  {building.properties.address}, {building.properties.postcode}{" "}
-                  {building.properties.city}
-                </summary>
-                <pre>{JSON.stringify(building.properties, null, 2)}</pre>
-              </details>
-            </li>
-          ))}
-        </ul>
+        {buildings.loading ? (
+          <span>Loading&hellip;</span>
+        ) : (
+          <ul>
+            {rows.map((building) => (
+              <li key={building.properties._id} className="mb-2">
+                <details>
+                  <summary className="flex gap-2 items-center">
+                    <StateIndicator state={building.properties.state} />{" "}
+                    <span>
+                      {building.properties.address},{" "}
+                      {building.properties.postcode} {building.properties.city}
+                    </span>
+                  </summary>
+                  <pre>{JSON.stringify(building.properties, null, 2)}</pre>
+                </details>
+              </li>
+            ))}
+          </ul>
+        )}
       </main>
     </>
   );

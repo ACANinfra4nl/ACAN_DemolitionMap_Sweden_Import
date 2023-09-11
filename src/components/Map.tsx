@@ -1,4 +1,4 @@
-import { FC, useCallback, useRef, useState } from "react";
+import { FC, useCallback, useRef } from "react";
 import ReactMapGl, {
   MapLayerMouseEvent,
   Source,
@@ -6,14 +6,13 @@ import ReactMapGl, {
   CircleLayer,
   MapRef,
   SymbolLayer,
-  MapGeoJSONFeature,
   Marker,
 } from "react-map-gl/maplibre";
+import { Feature, FeatureCollection, Point } from "geojson";
+import type { FeatureBuilding, LatLng } from "@/types";
 
 // Include style sheet
 import "maplibre-gl/dist/maplibre-gl.css";
-import { Feature, FeatureCollection, Point } from "geojson";
-import { clearSelection } from "@/lib/clearSelection";
 
 const DOUBLE_CLICK_TIMEOUT = 500;
 

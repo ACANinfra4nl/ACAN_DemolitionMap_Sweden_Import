@@ -1,4 +1,4 @@
-import { Feature, FeatureCollection } from "geojson";
+import type { Feature, FeatureCollection } from "geojson";
 
 interface LatLng {
   lat: number;

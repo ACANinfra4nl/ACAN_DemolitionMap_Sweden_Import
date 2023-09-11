@@ -11,9 +11,10 @@ import {
   useReducer,
 } from "react";
 
-const INITIAL_STATE: BuildingCollection = {
+const INITIAL_STATE: BuildingCollection & { loading: boolean } = {
   type: "FeatureCollection",
   features: [],
+  loading: true,
 };
 
 export const enum ACTIONS {
@@ -31,23 +32,24 @@ interface ADD_BUILDING_ACTION {
 }
 type Action = SET_BUILDINGS_ACTION | ADD_BUILDING_ACTION;
 
-const reducer: Reducer<BuildingCollection, Action> = (
+const reducer: Reducer<typeof INITIAL_STATE, Action> = (
   state,
   { type, payload }
 ) => {
   switch (type) {
     case ACTIONS.SET_BUILDINGS:
-      return payload;
+      return { ...payload, loading: false };
     case ACTIONS.ADD_BUILDING:
       return {
         type: "FeatureCollection",
         features: [...state.features, payload],
+        loading: false,
       };
   }
 };
 
 export const BuildingsContext =
-  createContext<BuildingCollection>(INITIAL_STATE); // ts-ignore-line
+  createContext<typeof INITIAL_STATE>(INITIAL_STATE); // ts-ignore-line
 export const BuildingsDispatchContext = createContext<Dispatch<Action>>(
   () => null
 );
