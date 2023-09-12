@@ -8,8 +8,7 @@ import { image } from "@/components/portableText/image";
 export const Content: FC<{ data: SanityDocument<ManifestDocumentType> }> = ({
   data,
 }) => (
-  <PortableText
-    value={data.content}
-    components={{ listItem, list, types: { image } }}
-  />
+  <div className="prose">
+    <PortableText value={data.content} components={{ types: { image } }} />
+  </div>
 );

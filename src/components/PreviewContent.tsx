@@ -17,9 +17,11 @@ export const PreviewContent: FC<{
   console.log("updated", liveData);
 
   return (
-    <PortableText
-      value={liveData.content}
-      components={{ listItem, list, types: { image } }}
-    />
+    <div className="prose">
+      <PortableText
+        value={liveData.content}
+        components={{ types: { image } }}
+      />
+    </div>
   );
 };
