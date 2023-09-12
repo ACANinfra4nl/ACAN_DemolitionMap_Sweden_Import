@@ -12,10 +12,11 @@ export async function GET(req: NextRequest) {
     );
 
   // TODO: is there a more efficient way of forwarding the response from fetch?
-  const result = await fetch(
+  const results = await fetch(
     `https://api.geoapify.com/v1/geocode/reverse?lat=${lat}&lon=${lng}&lang=sv&apiKey=${process.env.GEOAPIFY_TOKEN}`
   ).then((response) => response.json());
   // const result = example2.features[0];
+  const result = results.features[0];
   if (!result)
     return NextResponse.json({ message: "Not found" }, { status: 404 });
   const response: ReverseGeocodeResult = {

@@ -26,6 +26,7 @@ const filterBuildings = (filter: string) => (feature: BuildingFeature) =>
   matchesIgnoreCase(feature.properties.propertyOwner, filter) ||
   matchesIgnoreCase(feature.properties.propertyDesignation, filter) ||
   matchesIgnoreCase(feature.properties.blockName, filter) ||
+  matchesIgnoreCase(feature.properties.state, filter) ||
   matchesIgnoreCase(feature.properties.category, filter);
 
 const buildYearSorter = (a: BuildingFeature, b: BuildingFeature) =>
@@ -91,7 +92,19 @@ export default function ListPage() {
               name="filter"
               className="border border-gray-200 flex-grow px-2 py-1"
               onChange={handleFilterChange}
+              // list="filter-options"
             />
+            {/* <datalist id="filter-options" className="captialize">
+              <option>hotad</option>
+              <option>riven</option>
+              <option>räddad</option>
+              <option>bostad</option>
+              <option>kontor</option>
+              <option>kommersiell</option>
+              <option>samhällsfastighet</option>
+              <option>industri</option>
+              <option>övrig</option>
+            </datalist> */}
           </div>
           <div className="mb-4 flex gap-2">
             <span>Sortera</span>{" "}
