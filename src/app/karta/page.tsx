@@ -40,7 +40,7 @@ export default function MapPage() {
   }, []);
   const handleClickFeature: (id: string) => void = useCallback((id) => {
     const feature = features.features.find((f) => f.properties._id === id);
-    // console.log("hittade matchande feature", feature, id);
+    console.log("hittade matchande feature", feature, id);
     setSelectedFeature(feature);
   }, []);
   const clearSelectedFeature = useCallback(

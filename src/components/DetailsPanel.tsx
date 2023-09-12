@@ -16,7 +16,7 @@ export const DetailsPanel: FC<DetailsProps> = ({ properties, onClose }) => (
       <br />
       {properties.postcode} {properties.city}
     </h2>
-    <pre>{JSON.stringify(properties, null, 2)}</pre>
+
     {properties.images &&
       properties.images.map &&
       properties.images.map((image) => (
@@ -53,5 +53,9 @@ export const DetailsPanel: FC<DetailsProps> = ({ properties, onClose }) => (
       <span className="font-bold">Rivningsorsak</span>{" "}
       {properties.demolitionCause}
     </p>
+    <details>
+      <summary>Visa kod</summary>
+      <pre>{JSON.stringify(properties, null, 2)}</pre>
+    </details>
   </div>
 );
