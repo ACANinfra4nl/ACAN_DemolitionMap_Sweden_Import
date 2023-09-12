@@ -33,14 +33,17 @@ export default function MapPage() {
     // save info from form
     const feature = await create(formData);
 
+    // TODO: show some sort of "thank you for contributing, someone will publish your entry shortly" message
+    alert(
+      "Tack för ditt bidrag! Informationen verifieras innan den syns på kartan."
+    );
     // add new marker
-    dispatch({ type: ACTIONS.ADD_BUILDING, payload: feature });
+    // dispatch({ type: ACTIONS.ADD_BUILDING, payload: feature });
     setAddingLocation(undefined);
     setIsAdding(false);
   }, []);
   const handleClickFeature: (id: string) => void = useCallback((id) => {
     const feature = features.features.find((f) => f.properties._id === id);
-    console.log("hittade matchande feature", feature, id);
     setSelectedFeature(feature);
   }, []);
   const clearSelectedFeature = useCallback(

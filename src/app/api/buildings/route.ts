@@ -1,7 +1,6 @@
 import { buildingToFeature } from "@/lib/buildingToFeature";
 import { client } from "@/lib/sanityClient";
 import { NextRequest, NextResponse } from "next/server";
-import imageUrlBuilder from "@sanity/image-url";
 import { groq } from "next-sanity";
 
 export async function GET(request: NextRequest) {
@@ -28,7 +27,7 @@ export async function GET(request: NextRequest) {
         images
     }`,
     undefined,
-    { perspective: "published" }
+    { perspective: "published", next: { tags: ["buildings"] } }
   );
 
   // transform to features
