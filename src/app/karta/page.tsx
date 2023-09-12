@@ -19,7 +19,7 @@ export default function MapPage() {
   const [isAdding, setIsAdding] = useState(false);
   const [addingLocation, setAddingLocation] = useState<LatLng>();
   const features = useContext(BuildingsContext);
-  const dispatch = useContext(BuildingsDispatchContext);
+  // const dispatch = useContext(BuildingsDispatchContext);
 
   const handleAddMarker = useCallback((latLng: LatLng) => {
     // show popup with form
@@ -31,7 +31,8 @@ export default function MapPage() {
   }, []);
   const handleSubmitFeature = useCallback(async (formData: FormData) => {
     // save info from form
-    const feature = await create(formData);
+    // const feature =
+    await create(formData);
 
     // TODO: show some sort of "thank you for contributing, someone will publish your entry shortly" message
     alert(
@@ -42,10 +43,13 @@ export default function MapPage() {
     setAddingLocation(undefined);
     setIsAdding(false);
   }, []);
-  const handleClickFeature: (id: string) => void = useCallback((id) => {
-    const feature = features.features.find((f) => f.properties._id === id);
-    setSelectedFeature(feature);
-  }, []);
+  const handleClickFeature: (id: string) => void = useCallback(
+    (id) => {
+      const feature = features.features.find((f) => f.properties._id === id);
+      setSelectedFeature(feature);
+    },
+    [features]
+  );
   const clearSelectedFeature = useCallback(
     () => setSelectedFeature(undefined),
     []

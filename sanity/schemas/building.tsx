@@ -132,8 +132,8 @@ export const building: SchemaTypeDefinition = {
                   : state === "hotad"
                   ? "yellow"
                   : "green",
-              width: "1em",
-              height: "1em",
+              width: "100%",
+              height: "100%",
             }}
           />
         ),

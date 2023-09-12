@@ -35,37 +35,30 @@ export const Map: FC<MapProps> = ({
   const mapRef = useRef<MapRef>(null);
   const handleClickMap: (e: MapLayerMouseEvent) => void = useCallback(
     (e) => {
-      console.log("clicked map", e);
       e.preventDefault();
       if (isAdding) {
         const coords = { lat: e.lngLat.lat, lng: e.lngLat.lng };
-        console.log("isAdding", coords);
         onAddMarker(coords);
         mapRef.current?.flyTo({ center: coords });
       } else if (e.features?.length === 1) {
         // clicked an existing building, show info
         const feature = e.features[0];
-        console.log("clicked building", feature);
         if (feature.properties.cluster === true) {
-          console.log("clicked cluster");
           // clicked cluster, zoom in
           mapRef.current?.flyTo({
             zoom: mapRef.current.getZoom() + 2,
             center: e.lngLat,
           });
         } else {
-          console.log("clicked feature", feature);
           // show info panel for feature
           onClickFeature(
             (feature as unknown as Feature<Point, FeatureBuilding>).properties
               ._id
           );
         }
-      } else {
-        console.log("clicked multiple?", e.features);
       }
     },
-    [isAdding, onAddMarker]
+    [isAdding, onAddMarker, onClickFeature]
   );
   const clusteredLayerStyle: CircleLayer = {
     id: "cluster",
