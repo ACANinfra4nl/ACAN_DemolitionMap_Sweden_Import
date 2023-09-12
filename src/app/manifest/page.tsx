@@ -1,10 +1,10 @@
 import { Navigation } from "@/components/Navigation";
 import { SanityDocument } from "next-sanity";
-import { cookies, draftMode } from "next/headers";
+import { draftMode } from "next/headers";
 import PreviewProvider from "@/components/PreviewProvider";
 import { Content } from "@/components/Content";
 import { manifestQuery } from "@/lib/queries";
-import { sanityFetch } from "@/lib/sanityFetch";
+import { readToken, sanityFetch } from "@/lib/sanityFetch";
 import { PreviewContent } from "@/components/PreviewContent";
 
 export default async function ManifestPage() {
@@ -12,7 +12,6 @@ export default async function ManifestPage() {
     query: manifestQuery,
   });
   const isDraftMode = draftMode().isEnabled;
-  const readToken = cookies().get("readToken")?.value;
 
   if (isDraftMode && readToken) {
     return (

@@ -6,7 +6,9 @@ import { client } from "../../sanity/lib/client";
 const DEFAULT_PARAMS = {} as QueryParams;
 const DEFAULT_TAGS = [] as string[];
 
-async function sanityFetch<QueryResponse>({
+export const readToken = process.env.SANITY_READ_TOKEN;
+
+export async function sanityFetch<QueryResponse>({
   query,
   params = DEFAULT_PARAMS,
   tags = DEFAULT_TAGS,
@@ -16,7 +18,6 @@ async function sanityFetch<QueryResponse>({
   tags?: string[];
 }): Promise<QueryResponse> {
   const isDraftMode = draftMode().isEnabled;
-  const readToken = cookies().get("readToken")?.value;
   if (isDraftMode && !readToken) {
     throw new Error(
       "The `SANITY_READ_TOKEN` environment variable is required."
@@ -38,5 +39,3 @@ async function sanityFetch<QueryResponse>({
       },
     });
 }
-
-export { sanityFetch };
