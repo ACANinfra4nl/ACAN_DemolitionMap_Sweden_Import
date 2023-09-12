@@ -105,7 +105,7 @@ export const Map: FC<MapProps> = ({
     <div className={className}>
       <ReactMapGl
         mapLib={import("maplibre-gl")}
-        mapStyle="https://demotiles.maplibre.org/style.json"
+        mapStyle="https://api.maptiler.com/maps/abbe45d8-df15-4288-ab89-0a96d0eb6269/style.json?key=0VxOnlQWkxpRRW7vyr9t"
         initialViewState={{ latitude: 59.3293, longitude: 18.0686, zoom: 5 }}
         onClick={handleClickMap}
         ref={mapRef}
