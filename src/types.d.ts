@@ -61,3 +61,8 @@ type BuildingCollection = GeoJSON.FeatureCollection<
   GeoJSON.Point,
   FeatureBuilding
 >;
+
+interface ManifestDocumentType {
+  heading: string;
+  content: import("sanity").PortableTextBlock[];
+}

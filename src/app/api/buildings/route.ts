@@ -2,11 +2,12 @@ import { buildingToFeature } from "@/lib/buildingToFeature";
 import { client } from "@/lib/sanityClient";
 import { NextRequest, NextResponse } from "next/server";
 import imageUrlBuilder from "@sanity/image-url";
+import { groq } from "next-sanity";
 
 export async function GET(request: NextRequest) {
   // fetch all buildings
   const buildings: SanityBuilding<LatLng>[] = await client.fetch(
-    `*[_type == "building"] {
+    groq`*[_type == "building"] {
         _id,
         category,
         state,

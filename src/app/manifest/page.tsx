@@ -1,27 +1,40 @@
 import { Navigation } from "@/components/Navigation";
-import { client } from "@/lib/sanityClient";
-import { PortableText } from "@portabletext/react";
-import { listItem } from "@/components/portableText/listItem";
-import { list } from "@/components/portableText/list";
-import { image } from "@/components/portableText/image";
-import { Fragment } from "react";
+import { SanityDocument } from "next-sanity";
+import { cookies, draftMode } from "next/headers";
+import PreviewProvider from "@/components/PreviewProvider";
+import { Content } from "@/components/Content";
+import { manifestQuery } from "@/lib/queries";
+import { sanityFetch } from "@/lib/sanityFetch";
+import { PreviewContent } from "@/components/PreviewContent";
 
 export default async function ManifestPage() {
-  // get data
-  const data = await client.fetch(
-    '*[_type=="manifest" && !(_id in path("drafts.**"))][0]'
-  );
-  // this should be a server component and not send any unnecessary JS to the client
+  const data = await sanityFetch<SanityDocument<ManifestDocumentType>>({
+    query: manifestQuery,
+  });
+  const isDraftMode = draftMode().isEnabled;
+  const readToken = cookies().get("readToken")?.value;
+
+  if (isDraftMode && readToken) {
+    return (
+      <>
+        <Navigation />
+        <main className="p-4">
+          <PreviewProvider token={readToken}>
+            <h1 className="text-4xl font-bold mb-4">{data.heading}</h1>
+            <PreviewContent data={data} query={manifestQuery} />
+          </PreviewProvider>
+        </main>
+      </>
+    );
+  }
+
   return (
     <>
       <Navigation />
       <main className="p-4">
         <h1 className="text-4xl font-bold mb-4">{data.heading}</h1>
 
-        <PortableText
-          value={data.content}
-          components={{ listItem, list, types: { image } }}
-        />
+        <Content data={data} />
       </main>
     </>
   );

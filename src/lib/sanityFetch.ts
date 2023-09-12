@@ -1,0 +1,42 @@
+import "server-only";
+import type { QueryParams } from "@sanity/client";
+import { cookies, draftMode } from "next/headers";
+import { client } from "../../sanity/lib/client";
+
+const DEFAULT_PARAMS = {} as QueryParams;
+const DEFAULT_TAGS = [] as string[];
+
+async function sanityFetch<QueryResponse>({
+  query,
+  params = DEFAULT_PARAMS,
+  tags = DEFAULT_TAGS,
+}: {
+  query: string;
+  params?: QueryParams;
+  tags?: string[];
+}): Promise<QueryResponse> {
+  const isDraftMode = draftMode().isEnabled;
+  const readToken = cookies().get("readToken")?.value;
+  if (isDraftMode && !readToken) {
+    throw new Error(
+      "The `SANITY_READ_TOKEN` environment variable is required."
+    );
+  }
+  const isDevelopment = process.env.NODE_ENV === "development";
+
+  return client
+    .withConfig({ useCdn: true })
+    .fetch<QueryResponse>(query, params, {
+      cache: isDevelopment || isDraftMode ? undefined : "force-cache",
+      ...(isDraftMode && {
+        token: readToken,
+        perspective: "previewDrafts",
+      }),
+      next: {
+        ...(isDraftMode && { revalidate: 10 }),
+        tags,
+      },
+    });
+}
+
+export { sanityFetch };
