@@ -109,4 +109,35 @@ export const building: SchemaTypeDefinition = {
       title: "Bilder",
     },
   ],
+  preview: {
+    select: {
+      category: "category",
+      state: "state",
+      blockName: "blockName",
+      address: "address",
+      postcode: "postcode",
+      city: "city",
+    },
+    prepare(selection) {
+      const { category, state, blockName, address, postcode, city } = selection;
+      return {
+        title: blockName ? blockName : `${address}, ${postcode} ${city}`,
+        subtitle: category,
+        media: (
+          <span
+            style={{
+              backgroundColor:
+                state === "riven"
+                  ? "red"
+                  : state === "hotad"
+                  ? "yellow"
+                  : "green",
+              width: "1em",
+              height: "1em",
+            }}
+          />
+        ),
+      };
+    },
+  },
 };
