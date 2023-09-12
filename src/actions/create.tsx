@@ -64,9 +64,9 @@ export const create = async (formData: FormData) => {
       // Rivningsår
       demolitionYear: Number(formData.get("demolitionYear")),
       // Arkitektur, historik - fritext (nuvarande verksamhet)
-      description: formData.get("description") as string,
+      description: formData.get("description") as string | undefined,
       // Anledning till rivning, fritext (vad planeras i dess ställe)
-      demolitionCause: formData.get("demolitionCause") as string,
+      demolitionCause: formData.get("demolitionCause") as string | undefined,
       // (Datum för inlägget)
       // Minnen, öppet för alla att lägga till
       images: imageAssets.length > 0 ? imageAssets : undefined,

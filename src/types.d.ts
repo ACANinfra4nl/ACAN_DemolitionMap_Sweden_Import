@@ -21,8 +21,8 @@ interface SanityBuilding<T extends LatLng> {
   propertyOwner?: string;
   buildYear: number;
   demolitionYear: number;
-  description: string;
-  demolitionCause: string;
+  description?: string;
+  demolitionCause?: string;
   images?: {
     _type: string;
     asset: { _type: string; _ref: string; url?: string };
@@ -45,8 +45,8 @@ interface FeatureBuilding {
   propertyOwner?: string;
   buildYear: number;
   demolitionYear: number;
-  description: string;
-  demolitionCause: string;
+  description?: string;
+  demolitionCause?: string;
   images?: string[];
 }
 

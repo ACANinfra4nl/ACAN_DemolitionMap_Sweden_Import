@@ -239,6 +239,10 @@ export const NewFeatureForm = ({
             className="border border-gray-200 w-full px-2 py-2"
           ></textarea>
         </div>
+        <div className="hidden" aria-hidden>
+          <label htmlFor="accept">Jag accepterar villkoren</label>
+          <input type="checkbox" name="accept" id="accept" />
+        </div>
         <div className="flex justify-between">
           <button
             onClick={onCancel}

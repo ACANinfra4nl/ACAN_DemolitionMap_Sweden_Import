@@ -62,7 +62,7 @@ export default function MapPage() {
           onClick={handleClickAddBuilding}
           className={classNames(isAdding && "underline")}
         >
-          {isAdding ? "Click location to add" : "Add building"}
+          {isAdding ? "Välj plats på kartan" : "Lägg till byggnad"}
         </button>
       </div>
       <Map
