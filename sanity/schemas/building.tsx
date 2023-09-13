@@ -7,6 +7,14 @@ export const building: SchemaTypeDefinition = {
   description: "Rivning rapporterad av användare",
   fields: [
     {
+      name: "reviewed",
+      type: "boolean",
+      title: "Granskad",
+      description:
+        "Granskade byggnader visas på kartan och i listan på hemsidan.",
+      initialValue: false,
+    },
+    {
       name: "location",
       type: "geopoint",
       title: "Plats",
@@ -117,9 +125,11 @@ export const building: SchemaTypeDefinition = {
       address: "address",
       postcode: "postcode",
       city: "city",
+      reviewed: "reviewed",
     },
     prepare(selection) {
-      const { category, state, blockName, address, postcode, city } = selection;
+      const { reviewed, category, state, blockName, address, postcode, city } =
+        selection;
       return {
         title: blockName ? blockName : `${address}, ${postcode} ${city}`,
         subtitle: category,
@@ -134,8 +144,13 @@ export const building: SchemaTypeDefinition = {
                   : "green",
               width: "100%",
               height: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
             }}
-          />
+          >
+            {reviewed ? "" : "🆕"}
+          </span>
         ),
       };
     },

@@ -2,7 +2,6 @@
 
 import { buildingToFeature } from "@/lib/buildingToFeature";
 import { client } from "@/lib/sanityClient";
-import { randomUUID } from "crypto";
 
 const uploadAssets = async (images: File[]) => {
   const imageAssets = [];
@@ -26,10 +25,8 @@ export const create = async (formData: FormData) => {
   // save info from form
   const formImages = formData.getAll("images") as File[];
   const imageAssets = await uploadAssets(formImages);
-  const id = randomUUID();
   const createdBuilding = await client.create(
     {
-      _id: `draft.${id}`,
       _type: "building",
       location: {
         _type: "geopoint",
@@ -71,6 +68,7 @@ export const create = async (formData: FormData) => {
       // (Datum för inlägget)
       // Minnen, öppet för alla att lägga till
       images: imageAssets.length > 0 ? imageAssets : undefined,
+      reviewed: false,
     },
     { returnDocuments: true }
   );

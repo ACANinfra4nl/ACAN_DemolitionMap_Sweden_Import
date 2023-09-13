@@ -6,7 +6,7 @@ import { groq } from "next-sanity";
 export async function GET(request: NextRequest) {
   // fetch all buildings
   const buildings: SanityBuilding<LatLng>[] = await client.fetch(
-    groq`*[_type == "building"] {
+    groq`*[_type == "building" && reviewed == true] {
         _id,
         category,
         state,
