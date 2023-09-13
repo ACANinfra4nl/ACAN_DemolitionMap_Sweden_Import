@@ -10,7 +10,6 @@ import { deskTool } from "sanity/desk";
 import { dataset, projectId } from "./sanity/env";
 import { schema } from "./sanity/schema";
 import { defaultDocumentNode } from "./sanity/lib/defaultDocumentNode";
-import { draftReviewPluginV3 } from "sanity-plugin-draft-review-v3";
 
 export default defineConfig({
   basePath: "/studio",
@@ -23,6 +22,5 @@ export default defineConfig({
     // Vision is a tool that lets you query your content with GROQ in the studio
     // https://www.sanity.io/docs/the-vision-plugin
     // visionTool({ defaultApiVersion: apiVersion }),
-    draftReviewPluginV3({}),
   ],
 });
