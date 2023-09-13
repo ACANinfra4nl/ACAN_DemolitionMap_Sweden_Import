@@ -1,5 +1,5 @@
 import { FC, MouseEventHandler, useCallback, useRef } from "react";
-import { Stack, Button } from "@sanity/ui";
+import { Stack, Button, Text } from "@sanity/ui";
 import { PatchEvent, set } from "sanity";
 import ReactMapGl, {
   MapLayerMouseEvent,
@@ -69,15 +69,24 @@ export const MapInput: FC<MapInputProps> = (props) => {
           <AttributionControl position="bottom-right" compact />
         </ReactMapGl>
       </div>
-      <Button onClick={handleCenterMapClick} mode="ghost" disabled={!hasValue}>
-        {hasValue ? (
-          <>
-            ({props.value.lat}, {props.value.lng})
-          </>
-        ) : (
-          "Ingen plats vald"
-        )}
-      </Button>
+      <div className="flex gap-2 items-center">
+        <Text>
+          {hasValue ? (
+            <>
+              ({props.value.lat}, {props.value.lng})
+            </>
+          ) : (
+            "(-, -)"
+          )}
+        </Text>
+        <Button
+          onClick={handleCenterMapClick}
+          mode="ghost"
+          disabled={!hasValue}
+        >
+          Centrera
+        </Button>
+      </div>
     </Stack>
   );
 };
