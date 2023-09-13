@@ -12,8 +12,64 @@ import { Feature, FeatureCollection, Point } from "geojson";
 
 // Include style sheet
 import "maplibre-gl/dist/maplibre-gl.css";
+import { ExpressionSpecification } from "maplibre-gl";
 
-const DOUBLE_CLICK_TIMEOUT = 500;
+const CLUSTERED_LAYER_STYLE: CircleLayer = {
+  id: "cluster",
+  source: "annotations",
+  type: "circle",
+  filter: ["has", "point_count"],
+  paint: {
+    "circle-color": "#000",
+    "circle-stroke-width": 3,
+    "circle-stroke-color": "#ccc",
+    "circle-stroke-opacity": 0.3,
+    "circle-radius": ["step", ["get", "point_count"], 20, 100, 30, 750, 40],
+  }, // Radius of each cluster when clustering points (defaults to 50)
+};
+const CLUSTERED_COUNT_LAYER_STYLE: SymbolLayer = {
+  id: "cluster-count",
+  type: "symbol",
+  source: "annotations",
+  filter: ["has", "point_count"],
+  paint: {
+    "text-color": "#fff",
+  },
+  layout: {
+    "text-field": "{point_count_abbreviated}",
+    "text-size": 14,
+  },
+};
+const THREATENED_EXPR: ExpressionSpecification = [
+  "==",
+  ["get", "state"],
+  "hotad",
+];
+const DEMOLISHED_EXPR: ExpressionSpecification = [
+  "==",
+  ["get", "state"],
+  "riven",
+];
+const UNCLUSTERED_LAYER_STYLE: CircleLayer = {
+  id: "unclustered-points",
+  type: "circle",
+  source: "annotations",
+  filter: ["!", ["has", "point_count"]],
+  paint: {
+    "circle-color": [
+      "case",
+      THREATENED_EXPR,
+      "yellow",
+      DEMOLISHED_EXPR,
+      "red",
+      "green",
+    ],
+    "circle-radius": 10,
+    "circle-stroke-width": 1,
+    "circle-stroke-color": "#fff",
+    "circle-stroke-opacity": 0.7,
+  },
+};
 
 interface MapProps {
   features: FeatureCollection;
@@ -60,46 +116,6 @@ export const Map: FC<MapProps> = ({
     },
     [isAdding, onAddMarker, onClickFeature]
   );
-  const clusteredLayerStyle: CircleLayer = {
-    id: "cluster",
-    source: "annotations",
-    type: "circle",
-    filter: ["has", "point_count"],
-    paint: {
-      "circle-color": "#000",
-      "circle-stroke-width": 3,
-      "circle-stroke-color": "#ccc",
-      "circle-stroke-opacity": 0.3,
-      "circle-radius": ["step", ["get", "point_count"], 20, 100, 30, 750, 40],
-    }, // Radius of each cluster when clustering points (defaults to 50)
-  };
-  const clusterCountLayerStyle: SymbolLayer = {
-    id: "cluster-count",
-    type: "symbol",
-    source: "annotations",
-    filter: ["has", "point_count"],
-    paint: {
-      "text-color": "#fff",
-    },
-    layout: {
-      "text-field": "{point_count_abbreviated}",
-      //   "text-font": ["Queue Bold", "Arial Unicode MS Bold"],
-      "text-size": 14,
-    },
-  };
-  const unclusteredLayerStyle: CircleLayer = {
-    id: "unclustered-points",
-    type: "circle",
-    source: "annotations",
-    filter: ["!", ["has", "point_count"]],
-    paint: {
-      "circle-color": "#000000",
-      "circle-radius": 10,
-      "circle-stroke-width": 1,
-      "circle-stroke-color": "#fff",
-      "circle-stroke-opacity": 0.7,
-    },
-  };
 
   return (
     <div className={className}>
@@ -119,9 +135,9 @@ export const Map: FC<MapProps> = ({
           clusterMaxZoom={11}
           clusterRadius={20}
         >
-          <Layer {...clusteredLayerStyle} />
-          <Layer {...clusterCountLayerStyle} />
-          <Layer {...unclusteredLayerStyle} />
+          <Layer {...CLUSTERED_LAYER_STYLE} />
+          <Layer {...CLUSTERED_COUNT_LAYER_STYLE} />
+          <Layer {...UNCLUSTERED_LAYER_STYLE} />
         </Source>
         {addingLocation && (
           <Marker

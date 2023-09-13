@@ -149,7 +149,7 @@ export const building: SchemaTypeDefinition = {
               justifyContent: "center",
             }}
           >
-            {reviewed ? "" : "🆕"}
+            {reviewed ? "" : "👀"}
           </span>
         ),
       };
