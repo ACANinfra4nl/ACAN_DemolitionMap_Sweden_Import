@@ -83,6 +83,7 @@ export const MapInput: FC<MapInputProps> = (props) => {
           onClick={handleCenterMapClick}
           mode="ghost"
           disabled={!hasValue}
+          paddingY={1}
         >
           Centrera
         </Button>
