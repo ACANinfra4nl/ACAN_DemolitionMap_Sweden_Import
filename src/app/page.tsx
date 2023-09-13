@@ -11,10 +11,7 @@ export default function HomePage() {
   return (
     <>
       <Navigation />
-      <main className="p-4">
-        <EnvOrNo envVar="VERCEL_URL" />
-        <EnvOrNo envVar="NEXT_PUBLIC_VERCEL_URL" />
-      </main>
+      <main className="p-4"></main>
     </>
   );
 }
