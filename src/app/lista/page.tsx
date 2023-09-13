@@ -135,7 +135,7 @@ export default function ListPage() {
             {rows.map((building) => (
               <li key={building.properties._id} className="mb-2">
                 <details>
-                  <summary className="flex gap-2 items-center">
+                  <summary className="flex gap-2 items-center cursor-pointer">
                     <StateIndicator state={building.properties.state} />{" "}
                     <span>
                       {building.properties.address},{" "}

@@ -3,6 +3,8 @@ import { client } from "@/lib/sanityClient";
 import { NextRequest, NextResponse } from "next/server";
 import { groq } from "next-sanity";
 
+export const runtime = "edge";
+
 export async function GET(request: NextRequest) {
   // fetch all buildings
   const buildings: SanityBuilding<LatLng>[] = await client.fetch(
