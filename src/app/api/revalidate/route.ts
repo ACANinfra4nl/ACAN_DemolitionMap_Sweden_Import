@@ -2,7 +2,6 @@ import { revalidatePath, revalidateTag } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
-  console.log("revalidate api called!");
   if (
     process.env.NODE_ENV !== "development" &&
     request.headers.get("authorization") !==
@@ -18,10 +17,12 @@ export async function GET(request: NextRequest) {
 
   const path = request.nextUrl.searchParams.get("path");
   if (path) {
+    console.log(`Revalidating path "${path}"`);
     revalidatePath(path);
   }
   const tag = request.nextUrl.searchParams.get("tag");
   if (tag) {
+    console.log(`Revalidating tag "${tag}"`);
     revalidateTag(tag);
   }
 

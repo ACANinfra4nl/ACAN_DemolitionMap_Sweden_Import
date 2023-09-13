@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
         images
     }`,
     undefined,
-    { perspective: "published", next: { tags: ["buildings"] } }
+    { perspective: "published", next: { tags: ["buildings"], revalidate: 600 } }
   );
 
   // transform to features
