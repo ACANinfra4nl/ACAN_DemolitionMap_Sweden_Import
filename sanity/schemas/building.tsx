@@ -1,4 +1,5 @@
 import { SchemaTypeDefinition } from "sanity";
+import { MapInput } from "../components/MapInput";
 
 export const building: SchemaTypeDefinition = {
   name: "building",
@@ -18,8 +19,10 @@ export const building: SchemaTypeDefinition = {
       name: "location",
       type: "geopoint",
       title: "Plats",
-      readOnly: true,
       validation: (Rule) => Rule.required(),
+      components: {
+        input: MapInput,
+      },
     },
     {
       name: "category",
