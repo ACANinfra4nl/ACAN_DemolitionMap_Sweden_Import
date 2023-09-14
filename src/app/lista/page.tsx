@@ -17,17 +17,22 @@ import {
 const matchesIgnoreCase = (haystack: string | undefined, needle: string) =>
   haystack?.toLowerCase().includes(needle.toLowerCase());
 
-const filterBuildings = (filter: string) => (feature: BuildingFeature) =>
-  matchesIgnoreCase(feature.properties.description, filter) ||
-  matchesIgnoreCase(feature.properties.demolitionCause, filter) ||
-  matchesIgnoreCase(feature.properties.address, filter) ||
-  matchesIgnoreCase(feature.properties.city, filter) ||
-  matchesIgnoreCase(feature.properties.architect, filter) ||
-  matchesIgnoreCase(feature.properties.propertyOwner, filter) ||
-  matchesIgnoreCase(feature.properties.propertyDesignation, filter) ||
-  matchesIgnoreCase(feature.properties.blockName, filter) ||
-  matchesIgnoreCase(feature.properties.state, filter) ||
-  matchesIgnoreCase(feature.properties.category, filter);
+const filterBuildings = (filters: string) => (feature: BuildingFeature) =>
+  filters
+    .split(/\s+/)
+    .every(
+      (filter) =>
+        matchesIgnoreCase(feature.properties.description, filter) ||
+        matchesIgnoreCase(feature.properties.demolitionCause, filter) ||
+        matchesIgnoreCase(feature.properties.address, filter) ||
+        matchesIgnoreCase(feature.properties.city, filter) ||
+        matchesIgnoreCase(feature.properties.architect, filter) ||
+        matchesIgnoreCase(feature.properties.propertyOwner, filter) ||
+        matchesIgnoreCase(feature.properties.propertyDesignation, filter) ||
+        matchesIgnoreCase(feature.properties.blockName, filter) ||
+        matchesIgnoreCase(feature.properties.state, filter) ||
+        matchesIgnoreCase(feature.properties.category, filter)
+    );
 
 const buildYearSorter = (a: BuildingFeature, b: BuildingFeature) =>
   a.properties.buildYear - b.properties.buildYear;
