@@ -8,8 +8,7 @@ import { deskTool } from "sanity/desk";
 
 // Go to https://www.sanity.io/docs/api-versioning to learn how API versioning works
 import { dataset, projectId } from "./sanity/env";
-import { schema } from "./sanity/schema";
-import Iframe from "sanity-plugin-iframe-pane";
+import { schemaTypes } from "./sanity/schemaTypes";
 import { createPreview } from "./sanity/lib/preview";
 import { groq } from "next-sanity";
 
@@ -21,7 +20,13 @@ export default defineConfig({
   projectId,
   dataset,
   // Add and edit the content schema in the './sanity/schema' folder
-  schema,
+  schema: {
+    types: schemaTypes,
+
+    // Filter out singleton types from the global “New document” menu options
+    templates: (templates) =>
+      templates.filter(({ schemaType }) => !singletonTypes.has(schemaType)),
+  },
   plugins: [
     deskTool({
       structure: (S) =>
@@ -44,6 +49,12 @@ export default defineConfig({
                   groq`_type == "building" && reviewed != true`
                 )
               ),
+            S.listItem()
+              .title("Alla byggnader")
+              .id("buildings")
+              .child(
+                S.documentTypeList("building").filter(groq`_type == "building"`)
+              ),
             S.divider(),
             S.listItem()
               .title("Manifest")
@@ -56,8 +67,15 @@ export default defineConfig({
               ),
           ]),
     }),
+
     // Vision is a tool that lets you query your content with GROQ in the studio
     // https://www.sanity.io/docs/the-vision-plugin
     // visionTool({ defaultApiVersion: apiVersion }),
   ],
+  document: {
+    actions: (input, context) =>
+      singletonTypes.has(context.schemaType)
+        ? input.filter(({ action }) => action && singletonActions.has(action))
+        : input,
+  },
 });
