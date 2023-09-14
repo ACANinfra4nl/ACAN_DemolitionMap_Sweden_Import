@@ -11,6 +11,7 @@ import { dataset, projectId } from "./sanity/env";
 import { schema } from "./sanity/schema";
 import Iframe from "sanity-plugin-iframe-pane";
 import { createPreview } from "./sanity/lib/preview";
+import { groq } from "next-sanity";
 
 const singletonActions = new Set(["publish", "discardChanges", "restore"]);
 const singletonTypes = new Set(["manifest"]);
@@ -28,6 +29,23 @@ export default defineConfig({
           .title("Innehåll")
           .items([
             S.listItem()
+              .title("Granskade byggnader")
+              .id("reviewed")
+              .child(
+                S.documentTypeList("building").filter(
+                  groq`_type == "building" && reviewed == true`
+                )
+              ),
+            S.listItem()
+              .title("Ogranskade byggnader")
+              .id("unreviewed")
+              .child(
+                S.documentTypeList("building").filter(
+                  groq`_type == "building" && reviewed != true`
+                )
+              ),
+            S.divider(),
+            S.listItem()
               .title("Manifest")
               .id("manifest")
               .child(
@@ -36,7 +54,6 @@ export default defineConfig({
                   .id("manifest")
                   .views(createPreview(S))
               ),
-            S.documentTypeListItem("building"),
           ]),
     }),
     // Vision is a tool that lets you query your content with GROQ in the studio
