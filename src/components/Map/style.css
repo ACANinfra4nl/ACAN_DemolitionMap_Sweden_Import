@@ -1,0 +1,46 @@
+.maplibregl-ctrl-group:not(:empty) {
+  box-shadow: none;
+  display: flex;
+  margin-right: 3rem;
+  margin-bottom: 18px;
+}
+
+.maplibregl-ctrl-group.maplibregl-ctrl-group button {
+  display: inline-block;
+  border: 3px solid currentColor;
+  width: 3rem;
+  height: 3rem;
+  fill: currentColor;
+
+  & + button {
+    border-left: 0;
+  }
+}
+.maplibregl-ctrl-group button:focus:first-child {
+  border-radius: 0;
+}
+.maplibregl-ctrl-group button:focus:last-child {
+  border-radius: 0;
+}
+
+.maplibregl-ctrl button .maplibregl-ctrl-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* font-weight: bold;
+  font-size: 1.5rem; */
+  width: auto;
+  height: auto;
+}
+.maplibregl-ctrl button.maplibregl-ctrl-zoom-in .maplibregl-ctrl-icon {
+  background-image: none;
+  &::before {
+    content: "+";
+  }
+}
+.maplibregl-ctrl button.maplibregl-ctrl-zoom-out .maplibregl-ctrl-icon {
+  background-image: none;
+  &::before {
+    content: "-";
+  }
+}

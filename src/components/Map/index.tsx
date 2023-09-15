@@ -7,12 +7,15 @@ import ReactMapGl, {
   MapRef,
   SymbolLayer,
   Marker,
+  NavigationControl,
 } from "react-map-gl/maplibre";
 import { Feature, FeatureCollection, Point } from "geojson";
 
 // Include style sheet
 import "maplibre-gl/dist/maplibre-gl.css";
+import "./style.css";
 import { ExpressionSpecification } from "maplibre-gl";
+import classNames from "classnames";
 
 const CLUSTERED_LAYER_STYLE: CircleLayer = {
   id: "cluster",
@@ -118,7 +121,7 @@ export const Map: FC<MapProps> = ({
   );
 
   return (
-    <div className={className}>
+    <div className={classNames("text-red-600", className)}>
       <ReactMapGl
         mapLib={import("maplibre-gl")}
         mapStyle="https://api.maptiler.com/maps/abbe45d8-df15-4288-ab89-0a96d0eb6269/style.json?key=0VxOnlQWkxpRRW7vyr9t"
@@ -145,6 +148,12 @@ export const Map: FC<MapProps> = ({
             longitude={addingLocation.lng}
           />
         )}
+        <NavigationControl
+          showZoom
+          visualizePitch={false}
+          showCompass={false}
+          position="bottom-right"
+        />
       </ReactMapGl>
     </div>
   );

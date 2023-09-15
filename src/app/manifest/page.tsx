@@ -16,7 +16,7 @@ export default async function ManifestPage() {
   if (isDraftMode && readToken) {
     return (
       <>
-        <Navigation />
+        <Navigation color="text-blue-500" />
         <main className="p-4">
           <PreviewProvider token={readToken}>
             <h1 className="text-4xl font-bold mb-4">{data.heading}</h1>
@@ -29,7 +29,7 @@ export default async function ManifestPage() {
 
   return (
     <>
-      <Navigation />
+      <Navigation color="text-blue-500" />
       <main className="p-4">
         <h1 className="text-4xl font-bold mb-4">{data.heading}</h1>
 

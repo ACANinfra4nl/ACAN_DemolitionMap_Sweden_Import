@@ -1,34 +1,47 @@
 "use client";
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import classNames from "classnames";
 
-export const Navigation: FC = () => {
+const NavLink: FC<{ href: string; path: string; children: ReactNode }> = ({
+  href,
+  path,
+  children,
+}) => (
+  <Link
+    className={classNames("p-3", path === href && "pointer-events-none")}
+    href={href}
+  >
+    {children}
+  </Link>
+);
+
+export const Navigation: FC<{ color: string }> = ({ color }) => {
   const path = usePathname();
   return (
-    <nav className="flex">
-      <Link className={classNames("p-4", path === "/" && "underline")} href="/">
-        Hem
-      </Link>
-      <Link
-        className={classNames("p-4", path.includes("/karta") && "underline")}
-        href="/karta"
-      >
-        Karta
-      </Link>
-      <Link
-        className={classNames("p-4", path.includes("/lista") && "underline")}
-        href="/lista"
-      >
-        Lista
-      </Link>
-      <Link
-        className={classNames("p-4", path.includes("/manifest") && "underline")}
-        href="/manifest"
-      >
-        Manifest
-      </Link>
-    </nav>
+    <div
+      className={classNames(
+        "flex justify-between p-4 w-full border-b border-current border-solid",
+        color
+      )}
+    >
+      <nav className="flex items-center gap-5">
+        <span className="uppercase">
+          Svensk
+          <br />
+          rivningsatlas
+        </span>
+        <NavLink href="/" path={path}>
+          Karta
+        </NavLink>
+        <NavLink href="/lista" path={path}>
+          Lista
+        </NavLink>
+        <NavLink href="/manifest" path={path}>
+          Manifest
+        </NavLink>
+      </nav>
+    </div>
   );
 };
