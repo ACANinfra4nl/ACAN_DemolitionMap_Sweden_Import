@@ -17,7 +17,9 @@ const NavLink: FC<{ href: string; path: string; children: ReactNode }> = ({
   </Link>
 );
 
-export const Navigation: FC<{ color: string }> = ({ color }) => {
+export const Navigation: FC<{ color?: string }> = ({
+  color = "text-blue-500",
+}) => {
   const path = usePathname();
   return (
     <div
