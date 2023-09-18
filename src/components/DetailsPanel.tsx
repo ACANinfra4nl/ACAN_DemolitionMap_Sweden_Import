@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { CloseButton } from "./CloseButton";
+import { Carousel } from "./Carousel";
 
 interface DetailsProps {
   properties: FeatureBuilding;
@@ -17,16 +18,18 @@ export const DetailsPanel: FC<DetailsProps> = ({ properties, onClose }) => (
       {properties.postcode} {properties.city}
     </h2>
 
-    {properties.images &&
-      properties.images.map &&
-      properties.images.map((image) => (
-        <img
-          key={image}
-          src={image}
-          role="presentation"
-          className="w-full aspect-video object-cover block mb-4"
-        />
-      ))}
+    {properties.images && properties.images.map && (
+      <Carousel>
+        {properties.images.map((image) => (
+          <img
+            key={image}
+            src={image}
+            role="presentation"
+            className="w-full aspect-video object-cover mb-4 scroll-m-0 snap-start"
+          />
+        ))}
+      </Carousel>
+    )}
     <p className="mb-4">
       <span className="font-bold">Kategori</span>{" "}
       <span className="capitalize">{properties.category}</span>
