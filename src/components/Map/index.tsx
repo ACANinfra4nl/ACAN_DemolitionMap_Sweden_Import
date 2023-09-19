@@ -3,76 +3,38 @@ import ReactMapGl, {
   MapLayerMouseEvent,
   Source,
   Layer,
-  CircleLayer,
   MapRef,
-  SymbolLayer,
   Marker,
   NavigationControl,
 } from "react-map-gl/maplibre";
-import { Feature, FeatureCollection, Point } from "geojson";
+import type { Feature, FeatureCollection, Point } from "geojson";
 
 // Include style sheet
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./style.css";
-import { ExpressionSpecification } from "maplibre-gl";
 import classNames from "classnames";
+import imgRiven from "./riven.png";
+import imgHotad from "./hotad.png";
+import imgRäddad from "./räddad.png";
+import { LegendControl } from "./LegendControl";
+import {
+  CLUSTERED_COUNT_LAYER_STYLE,
+  CLUSTERED_LAYER_STYLE,
+  UNCLUSTERED_LAYER_STYLE,
+  UNCLUSTERED_SYMBOL_LAYER_STYLE,
+} from "./layers";
 
-const CLUSTERED_LAYER_STYLE: CircleLayer = {
-  id: "cluster",
-  source: "annotations",
-  type: "circle",
-  filter: ["has", "point_count"],
-  paint: {
-    "circle-color": "#000",
-    "circle-stroke-width": 3,
-    "circle-stroke-color": "#ccc",
-    "circle-stroke-opacity": 0.3,
-    "circle-radius": ["step", ["get", "point_count"], 20, 100, 30, 750, 40],
-  }, // Radius of each cluster when clustering points (defaults to 50)
-};
-const CLUSTERED_COUNT_LAYER_STYLE: SymbolLayer = {
-  id: "cluster-count",
-  type: "symbol",
-  source: "annotations",
-  filter: ["has", "point_count"],
-  paint: {
-    "text-color": "#fff",
-  },
-  layout: {
-    "text-field": "{point_count_abbreviated}",
-    "text-size": 14,
-  },
-};
-const THREATENED_EXPR: ExpressionSpecification = [
-  "==",
-  ["get", "state"],
-  "hotad",
-];
-const DEMOLISHED_EXPR: ExpressionSpecification = [
-  "==",
-  ["get", "state"],
-  "riven",
-];
-const UNCLUSTERED_LAYER_STYLE: CircleLayer = {
-  id: "unclustered-points",
-  type: "circle",
-  source: "annotations",
-  filter: ["!", ["has", "point_count"]],
-  paint: {
-    "circle-color": [
-      "case",
-      THREATENED_EXPR,
-      "yellow",
-      DEMOLISHED_EXPR,
-      "red",
-      "green",
-    ],
-    "circle-radius": 10,
-    "circle-stroke-width": 1,
-    "circle-stroke-color": "#fff",
-    "circle-stroke-opacity": 0.7,
-  },
-};
+function loadImage(map: MapRef, id: string, src: string): Promise<void> {
+  console.log("loading image", id);
+  if (map.hasImage(id)) return Promise.resolve();
+  return new Promise((resolve, reject) =>
+    map.loadImage(src, (err, img) => {
+      if (err || !img) return reject(err);
+      map.addImage(id, img);
+      resolve();
+    }),
+  );
+}
 
 interface MapProps {
   features: FeatureCollection;
@@ -92,6 +54,7 @@ export const Map: FC<MapProps> = ({
   className,
 }) => {
   const mapRef = useRef<MapRef>(null);
+
   const handleClickMap: (e: MapLayerMouseEvent) => void = useCallback(
     (e) => {
       e.preventDefault();
@@ -112,12 +75,12 @@ export const Map: FC<MapProps> = ({
           // show info panel for feature
           onClickFeature(
             (feature as unknown as Feature<Point, FeatureBuilding>).properties
-              ._id
+              ._id,
           );
         }
       }
     },
-    [isAdding, onAddMarker, onClickFeature]
+    [isAdding, onAddMarker, onClickFeature],
   );
 
   return (
@@ -141,6 +104,7 @@ export const Map: FC<MapProps> = ({
           <Layer {...CLUSTERED_LAYER_STYLE} />
           <Layer {...CLUSTERED_COUNT_LAYER_STYLE} />
           <Layer {...UNCLUSTERED_LAYER_STYLE} />
+          <Layer {...UNCLUSTERED_SYMBOL_LAYER_STYLE} />
         </Source>
         {addingLocation && (
           <Marker
@@ -154,6 +118,12 @@ export const Map: FC<MapProps> = ({
           showCompass={false}
           position="bottom-right"
         />
+        {/* <LegendControl
+          position="top-right"
+          demolishedSrc={imgRiven.src}
+          threatenedSrc={imgHotad.src}
+          savedSrc={imgRäddad.src}
+        /> */}
       </ReactMapGl>
     </div>
   );

@@ -51,10 +51,6 @@ export const Carousel: FC<PropsWithChildren> = ({ children }) => {
   };
   return (
     <div>
-      <div
-        className="h-0.5 bg-red-600 w-full origin-left"
-        style={{ transform: `scaleX(${scrollPercent})` }}
-      ></div>
       <div className="relative group">
         <button
           onClick={handlePrev}
@@ -78,13 +74,17 @@ export const Carousel: FC<PropsWithChildren> = ({ children }) => {
           {children}
         </div>
       </div>
-      <div>
+      <div
+        className="h-0.5 bg-red-600 w-full origin-left"
+        style={{ transform: `scaleX(${scrollPercent})` }}
+      ></div>
+      {/* <div>
         {ref.current && (
           <>
             {getCurrentSlide(ref.current) + 1}/{getNumSlides(ref.current) + 1}
           </>
         )}
-      </div>
+      </div> */}
     </div>
   );
 };

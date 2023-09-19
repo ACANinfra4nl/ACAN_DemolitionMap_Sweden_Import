@@ -1,6 +1,17 @@
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 import { CloseButton } from "./CloseButton";
 import { Carousel } from "./Carousel";
+import { StateIcon } from "./StateIcon";
+
+const Detail: FC<{ label: string; value: string | number | ReactNode }> = ({
+  label,
+  value,
+}) => (
+  <>
+    <div>{label}</div>
+    <div className="text-right font-bold">{value}</div>
+  </>
+);
 
 interface DetailsProps {
   properties: FeatureBuilding;
@@ -8,15 +19,10 @@ interface DetailsProps {
 }
 
 export const DetailsPanel: FC<DetailsProps> = ({ properties, onClose }) => (
-  <div className="bg-white p-4">
-    <div className="text-right mb-4">
+  <div className="relative bg-white">
+    <div className="absolute left-6 top-6 z-10">
       <CloseButton onClick={onClose} />
     </div>
-    <h2 className="text-lg">
-      {properties.address}
-      <br />
-      {properties.postcode} {properties.city}
-    </h2>
 
     {properties.images && properties.images.map && (
       <Carousel>
@@ -25,37 +31,68 @@ export const DetailsPanel: FC<DetailsProps> = ({ properties, onClose }) => (
             key={image}
             src={image}
             role="presentation"
-            className="w-full aspect-video object-cover mb-4 scroll-m-0 snap-start"
+            className="aspect-video w-full snap-start object-cover"
           />
         ))}
       </Carousel>
     )}
-    <p className="mb-4">
-      <span className="font-bold">Kategori</span>{" "}
-      <span className="capitalize">{properties.category}</span>
-    </p>
-    <p className="mb-4">
-      <span className="font-bold">Status</span>{" "}
-      <span className="capitalize">{properties.state}</span>
-    </p>
-    {properties.blockName && (
-      <p className="mb-4">
-        <span className="font-bold">Kvartersnamn</span> {properties.blockName}
-      </p>
-    )}
-    <p className="mb-4">
-      <span className="font-bold">Byggår</span> {properties.buildYear}
-    </p>
-    <p className="mb-4">
-      <span className="font-bold">Rivningsår</span> {properties.demolitionYear}
-    </p>
-    <p className="mb-4">
-      <span className="font-bold">Arkitektur</span> {properties.description}
-    </p>
-    <p className="mb-4">
-      <span className="font-bold">Rivningsorsak</span>{" "}
-      {properties.demolitionCause}
-    </p>
+
+    <div className="p-4">
+      <h2 className="mb-4">
+        <span className="text-2xl font-bold">{properties.address}</span>
+        <br />
+        <span className="text-lg font-bold uppercase">
+          {properties.postcode} {properties.city}
+        </span>
+      </h2>
+      <div className="grid grid-cols-2 gap-2">
+        <div className="mb-4 text-lg font-bold capitalize">
+          {properties.category}
+        </div>
+        <div className="flex justify-end gap-2 text-lg font-bold uppercase">
+          <StateIcon state={properties.state} />
+          {properties.state}
+        </div>
+        {properties.architect && (
+          <>
+            <div>Arkitekt</div>
+            <div>{properties.architect}</div>
+          </>
+        )}
+        {typeof properties.size === "number" && properties.size > 0 && (
+          <Detail
+            label="Storlek"
+            value={
+              <>
+                {properties.size}m<sup>2</sup>
+              </>
+            }
+          />
+        )}
+        {properties.blockName && (
+          <Detail label="Kvartersnamn" value={properties.blockName} />
+        )}
+        {properties.propertyOwner && (
+          <Detail label="Fastighetsägare" value={properties.propertyOwner} />
+        )}
+        {typeof properties.boundCO2 === "number" && properties.boundCO2 > 0 && (
+          <Detail label="Bunden CO²" value={<>{properties.boundCO2} ton</>} />
+        )}
+        {properties.buildYear > 0 && (
+          <Detail label="Byggår" value={properties.buildYear} />
+        )}
+        {properties.demolitionYear > 0 && (
+          <Detail label="Rivningsår" value={properties.demolitionYear} />
+        )}
+        {properties.description && (
+          <Detail label="Arkitektur" value={properties.description} />
+        )}
+        {properties.demolitionCause && (
+          <Detail label="Rivningsorsak" value={properties.demolitionCause} />
+        )}
+      </div>
+    </div>
+
     <details>
       <summary>Visa kod</summary>
       <pre>{JSON.stringify(properties, null, 2)}</pre>
