@@ -46,7 +46,7 @@ const SORTERS = {
 
 const StateIndicator: FC<{ state: string }> = ({ state }) => (
   <div
-    className={classNames("rounded-full w-4 h-4", {
+    className={classNames("rounded-full w-6 h-6", {
       "bg-yellow-400": state === "hotad",
       "bg-green-500": state === "räddad",
       "bg-red-600": state === "riven",
@@ -136,19 +136,25 @@ export default function ListPage() {
         {buildings.loading ? (
           <span>Loading&hellip;</span>
         ) : (
-          <ul>
+          <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {rows.map((building) => (
-              <li key={building.properties._id} className="mb-2">
-                <details>
-                  <summary className="flex gap-2 items-center cursor-pointer">
-                    <StateIndicator state={building.properties.state} />{" "}
-                    <span>
-                      {building.properties.address},{" "}
-                      {building.properties.postcode} {building.properties.city}
-                    </span>
-                  </summary>
-                  <pre>{JSON.stringify(building.properties, null, 2)}</pre>
-                </details>
+              <li key={building.properties._id} className="flex flex-col gap-2">
+                <div className="relative aspect-[3/2] w-full">
+                  <div className="absolute top-2 left-2">
+                    <StateIndicator state={building.properties.state} />
+                  </div>
+                  {building.properties.images && (
+                    <img
+                      src={building.properties.images[0]}
+                      className="aspect-[3/2] w-full object-cover"
+                    />
+                  )}
+                </div>
+                <div>
+                  {building.properties.address}
+                  <br />
+                  {building.properties.postcode} {building.properties.city}
+                </div>
               </li>
             ))}
           </ul>

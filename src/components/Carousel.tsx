@@ -13,16 +13,26 @@ const getScrollPercent = (el: HTMLDivElement) => {
   const offsetWidth = el.offsetWidth;
   return scrollLeft / (scrollWidth - offsetWidth);
 };
+const getNumSlides = (el: HTMLDivElement) => {
+  const scrollWidth = el.scrollWidth;
+  const offsetWidth = el.offsetWidth;
+  return Math.round((scrollWidth - offsetWidth) / offsetWidth);
+};
+const getCurrentSlide = (el: HTMLDivElement) => {
+  const numSlides = getNumSlides(el);
+  const currentSlide = Math.round(numSlides * getScrollPercent(el));
+  return currentSlide;
+};
 
 export const Carousel: FC<PropsWithChildren> = ({ children }) => {
   const ref = useRef<HTMLDivElement>(null);
   const [scrollPercent, setScrollPercent] = useState(0);
-  const [scrollLeft, setScrollLeft] = useState(0);
+
   const handleScroll: UIEventHandler<HTMLDivElement> = (e) => {
     const el = e.currentTarget;
     setScrollPercent(getScrollPercent(el));
-    setScrollLeft(scrollLeft);
   };
+
   const handlePrev: MouseEventHandler<HTMLButtonElement> = (e) => {
     if (!ref.current) return;
     ref.current.scrollBy({
@@ -67,6 +77,13 @@ export const Carousel: FC<PropsWithChildren> = ({ children }) => {
         >
           {children}
         </div>
+      </div>
+      <div>
+        {ref.current && (
+          <>
+            {getCurrentSlide(ref.current) + 1}/{getNumSlides(ref.current) + 1}
+          </>
+        )}
       </div>
     </div>
   );
