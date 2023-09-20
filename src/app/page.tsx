@@ -31,7 +31,7 @@ export default function MapPage() {
 
     // TODO: show some sort of "thank you for contributing, someone will publish your entry shortly" message
     alert(
-      "Tack för ditt bidrag! Informationen verifieras innan den syns på kartan."
+      "Tack för ditt bidrag! Informationen verifieras innan den syns på kartan.",
     );
     // add new marker
     // dispatch({ type: ACTIONS.ADD_BUILDING, payload: feature });
@@ -43,11 +43,11 @@ export default function MapPage() {
       const feature = features.features.find((f) => f.properties._id === id);
       setSelectedFeature(feature);
     },
-    [features]
+    [features],
   );
   const clearSelectedFeature = useCallback(
     () => setSelectedFeature(undefined),
-    []
+    [],
   );
   const handleClickAddBuilding: MouseEventHandler<HTMLButtonElement> =
     useCallback((e) => {
@@ -56,15 +56,15 @@ export default function MapPage() {
     }, []);
 
   return (
-    <main className="min-h-screen w-full grid grid-cols-2 grid-rows-[auto_1fr]">
-      <div className="row-start-1 col-span-2">
+    <main className="grid min-h-screen w-full grid-cols-2 grid-rows-[auto_1fr]">
+      <div className="col-span-2 row-start-1">
         <Navigation color="text-red-600" />
       </div>
 
-      <div className="absolute left-0 right-0 flex items-center justify-center bottom-[62px] sm:bottom-[38px] z-10 ml-8 mr-40 sm:ml-40">
+      <div className="absolute bottom-[62px] left-0 right-0 z-10 ml-8 mr-40 flex items-center justify-center sm:bottom-[38px] sm:ml-40">
         <button
           onClick={handleClickAddBuilding}
-          className="border-[3px] border-red-600 bg-white text-red-600 h-12 px-4"
+          className="h-12 border-[3px] border-red-600 bg-white px-4 text-red-600"
         >
           {isAdding ? (
             "Välj plats på kartan"
@@ -76,7 +76,7 @@ export default function MapPage() {
         </button>
       </div>
       <Map
-        className="col-span-2 row-start-2 col-start-1"
+        className="col-span-2 col-start-1 row-start-2"
         features={features}
         isAdding={isAdding}
         addingLocation={addingLocation}
@@ -84,7 +84,7 @@ export default function MapPage() {
         onClickFeature={handleClickFeature}
       />
       {selectedFeature && (
-        <div className="col-span-1 col-start-1 row-start-2 z-10 relative grid">
+        <div className="relative z-10 col-span-1 col-start-1 row-start-2 grid bg-white">
           <DetailsPanel
             properties={selectedFeature.properties}
             onClose={clearSelectedFeature}
@@ -92,7 +92,7 @@ export default function MapPage() {
         </div>
       )}
       {addingLocation && (
-        <div className="col-span-1 col-start-1 row-start-2 z-10 relative grid">
+        <div className="relative z-10 col-span-1 col-start-1 row-start-2 grid">
           <NewFeatureForm
             latLng={addingLocation}
             onCancel={handleCancelFeature}

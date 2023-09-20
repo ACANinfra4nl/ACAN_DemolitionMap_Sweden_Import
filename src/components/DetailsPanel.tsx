@@ -19,22 +19,24 @@ interface DetailsProps {
 }
 
 export const DetailsPanel: FC<DetailsProps> = ({ properties, onClose }) => (
-  <div className="relative bg-white">
-    <div className="absolute left-6 top-6 z-10">
+  <div className="grid grid-rows-[auto_1fr]">
+    <div className="z-10 col-start-1 row-start-1 ml-6 mt-6">
       <CloseButton onClick={onClose} />
     </div>
 
     {properties.images && properties.images.map && (
-      <Carousel>
-        {properties.images.map((image) => (
-          <img
-            key={image}
-            src={image}
-            role="presentation"
-            className="aspect-video w-full snap-start object-cover"
-          />
-        ))}
-      </Carousel>
+      <div className="col-start-1 row-span-2 row-start-1">
+        <Carousel>
+          {properties.images.map((image) => (
+            <img
+              key={image}
+              src={image}
+              role="presentation"
+              className="aspect-video w-full snap-start object-cover"
+            />
+          ))}
+        </Carousel>
+      </div>
     )}
 
     <div className="p-4">
