@@ -1,0 +1,6 @@
+.acan-legend-button {
+  &.\:selected {
+    background-color: black;
+    color: white;
+  }
+}

@@ -15,6 +15,7 @@ export default function MapPage() {
   const [addingLocation, setAddingLocation] = useState<LatLng>();
   const features = useContext(BuildingsContext);
   // const dispatch = useContext(BuildingsDispatchContext);
+  const [filter, setFilter] = useState<string>();
 
   const handleAddMarker = useCallback((latLng: LatLng) => {
     // show popup with form
@@ -55,6 +56,13 @@ export default function MapPage() {
       setIsAdding(true);
     }, []);
 
+  const filteredFeatures: BuildingCollection = {
+    type: "FeatureCollection",
+    features: features.features.filter(
+      (f) => typeof filter === "undefined" || f.properties.state === filter,
+    ),
+  };
+
   return (
     <main className="grid min-h-screen w-full grid-cols-2 grid-rows-[auto_1fr]">
       <div className="col-span-2 row-start-1">
@@ -77,11 +85,12 @@ export default function MapPage() {
       </div>
       <Map
         className="col-span-2 col-start-1 row-start-2"
-        features={features}
+        features={filteredFeatures}
         isAdding={isAdding}
         addingLocation={addingLocation}
         onAddMarker={handleAddMarker}
         onClickFeature={handleClickFeature}
+        onFilter={setFilter}
       />
       {selectedFeature && (
         <div className="relative z-10 col-span-1 col-start-1 row-start-2 grid bg-white">

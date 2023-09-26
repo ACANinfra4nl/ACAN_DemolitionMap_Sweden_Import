@@ -37,11 +37,12 @@ function loadImage(map: MapRef, id: string, src: string): Promise<void> {
 }
 
 interface MapProps {
-  features: FeatureCollection;
+  features: BuildingCollection;
   isAdding: boolean;
   addingLocation?: LatLng;
   onAddMarker: (latLng: LatLng) => void;
   onClickFeature: (id: string) => void;
+  onFilter?: (state?: string) => void;
   className?: string;
 }
 
@@ -51,6 +52,7 @@ export const Map: FC<MapProps> = ({
   addingLocation,
   onAddMarker,
   onClickFeature,
+  onFilter,
   className,
 }) => {
   const mapRef = useRef<MapRef>(null);
@@ -118,12 +120,15 @@ export const Map: FC<MapProps> = ({
           showCompass={false}
           position="bottom-right"
         />
-        {/* <LegendControl
-          position="top-right"
-          demolishedSrc={imgRiven.src}
-          threatenedSrc={imgHotad.src}
-          savedSrc={imgRäddad.src}
-        /> */}
+        {onFilter && (
+          <LegendControl
+            position="top-right"
+            demolishedSrc={imgRiven.src}
+            threatenedSrc={imgHotad.src}
+            savedSrc={imgRäddad.src}
+            onClick={onFilter}
+          />
+        )}
       </ReactMapGl>
     </div>
   );
