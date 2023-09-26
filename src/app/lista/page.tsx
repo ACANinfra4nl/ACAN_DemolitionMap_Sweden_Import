@@ -1,21 +1,21 @@
 "use client";
 import { DetailsMap } from "@/components/DetailsMap";
 import { DetailsPanel } from "@/components/DetailsPanel";
-import { Map } from "@/components/Map";
 import { Navigation } from "@/components/Navigation";
 import { BuildingsContext } from "@/state/buildings";
 import classNames from "classnames";
-import type { Feature, Point } from "geojson";
-import Link from "next/link";
 import {
   ChangeEventHandler,
   FC,
   MouseEvent,
   useCallback,
   useContext,
-  useEffect,
   useState,
 } from "react";
+import imgRiven from "../../img/riven.png";
+import imgHotad from "../../img/hotad.png";
+import imgRäddad from "../../img/räddad.png";
+import { FilterButton } from "@/components/FilterButton";
 
 const matchesIgnoreCase = (haystack: string | undefined, needle: string) =>
   haystack?.toLowerCase().includes(needle.toLowerCase());
@@ -65,6 +65,7 @@ const SortArrow: FC<{ descending?: boolean }> = ({ descending }) => (
 
 export default function ListPage() {
   const [filter, setFilter] = useState("");
+  const [stateFilter, setStateFilter] = useState<string>();
   const buildings = useContext(BuildingsContext);
   const [selectedBuilding, setSelectedBuilding] = useState<FeatureBuilding>();
   const [sortBy, setSortBy] = useState<keyof typeof SORTERS>("buildYear");
@@ -83,7 +84,18 @@ export default function ListPage() {
     setSortBy(key);
   };
 
+  const handleStateFilter = useCallback(
+    (state: string) =>
+      setStateFilter((old) => (old === state ? undefined : state)),
+    [],
+  );
+
   let rows = buildings.features
+    .filter(
+      (b) =>
+        typeof stateFilter === "undefined" ||
+        b.properties.state === stateFilter,
+    )
     .filter(filterBuildings(filter))
     .sort(SORTERS[sortBy]);
   if (sortDesc) rows.reverse();
@@ -107,8 +119,8 @@ export default function ListPage() {
             </div>
           ) : (
             <div className="col-start-1 row-start-1 overflow-scroll scroll-smooth p-4">
-              <div className="flex w-full items-center gap-4">
-                <div className="mb-4 flex flex-grow items-center gap-2">
+              <div className="mb-4 flex w-full items-center gap-4">
+                <div className="flex flex-grow items-center gap-2">
                   <label htmlFor="filter">Filtrera</label>
                   <input
                     id="filter"
@@ -130,7 +142,27 @@ export default function ListPage() {
               <option>övrig</option>
             </datalist> */}
                 </div>
-                <div className="mb-4 flex gap-2">
+                <div className="flex items-center gap-4">
+                  <FilterButton
+                    imgSrc={imgRiven.src}
+                    state="riven"
+                    selected={stateFilter === "riven"}
+                    onClick={handleStateFilter}
+                  />
+                  <FilterButton
+                    imgSrc={imgHotad.src}
+                    state="hotad"
+                    selected={stateFilter === "hotad"}
+                    onClick={handleStateFilter}
+                  />
+                  <FilterButton
+                    imgSrc={imgRäddad.src}
+                    state="räddad"
+                    selected={stateFilter === "räddad"}
+                    onClick={handleStateFilter}
+                  />
+                </div>
+                <div className="flex items-center gap-2">
                   <span>Sortera</span>{" "}
                   <button
                     onClick={handleSortBy("buildYear")}

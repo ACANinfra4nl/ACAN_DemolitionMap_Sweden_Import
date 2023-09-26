@@ -13,9 +13,9 @@ import type { Feature, FeatureCollection, Point } from "geojson";
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./style.css";
 import classNames from "classnames";
-import imgRiven from "./riven.png";
-import imgHotad from "./hotad.png";
-import imgRäddad from "./räddad.png";
+import imgRiven from "../../img/riven.png";
+import imgHotad from "../../img/hotad.png";
+import imgRäddad from "../../img/räddad.png";
 import { LegendControl } from "./LegendControl";
 import {
   CLUSTERED_COUNT_LAYER_STYLE,
