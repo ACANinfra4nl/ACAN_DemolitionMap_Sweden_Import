@@ -23,7 +23,7 @@ export const FilterButton: FC<FilterButtonProps> = ({
       )}
       onClick={handleClick}
     >
-      <img src={imgSrc} role="presentation" className="h-4 w-4" />
+      <img src={imgSrc} role="presentation" className="h-5 w-5" />
       {state}
     </button>
   );

@@ -5,7 +5,7 @@ import {
   IControl,
   ControlPosition,
 } from "react-map-gl/maplibre";
-import "./LegendControl.css";
+// import "./LegendControl.css";
 
 const createStateLegendElement = (
   src: string,
