@@ -6,10 +6,10 @@ export const StateIcon: FC<{ state: string }> = ({ state }) => (
     className={classNames(
       "h-4 w-4 rounded-full",
       state == "riven"
-        ? "bg-red-600"
+        ? "bg-demolished"
         : state == "hotad"
-        ? "bg-yellow-400"
-        : "bg-green-500",
+        ? "bg-threatened"
+        : "bg-saved",
     )}
     aria-label={state}
   ></div>

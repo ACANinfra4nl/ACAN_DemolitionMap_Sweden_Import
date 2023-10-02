@@ -19,7 +19,7 @@ interface DetailsProps {
 }
 
 export const DetailsPanel: FC<DetailsProps> = ({ properties, onClose }) => (
-  <div className="grid grid-rows-[auto_1fr]">
+  <div className="grid grid-rows-[auto_1fr] p-5">
     <div className="z-10 col-start-1 row-start-1 ml-6 mt-6">
       <CloseButton onClick={onClose} />
     </div>

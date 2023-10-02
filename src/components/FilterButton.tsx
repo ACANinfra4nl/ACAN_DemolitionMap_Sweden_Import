@@ -1,5 +1,6 @@
 "use client";
 import { StateIcon } from "@/components/StateIcon";
+import classNames from "classnames";
 import { FC, useCallback } from "react";
 
 export const FilterButton: FC<{
@@ -13,7 +14,10 @@ export const FilterButton: FC<{
   );
   return (
     <button
-      className="flex items-center gap-2 font-bold uppercase"
+      className={classNames(
+        "flex items-center gap-2 font-bold uppercase",
+        filter && state !== filter && "opacity-50",
+      )}
       onClick={handleClick}
     >
       <StateIcon state={state} />

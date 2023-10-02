@@ -1,20 +1,11 @@
-import { buildingToFeature, toFeature } from "@/lib/buildingToFeature";
+import { toFeature } from "@/lib/buildingToFeature";
 import { FC, useCallback, useState } from "react";
 import ReactMapGl, {
-  MapLayerMouseEvent,
   Source,
   Layer,
-  CircleLayer,
-  MapRef,
-  SymbolLayer,
-  Marker,
-  NavigationControl,
   ViewStateChangeEvent,
 } from "react-map-gl/maplibre";
-import {
-  UNCLUSTERED_LAYER_STYLE,
-  UNCLUSTERED_SYMBOL_LAYER_STYLE,
-} from "./Map/layers";
+import { UNCLUSTERED_LAYER_STYLE } from "./Map/layers";
 import { FeatureCollection } from "geojson";
 import { mapStyle } from "./Map/style";
 
@@ -50,7 +41,6 @@ export const DetailsMap: FC<{ building: FeatureBuilding }> = ({ building }) => {
     >
       <Source id="annotations" type="geojson" data={features}>
         <Layer {...UNCLUSTERED_LAYER_STYLE} />
-        <Layer {...UNCLUSTERED_SYMBOL_LAYER_STYLE} />
       </Source>
     </ReactMapGl>
   );

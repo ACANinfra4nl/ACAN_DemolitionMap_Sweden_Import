@@ -3,6 +3,8 @@ import { FC, ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import classNames from "classnames";
+import { AcanLogoCircle } from "./AcanLogoCircle";
+import { ScalingAcanLogo } from "./ScalingAcanLogo";
 
 const NavLink: FC<{ href: string; path: string; children: ReactNode }> = ({
   href,
@@ -17,7 +19,7 @@ const NavLink: FC<{ href: string; path: string; children: ReactNode }> = ({
   </Link>
 );
 
-export const Navigation: FC = () => {
+export const Navigation: FC<{ scaleLogo?: boolean }> = ({ scaleLogo }) => {
   const path = usePathname();
   return (
     <nav className="flex w-full items-start justify-between gap-2 p-5 text-xl font-bold uppercase leading-none">
@@ -38,7 +40,13 @@ export const Navigation: FC = () => {
         </NavLink>
       </div>
       <div>
-        <span className="block rounded-full bg-black p-5 text-white">A!</span>
+        {scaleLogo ? (
+          <ScalingAcanLogo />
+        ) : (
+          <div className="w-14">
+            <AcanLogoCircle />
+          </div>
+        )}
       </div>
     </nav>
   );
