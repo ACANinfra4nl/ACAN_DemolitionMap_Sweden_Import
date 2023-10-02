@@ -16,13 +16,14 @@ import {
   UNCLUSTERED_SYMBOL_LAYER_STYLE,
 } from "./Map/layers";
 import { FeatureCollection } from "geojson";
+import { mapStyle } from "./Map/style";
 
 export const DetailsMap: FC<{ building: FeatureBuilding }> = ({ building }) => {
   const [viewState, setViewState] = useState({
     latitude: building.location.lat,
     longitude: building.location.lng,
     zoom: 17,
-    pitch: 35,
+    // pitch: 35,
   });
   const features: FeatureCollection = {
     type: "FeatureCollection",
@@ -42,7 +43,7 @@ export const DetailsMap: FC<{ building: FeatureBuilding }> = ({ building }) => {
   return (
     <ReactMapGl
       mapLib={import("maplibre-gl")}
-      mapStyle="https://api.maptiler.com/maps/abbe45d8-df15-4288-ab89-0a96d0eb6269/style.json?key=0VxOnlQWkxpRRW7vyr9t"
+      mapStyle={mapStyle}
       {...viewState}
       onZoom={handleInteraction}
       onRotate={handleInteraction}

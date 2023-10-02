@@ -7,6 +7,7 @@ import { NewFeatureForm } from "@/components/NewFeatureForm";
 import { BuildingsContext } from "@/state/buildings";
 import { Feature, Point } from "geojson";
 import { MouseEventHandler, useCallback, useContext, useState } from "react";
+import { FilterButton } from "../components/FilterButton";
 
 export default function MapPage() {
   const [selectedFeature, setSelectedFeature] =
@@ -64,36 +65,42 @@ export default function MapPage() {
   };
 
   return (
-    <main className="grid min-h-screen w-full grid-cols-2 grid-rows-[auto_1fr]">
-      <div className="col-span-2 row-start-1">
-        <Navigation color="text-red-600" />
+    <main className="grid min-h-screen w-full grid-cols-2 grid-rows-[auto_auto_1fr]">
+      <div className="col-span-2 col-start-1 row-start-1">
+        <Navigation />
       </div>
 
-      <div className="absolute bottom-[62px] left-0 right-0 z-10 ml-8 mr-40 flex items-center justify-center sm:bottom-[38px] sm:ml-40">
-        <button
-          onClick={handleClickAddBuilding}
-          className="h-12 border-[3px] border-red-600 bg-white px-4 text-red-600"
-        >
-          {isAdding ? (
-            "Välj plats på kartan"
-          ) : (
-            <>
-              + Lägg till<span className="hidden sm:inline"> byggnad</span>
-            </>
-          )}
-        </button>
+      <div className="col-span-2 col-start-1 row-start-2 mx-5 flex gap-2 pb-2">
+        <FilterButton state="riven" onClick={setFilter} filter={filter} />
+        <FilterButton state="hotad" onClick={setFilter} filter={filter} />
+        <FilterButton state="räddad" onClick={setFilter} filter={filter} />
       </div>
-      <Map
-        className="col-span-2 col-start-1 row-start-2"
-        features={filteredFeatures}
-        isAdding={isAdding}
-        addingLocation={addingLocation}
-        onAddMarker={handleAddMarker}
-        onClickFeature={handleClickFeature}
-        onFilter={setFilter}
-      />
+      <div className="relative col-span-2 col-start-1 row-start-3 mx-5 mb-5">
+        <div className="absolute bottom-12 left-5 z-10 sm:bottom-[40px]">
+          <button
+            onClick={handleClickAddBuilding}
+            className="h-12 rounded-md bg-black px-4 text-white transition-colors hover:bg-black/50"
+          >
+            {isAdding ? (
+              "Välj plats på kartan"
+            ) : (
+              <>
+                Lägg till<span className="hidden sm:inline"> byggnad</span>
+              </>
+            )}
+          </button>
+        </div>
+        <Map
+          className="h-full w-full"
+          features={filteredFeatures}
+          isAdding={isAdding}
+          addingLocation={addingLocation}
+          onAddMarker={handleAddMarker}
+          onClickFeature={handleClickFeature}
+        />
+      </div>
       {selectedFeature && (
-        <div className="relative z-10 col-span-1 col-start-1 row-start-2 grid bg-white">
+        <div className="relative z-10 col-span-1 col-start-1 row-span-3 row-start-1 grid bg-white">
           <DetailsPanel
             properties={selectedFeature.properties}
             onClose={clearSelectedFeature}
@@ -101,7 +108,7 @@ export default function MapPage() {
         </div>
       )}
       {addingLocation && (
-        <div className="relative z-10 col-span-1 col-start-1 row-start-2 grid">
+        <div className="relative z-10 col-span-1 col-start-1 row-span-3 row-start-1 grid">
           <NewFeatureForm
             latLng={addingLocation}
             onCancel={handleCancelFeature}

@@ -4,7 +4,7 @@ import { FC } from "react";
 export const StateIcon: FC<{ state: string }> = ({ state }) => (
   <div
     className={classNames(
-      "h-6 w-6 rounded-full",
+      "h-4 w-4 rounded-full",
       state == "riven"
         ? "bg-red-600"
         : state == "hotad"

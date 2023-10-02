@@ -7,22 +7,19 @@ import ReactMapGl, {
   Marker,
   NavigationControl,
 } from "react-map-gl/maplibre";
-import type { Feature, FeatureCollection, Point } from "geojson";
-
-// Include style sheet
-import "maplibre-gl/dist/maplibre-gl.css";
-import "./style.css";
+import type { Feature, Point } from "geojson";
 import classNames from "classnames";
-import imgRiven from "../../img/riven.png";
-import imgHotad from "../../img/hotad.png";
-import imgRäddad from "../../img/räddad.png";
-import { LegendControl } from "./LegendControl";
 import {
   CLUSTERED_COUNT_LAYER_STYLE,
   CLUSTERED_LAYER_STYLE,
   UNCLUSTERED_LAYER_STYLE,
   UNCLUSTERED_SYMBOL_LAYER_STYLE,
 } from "./layers";
+import { mapStyle } from "./style";
+
+// Include style sheets
+import "maplibre-gl/dist/maplibre-gl.css";
+import "./style.css";
 
 function loadImage(map: MapRef, id: string, src: string): Promise<void> {
   console.log("loading image", id);
@@ -42,7 +39,6 @@ interface MapProps {
   addingLocation?: LatLng;
   onAddMarker: (latLng: LatLng) => void;
   onClickFeature: (id: string) => void;
-  onFilter?: (state?: string) => void;
   className?: string;
 }
 
@@ -52,7 +48,6 @@ export const Map: FC<MapProps> = ({
   addingLocation,
   onAddMarker,
   onClickFeature,
-  onFilter,
   className,
 }) => {
   const mapRef = useRef<MapRef>(null);
@@ -86,10 +81,10 @@ export const Map: FC<MapProps> = ({
   );
 
   return (
-    <div className={classNames("text-red-600", className)}>
+    <div className={classNames("text-white", className)}>
       <ReactMapGl
         mapLib={import("maplibre-gl")}
-        mapStyle="https://api.maptiler.com/maps/abbe45d8-df15-4288-ab89-0a96d0eb6269/style.json?key=0VxOnlQWkxpRRW7vyr9t"
+        mapStyle={mapStyle}
         initialViewState={{ latitude: 59.3293, longitude: 18.0686, zoom: 5 }}
         onClick={handleClickMap}
         ref={mapRef}
@@ -120,15 +115,6 @@ export const Map: FC<MapProps> = ({
           showCompass={false}
           position="bottom-right"
         />
-        {onFilter && (
-          <LegendControl
-            position="top-right"
-            demolishedSrc={imgRiven.src}
-            threatenedSrc={imgHotad.src}
-            savedSrc={imgRäddad.src}
-            onClick={onFilter}
-          />
-        )}
       </ReactMapGl>
     </div>
   );

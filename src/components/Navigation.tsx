@@ -10,30 +10,23 @@ const NavLink: FC<{ href: string; path: string; children: ReactNode }> = ({
   children,
 }) => (
   <Link
-    className={classNames("p-3", path === href && "pointer-events-none")}
+    className={classNames(path === href && "pointer-events-none")}
     href={href}
   >
     {children}
   </Link>
 );
 
-export const Navigation: FC<{ color?: string }> = ({
-  color = "text-blue-500",
-}) => {
+export const Navigation: FC = () => {
   const path = usePathname();
   return (
-    <div
-      className={classNames(
-        "flex justify-between p-4 w-full border-b border-current border-solid",
-        color
-      )}
-    >
-      <nav className="flex items-center gap-5">
-        <span className="uppercase">
-          Svensk
-          <br />
-          rivningsatlas
-        </span>
+    <nav className="flex w-full items-start justify-between gap-2 p-5 text-xl font-bold uppercase leading-none">
+      <Link href="/">
+        Svensk
+        <br />
+        rivningsatlas
+      </Link>
+      <div className="flex flex-col">
         <NavLink href="/" path={path}>
           Karta
         </NavLink>
@@ -43,7 +36,10 @@ export const Navigation: FC<{ color?: string }> = ({
         <NavLink href="/manifest" path={path}>
           Manifest
         </NavLink>
-      </nav>
-    </div>
+      </div>
+      <div>
+        <span className="block rounded-full bg-black p-5 text-white">A!</span>
+      </div>
+    </nav>
   );
 };

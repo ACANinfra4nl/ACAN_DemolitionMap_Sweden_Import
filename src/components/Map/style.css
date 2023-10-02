@@ -1,21 +1,38 @@
 .maplibregl-ctrl-group:not(:empty) {
   box-shadow: none;
   display: flex;
-  margin-right: 3rem;
-  margin-bottom: 18px;
+}
+.maplibregl-ctrl-bottom-right .maplibregl-ctrl-group {
+  margin-right: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  gap: 0.25rem;
+  background: none;
+}
+
+.maplibregl-ctrl-attrib.maplibregl-compact,
+.maplibregl-ctrl-attrib.maplibregl-compact-show {
+  margin: 2px;
 }
 
 .maplibregl-ctrl-group.maplibregl-ctrl-group button {
   display: inline-block;
-  border: 3px solid currentColor;
+  border: 0;
   width: 3rem;
   height: 3rem;
-  fill: currentColor;
+  background: black;
+  border-radius: 6px;
+  color: inherit;
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
 
   & + button {
-    border-left: 0;
+    margin-left: 0.25rem;
   }
 }
+.maplibregl-ctrl button:not(:disabled):hover {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
 .maplibregl-ctrl-group button:focus:first-child {
   border-radius: 0;
 }
@@ -31,6 +48,7 @@
   font-size: 1.5rem; */
   width: auto;
   height: auto;
+  color: inherit;
 }
 .maplibregl-ctrl button.maplibregl-ctrl-zoom-in .maplibregl-ctrl-icon {
   background-image: none;

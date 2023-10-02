@@ -1,29 +1,22 @@
-import classNames from "classnames";
+"use client";
+import { StateIcon } from "@/components/StateIcon";
 import { FC, useCallback } from "react";
 
-interface FilterButtonProps {
-  imgSrc: string;
-  state: string;
-  selected: boolean;
-  onClick: (state: string) => void;
-}
-
-export const FilterButton: FC<FilterButtonProps> = ({
-  imgSrc,
-  selected,
-  state,
-  onClick,
-}) => {
-  const handleClick = useCallback(() => onClick(state), [state]);
+export const FilterButton: FC<{
+  state: "riven" | "hotad" | "räddad";
+  filter?: string;
+  onClick: (state?: string) => void;
+}> = ({ state, filter, onClick }) => {
+  const handleClick = useCallback(
+    () => onClick(filter === state ? undefined : state),
+    [state, filter],
+  );
   return (
     <button
-      className={classNames(
-        "flex items-center gap-2 px-2 py-1",
-        selected && "bg-black text-white",
-      )}
+      className="flex items-center gap-2 font-bold uppercase"
       onClick={handleClick}
     >
-      <img src={imgSrc} role="presentation" className="h-5 w-5" />
+      <StateIcon state={state} />
       {state}
     </button>
   );
