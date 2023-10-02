@@ -13,25 +13,12 @@ import {
   CLUSTERED_COUNT_LAYER_STYLE,
   CLUSTERED_LAYER_STYLE,
   UNCLUSTERED_LAYER_STYLE,
-  UNCLUSTERED_SYMBOL_LAYER_STYLE,
 } from "./layers";
 import { mapStyle } from "./style";
 
 // Include style sheets
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./style.css";
-
-function loadImage(map: MapRef, id: string, src: string): Promise<void> {
-  console.log("loading image", id);
-  if (map.hasImage(id)) return Promise.resolve();
-  return new Promise((resolve, reject) =>
-    map.loadImage(src, (err, img) => {
-      if (err || !img) return reject(err);
-      map.addImage(id, img);
-      resolve();
-    }),
-  );
-}
 
 interface MapProps {
   features: BuildingCollection;
@@ -101,7 +88,6 @@ export const Map: FC<MapProps> = ({
           <Layer {...CLUSTERED_LAYER_STYLE} />
           <Layer {...CLUSTERED_COUNT_LAYER_STYLE} />
           <Layer {...UNCLUSTERED_LAYER_STYLE} />
-          <Layer {...UNCLUSTERED_SYMBOL_LAYER_STYLE} />
         </Source>
         {addingLocation && (
           <Marker
