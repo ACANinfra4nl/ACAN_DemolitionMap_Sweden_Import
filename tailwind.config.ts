@@ -14,6 +14,21 @@ const config: Config = {
         saved: "#41B82E",
         "acan-blue": "#2637f3",
       },
+      fontSize: {
+        intro: ["clamp(1.25rem,3vw,3rem)", "1.05"],
+        menu: ["1.375rem", { fontWeight: "700", lineHeight: "1.05" }],
+        "menu-s": ["1.125rem", { fontWeight: "700", lineHeight: "1.05" }],
+        body: [
+          "1rem",
+          {
+            fontWeight: "700",
+            lineHeight: "1.05",
+          },
+        ],
+      },
+      margin: {
+        column: "calc(20% - 2.5rem)",
+      },
     },
   },
   plugins: [require("@tailwindcss/typography")],

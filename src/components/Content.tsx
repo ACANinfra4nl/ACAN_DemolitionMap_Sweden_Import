@@ -17,36 +17,38 @@ export const Content: FC<{ data: SanityDocument<ManifestDocumentType> }> = ({
     <div className="sticky top-0">
       <Navigation scaleLogo />
     </div>
-    <main>
+    <main className="mt-column">
       <div className="mx-5">
         {/* <h1 className="mb-4 text-4xl font-bold">{data.heading}</h1> */}
         <div className="grid grid-cols-5 items-end gap-10">
           <IntroText>{data.intro}</IntroText>
-          <div className="col-start-5 text-xl font-bold">
-            <Link href="/karta" className="block">
+          <div className="text-intro col-start-4 font-bold sm:col-start-5">
+            <Link href="/karta" className="block whitespace-nowrap">
               <span className="underline">Karta</span> &rarr;
             </Link>
-            <Link href="/lista" className="block">
+            <Link href="/lista" className="block whitespace-nowrap">
               <span className="underline">Lista</span> &rarr;
             </Link>
           </div>
         </div>
       </div>
       <LatestSection buildings={data.latestBuildings.map(fixBuildingImages)} />
-      <div className="prose mx-5">
-        <PortableText
-          value={data.content}
-          components={{
-            types: { image: Image },
-            block: {
-              intro: IntroText,
-            },
-          }}
-        />
-      </div>
-      <div className="mx-auto my-16 flex w-64 flex-col gap-14 px-5">
-        <AcanLogoText />
-        <SallyLogo />
+      <div className="mx-5 grid grid-cols-5">
+        <div className="text-body prose col-span-4 col-start-2 max-w-none sm:col-span-3 sm:col-start-3">
+          <PortableText
+            value={data.content}
+            components={{
+              types: { image: Image },
+              block: {
+                intro: IntroText,
+              },
+            }}
+          />
+        </div>
+        <div className="w-column col-span-3 col-start-2 mb-32 mt-16 flex flex-col gap-14 sm:col-span-1 sm:col-start-3">
+          <AcanLogoText />
+          <SallyLogo />
+        </div>
       </div>
     </main>
   </>

@@ -22,13 +22,13 @@ const NavLink: FC<{ href: string; path: string; children: ReactNode }> = ({
 export const Navigation: FC<{ scaleLogo?: boolean }> = ({ scaleLogo }) => {
   const path = usePathname();
   return (
-    <nav className="flex w-full items-start justify-between gap-2 p-5 text-xl font-bold uppercase leading-none">
-      <Link href="/">
+    <nav className="text-menu-s sm:text-menu grid w-full grid-cols-5 items-start justify-between gap-10 p-5 uppercase">
+      <Link href="/" className="col-span-2">
         Svensk
         <br />
         rivningsatlas
       </Link>
-      <div className="flex flex-col">
+      <div className="col-span-2 col-start-3 flex flex-col">
         <NavLink href="/" path={path}>
           Karta
         </NavLink>
@@ -39,11 +39,11 @@ export const Navigation: FC<{ scaleLogo?: boolean }> = ({ scaleLogo }) => {
           Manifest
         </NavLink>
       </div>
-      <div>
+      <div className="col-start-5 sm:col-start-5">
         {scaleLogo ? (
           <ScalingAcanLogo />
         ) : (
-          <div className="w-14">
+          <div className="ml-auto w-14">
             <AcanLogoCircle />
           </div>
         )}

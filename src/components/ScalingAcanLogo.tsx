@@ -31,7 +31,7 @@ export const ScalingAcanLogo: FC = () => {
     };
   }, []);
   return (
-    <div className="w-14 origin-top-right" ref={el}>
+    <div className="ml-auto w-14 origin-top-right" ref={el}>
       <AcanLogoCircle />
     </div>
   );
