@@ -120,8 +120,8 @@ export default function ListPage() {
           </div>
         ) : (
           <div className="col-start-1 row-start-2 overflow-scroll scroll-smooth px-5">
-            <div className="mb-4 flex w-full gap-x-10 gap-y-3">
-              <div className="flex basis-2/5 gap-2">
+            <div className="mb-4 grid w-full grid-cols-[auto_1fr_auto] gap-x-10 gap-y-3">
+              <div className="col-span-3 flex gap-2 md:col-span-1">
                 <FilterButton
                   state="riven"
                   filter={stateFilter}
@@ -138,7 +138,7 @@ export default function ListPage() {
                   onClick={setStateFilter}
                 />
               </div>
-              <div className="text-menu-s sm:text-menu flex-grow basis-1/5 items-center">
+              <div className="text-menu-s sm:text-menu col-span-2 items-center md:col-span-1 md:col-start-2">
                 <input
                   aria-label="Filtrera"
                   id="filter"
@@ -148,7 +148,7 @@ export default function ListPage() {
                   onChange={handleFilterChange}
                 />
               </div>
-              <div className="text-menu-s sm:text-menu flex basis-1/5 items-center gap-2">
+              <div className="text-menu-s sm:text-menu col-start-3 flex items-center gap-2">
                 {/* <SortButton
                     sortKey="address"
                     sortBy={sortBy}
