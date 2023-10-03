@@ -8,10 +8,11 @@ function easeInOutCubic(x: number): number {
 export const ScalingAcanLogo: FC = () => {
   const el = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    const scrollHandler = () => {
+    const resizeLogo = () => {
       if (!el.current) return;
+      console.log("recalculating logo size");
       const maxWidth = (document.body.clientWidth - 40 - 160) / 5;
-      const maxScale = maxWidth / el.current.offsetWidth;
+      const maxScale = Math.max(1, maxWidth / el.current.offsetWidth);
       if (window.scrollY > 0) {
         const scrollAmount = 1 - Math.min(1, window.scrollY / 500);
         el.current.style.transform = `scale(${
@@ -21,12 +22,16 @@ export const ScalingAcanLogo: FC = () => {
         el.current.style.transform = `scale(${maxScale})`;
       }
     };
-    scrollHandler();
-    document.addEventListener("scroll", scrollHandler, { passive: true });
-    return () => document.removeEventListener("scroll", scrollHandler);
+    resizeLogo();
+    document.addEventListener("scroll", resizeLogo, { passive: true });
+    window.addEventListener("resize", resizeLogo, { passive: true });
+    return () => {
+      document.removeEventListener("scroll", resizeLogo);
+      window.removeEventListener("resize", resizeLogo);
+    };
   }, []);
   return (
-    <div className="mb-36 w-14 origin-top-right" ref={el}>
+    <div className="w-14 origin-top-right" ref={el}>
       <AcanLogoCircle />
     </div>
   );
