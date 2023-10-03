@@ -46,8 +46,12 @@ export const Content: FC<{ data: SanityDocument<ManifestDocumentType> }> = ({
           />
         </div>
         <div className="w-column col-span-3 col-start-2 mb-32 mt-16 flex flex-col gap-14 sm:col-span-1 sm:col-start-3">
-          <AcanLogoText />
-          <SallyLogo />
+          <Link href="https://www.architectscan.se/" rel="noopener noreferrer">
+            <AcanLogoText />
+          </Link>
+          <Link href="https://sally.doberman.co/" rel="noopener noreferrer">
+            <SallyLogo />
+          </Link>
         </div>
       </div>
     </main>
