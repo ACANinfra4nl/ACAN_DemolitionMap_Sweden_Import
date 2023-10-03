@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import { SchemaTypeDefinition } from "sanity";
 
 export const manifest: SchemaTypeDefinition = {
@@ -13,6 +14,13 @@ export const manifest: SchemaTypeDefinition = {
       validation: (Rule) => Rule.required(),
     },
     {
+      name: "intro",
+      type: "text",
+      title: "Ingress",
+      rows: 5,
+      validation: (Rule) => Rule.required(),
+    },
+    {
       name: "content",
       type: "array",
       title: "Innehåll",
@@ -24,6 +32,13 @@ export const manifest: SchemaTypeDefinition = {
             { title: "H2", value: "h2" },
             { title: "H3", value: "h3" },
             { title: "Quote", value: "blockquote" },
+            {
+              title: "Ingress",
+              value: "intro",
+              component: ({ children }) => (
+                <p className="max-w-[24em] text-xl font-bold">{children}</p>
+              ),
+            },
           ],
         },
         { type: "image" },
