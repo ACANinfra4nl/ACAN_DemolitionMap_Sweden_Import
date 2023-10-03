@@ -26,13 +26,13 @@ export const LatestSection: FC<{ buildings: FeatureBuilding[] }> = ({
               </div>
             )}
           </div>
-          <div className="text-menu-s sm:text-menu flex items-start justify-between gap-2">
+          <div className="text-menu-s sm:text-menu flex items-start justify-between gap-2 uppercase">
             <div>
               {building.address}
               <br />
               {building.postcode} {building.city}
             </div>
-            <div className="flex shrink-0 items-center gap-2 uppercase">
+            <div className="flex shrink-0 items-center gap-2">
               <StateIcon state={building.state} />
               <span>
                 {building.state} {building.demolitionYear}

@@ -107,7 +107,7 @@ export default function ListPage() {
         </div>
         {/* <main className="grid grid-cols-1 grid-rows-1 overflow-hidden"> */}
         {selectedBuilding ? (
-          <div className="col-start-1 row-span-2 row-start-1 grid grid-cols-3 grid-rows-1 overflow-hidden">
+          <div className="col-span-2 col-start-1 row-start-1 grid grid-cols-3 grid-rows-1 overflow-hidden">
             <div className="z-10 col-start-1 col-end-2 row-start-1 bg-white">
               <DetailsPanel
                 properties={selectedBuilding}
@@ -120,8 +120,8 @@ export default function ListPage() {
           </div>
         ) : (
           <div className="col-start-1 row-start-2 overflow-scroll scroll-smooth px-5">
-            <div className="mb-4 flex w-full gap-4">
-              <div className="flex gap-2">
+            <div className="mb-4 flex w-full gap-x-10 gap-y-3">
+              <div className="flex basis-2/5 gap-2">
                 <FilterButton
                   state="riven"
                   filter={stateFilter}
@@ -138,17 +138,17 @@ export default function ListPage() {
                   onClick={setStateFilter}
                 />
               </div>
-              <div className="flex flex-grow items-center gap-2">
+              <div className="text-menu-s sm:text-menu flex-grow basis-1/5 items-center">
                 <input
                   aria-label="Filtrera"
                   id="filter"
                   type="text"
                   name="filter"
-                  className="flex-grow border-b border-current"
+                  className="w-full border-b border-current"
                   onChange={handleFilterChange}
                 />
               </div>
-              <div className="flex items-center gap-2">
+              <div className="text-menu-s sm:text-menu flex basis-1/5 items-center gap-2">
                 {/* <SortButton
                     sortKey="address"
                     sortBy={sortBy}
@@ -178,33 +178,35 @@ export default function ListPage() {
             {buildings.loading ? (
               <span>Loading&hellip;</span>
             ) : (
-              <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+              <ul className="grid grid-cols-1 items-baseline gap-10 sm:grid-cols-2 lg:grid-cols-5">
                 {rows.map((building) => (
                   <li key={building.properties._id}>
                     <button
                       onClick={() => setSelectedBuilding(building.properties)}
                       className="flex w-full flex-col gap-2 text-left hover:text-blue-500"
                     >
-                      <div className="relative aspect-[3/2] w-full">
-                        <div className="absolute left-2 top-2"></div>
+                      <div className="w-full">
                         {building.properties.images &&
                         building.properties.images.length > 0 ? (
                           <img
                             src={building.properties.images[0]}
-                            className="aspect-[3/2] w-full object-cover"
+                            className="w-full"
                           />
                         ) : (
-                          <div className="flex aspect-[3/2] w-full items-center justify-center bg-gray-100 object-cover text-gray-300">
+                          <div className="float-left flex aspect-square w-full items-center justify-center bg-gray-100 text-gray-300">
                             Bild saknas
                           </div>
                         )}
                       </div>
-                      <div className="flex gap-2">
-                        <div>
-                          {building.properties.address}
-                          <br />
-                          {building.properties.postcode}{" "}
-                          {building.properties.city}
+                      <div className="text-body grid w-full grid-cols-[1fr_auto] gap-2 uppercase">
+                        <div className="w-full min-w-0">
+                          <div className="max-w-full overflow-hidden text-ellipsis whitespace-nowrap">
+                            {building.properties.address}
+                          </div>
+                          <div className="max-w-full overflow-hidden text-ellipsis whitespace-nowrap">
+                            {building.properties.postcode}{" "}
+                            {building.properties.city}
+                          </div>
                         </div>
                         <StateIcon state={building.properties.state} />
                       </div>
@@ -231,7 +233,10 @@ const SortButton: FC<
   return (
     <button
       onClick={onClick}
-      className={classNames(sortBy === sortKey && "underline")}
+      className={classNames(
+        "whitespace-nowrap",
+        sortBy === sortKey && "underline",
+      )}
     >
       {children}
       <SortArrow descending={sortBy === sortKey ? sortDesc : undefined} />
