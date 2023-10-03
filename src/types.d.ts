@@ -64,5 +64,7 @@ type BuildingCollection = GeoJSON.FeatureCollection<
 
 interface ManifestDocumentType {
   heading: string;
+  intro: string;
   content: import("sanity").PortableTextBlock[];
+  latestBuildings: SanityBuilding<LatLng>[];
 }

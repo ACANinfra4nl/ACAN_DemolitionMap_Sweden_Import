@@ -2,34 +2,19 @@ import { buildingToFeature } from "@/lib/buildingToFeature";
 import { client } from "@/lib/sanityClient";
 import { NextRequest, NextResponse } from "next/server";
 import { groq } from "next-sanity";
+import { buildingsQuery } from "../../../../sanity/lib/queries";
 
 export const runtime = "edge";
 
 export async function GET(request: NextRequest) {
   // fetch all buildings
   const buildings: SanityBuilding<LatLng>[] = await client.fetch(
-    groq`*[_type == "building" && reviewed == true] {
-        _id,
-        category,
-        state,
-        address,
-        postcode,
-        city,
-        blockName,
-        propertyDesignation,
-        size,
-        boundCO2,
-        architect,
-        propertyOwner,
-        buildYear,
-        demolitionYear,
-        description,
-        demolitionCause,
-        location { lat, lng },
-        images
-    }`,
+    buildingsQuery,
     undefined,
-    { perspective: "published", next: { tags: ["buildings"], revalidate: 600 } }
+    {
+      perspective: "published",
+      next: { tags: ["buildings"], revalidate: 600 },
+    },
   );
 
   // transform to features

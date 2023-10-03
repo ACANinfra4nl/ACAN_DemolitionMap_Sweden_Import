@@ -1,12 +1,10 @@
 "use client";
-import { PortableText } from "@portabletext/react";
+
 import { SanityDocument } from "next-sanity";
 import { FC } from "react";
-import { listItem } from "@/components/portableText/listItem";
-import { list } from "@/components/portableText/list";
-import { image } from "@/components/portableText/image";
 import { useParams } from "next/navigation";
 import { useLiveQuery } from "next-sanity/preview";
+import { Content } from "./Content";
 
 export const PreviewContent: FC<{
   data: SanityDocument<ManifestDocumentType>;
@@ -16,12 +14,5 @@ export const PreviewContent: FC<{
   const [liveData] = useLiveQuery(data, query);
   console.log("updated", liveData);
 
-  return (
-    <div className="prose">
-      <PortableText
-        value={liveData.content}
-        components={{ types: { image } }}
-      />
-    </div>
-  );
+  return <Content data={liveData} />;
 };

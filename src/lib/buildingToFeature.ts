@@ -14,10 +14,16 @@ export const toFeature = <T extends { location: { lat: number; lng: number } }>(
 
 export const buildingToFeature = <T extends LatLng>(
   building: SanityBuilding<T>,
-): Feature<Point, FeatureBuilding> =>
-  toFeature({
-    ...building,
-    images: building.images
-      ?.map((image) => urlForImage(image).url())
-      .filter(Boolean) as string[],
-  });
+): Feature<Point, FeatureBuilding> => toFeature(fixBuildingImages(building));
+
+export const fixBuildingImages = <
+  T extends SanityBuilding<Tc>,
+  Tc extends LatLng,
+>(
+  building: T,
+) => ({
+  ...building,
+  images: building.images
+    ?.map((image) => urlForImage(image).url())
+    .filter(Boolean) as string[],
+});

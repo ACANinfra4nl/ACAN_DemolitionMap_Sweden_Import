@@ -3,7 +3,7 @@ import { SanityDocument } from "next-sanity";
 import { draftMode } from "next/headers";
 import PreviewProvider from "@/components/PreviewProvider";
 import { Content } from "@/components/Content";
-import { manifestQuery } from "@/lib/queries";
+import { manifestQuery } from "../../../sanity/lib/queries";
 import { readToken, sanityFetch } from "@/lib/sanityFetch";
 import { PreviewContent } from "@/components/PreviewContent";
 
@@ -15,30 +15,11 @@ export default async function ManifestPage() {
 
   if (isDraftMode && readToken) {
     return (
-      <>
-        <div className="sticky top-0">
-          <Navigation scaleLogo />
-        </div>
-        <main className="p-5">
-          <PreviewProvider token={readToken}>
-            <h1 className="mb-4 text-4xl font-bold">{data.heading}</h1>
-            <PreviewContent data={data} query={manifestQuery} />
-          </PreviewProvider>
-        </main>
-      </>
+      <PreviewProvider token={readToken}>
+        <PreviewContent data={data} query={manifestQuery} />
+      </PreviewProvider>
     );
   }
 
-  return (
-    <>
-      <div className="sticky top-0">
-        <Navigation scaleLogo />
-      </div>
-      <main className="p-5">
-        <h1 className="mb-4 text-4xl font-bold">{data.heading}</h1>
-
-        <Content data={data} />
-      </main>
-    </>
-  );
+  return <Content data={data} />;
 }
