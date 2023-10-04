@@ -9,6 +9,9 @@ import { UNCLUSTERED_LAYER_STYLE } from "./Map/layers";
 import { FeatureCollection } from "geojson";
 import { mapStyle } from "./Map/style";
 
+// Include style sheets
+import "maplibre-gl/dist/maplibre-gl.css";
+
 export const DetailsMap: FC<{ building: FeatureBuilding }> = ({ building }) => {
   const [viewState, setViewState] = useState({
     latitude: building.location.lat,

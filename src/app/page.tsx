@@ -8,8 +8,10 @@ import { BuildingsContext } from "@/state/buildings";
 import { Feature, Point } from "geojson";
 import { MouseEventHandler, useCallback, useContext, useState } from "react";
 import { FilterButton } from "../components/FilterButton";
+import { Transition } from "@headlessui/react";
 
 export default function MapPage() {
+  const [hasSelectedFeature, setHasSelectedFeature] = useState(false);
   const [selectedFeature, setSelectedFeature] =
     useState<Feature<Point, FeatureBuilding>>();
   const [isAdding, setIsAdding] = useState(false);
@@ -44,11 +46,12 @@ export default function MapPage() {
     (id) => {
       const feature = features.features.find((f) => f.properties._id === id);
       setSelectedFeature(feature);
+      setHasSelectedFeature(true);
     },
     [features],
   );
   const clearSelectedFeature = useCallback(
-    () => setSelectedFeature(undefined),
+    () => setHasSelectedFeature(false),
     [],
   );
   const handleClickAddBuilding: MouseEventHandler<HTMLButtonElement> =
@@ -99,14 +102,23 @@ export default function MapPage() {
           onClickFeature={handleClickFeature}
         />
       </div>
-      {selectedFeature && (
-        <div className="relative z-10 col-span-1 col-start-1 row-span-3 row-start-1 grid bg-white">
+      <Transition
+        show={hasSelectedFeature}
+        className="relative z-10 col-span-1 col-start-1 row-span-3 row-start-1 grid bg-white"
+        enter="transition-transform duration-300 ease-out"
+        enterFrom="-translate-x-full"
+        enterTo="translate-none"
+        leave="transition-transform duration-300 ease-out"
+        leaveFrom="translate-none"
+        leaveTo="-translate-x-full"
+      >
+        {selectedFeature && (
           <DetailsPanel
             properties={selectedFeature.properties}
             onClose={clearSelectedFeature}
           />
-        </div>
-      )}
+        )}
+      </Transition>
       {addingLocation && (
         <div className="relative z-10 col-span-1 col-start-1 row-span-3 row-start-1 grid">
           <NewFeatureForm

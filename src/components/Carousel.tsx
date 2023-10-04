@@ -119,7 +119,7 @@ const Dots: FC<{
 }> = ({ count, currentSlide, onClick }) => {
   const dotsArray = new Array(count).fill(0).map((_, n) => n);
   return (
-    <nav className="absolute bottom-1 left-1 right-1 flex items-center justify-center">
+    <nav className="absolute bottom-2 left-0 right-0 flex items-center justify-center">
       {dotsArray.map((n) => (
         <button
           onClick={() => onClick(n)}

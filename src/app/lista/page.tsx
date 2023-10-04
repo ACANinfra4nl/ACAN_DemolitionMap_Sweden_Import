@@ -14,6 +14,7 @@ import {
 } from "react";
 import { FilterButton } from "@/components/FilterButton";
 import { StateIcon } from "@/components/StateIcon";
+import { Transition } from "@headlessui/react";
 
 const matchesIgnoreCase = (haystack: string | undefined, needle: string) =>
   haystack?.toLowerCase().includes(needle.toLowerCase());
@@ -72,6 +73,7 @@ export default function ListPage() {
   const [filter, setFilter] = useState("");
   const [stateFilter, setStateFilter] = useState<string>();
   const buildings = useContext(BuildingsContext);
+  const [hasSelectedBuilding, setHasSelectedBuilding] = useState(false);
   const [selectedBuilding, setSelectedBuilding] = useState<FeatureBuilding>();
   const [sortBy, setSortBy] = useState<keyof typeof SORTERS>("buildYear");
   const [sortDesc, setSortDesc] = useState(false);
@@ -106,50 +108,69 @@ export default function ListPage() {
           <Navigation />
         </div>
         {/* <main className="grid grid-cols-1 grid-rows-1 overflow-hidden"> */}
-        {selectedBuilding ? (
-          <div className="col-span-2 col-start-1 row-start-1 grid grid-cols-3 grid-rows-1 overflow-hidden">
-            <div className="z-10 col-start-1 col-end-2 row-start-1 bg-white">
+        <Transition
+          show={hasSelectedBuilding}
+          className="z-10 col-span-2 col-start-1 row-span-2 row-start-1 grid grid-cols-3 grid-rows-1 overflow-hidden"
+        >
+          <Transition.Child
+            className="col-start-1 col-end-2 row-start-1 bg-white"
+            enter="transition-transform duration-300 ease-out"
+            enterFrom="-translate-x-full"
+            enterTo="translate-none"
+            leave="transition-transform ease-in duration-300"
+            leaveFrom="translate-none"
+            leaveTo="-translate-x-full"
+          >
+            {selectedBuilding && (
               <DetailsPanel
                 properties={selectedBuilding}
-                onClose={() => setSelectedBuilding(undefined)}
+                onClose={() => setHasSelectedBuilding(false)}
+              />
+            )}
+          </Transition.Child>
+          <Transition.Child
+            className="col-start-2 col-end-4 row-start-1 bg-black"
+            enter="transition-transform ease-out duration-300"
+            enterFrom="translate-x-full"
+            enterTo="translate-none"
+            leave="transition-transform ease-in duration-300"
+            leaveFrom="translate-none"
+            leaveTo="translate-x-full"
+          >
+            {selectedBuilding && <DetailsMap building={selectedBuilding} />}
+          </Transition.Child>
+        </Transition>
+        <div className="col-start-1 row-start-2 overflow-scroll scroll-smooth px-5">
+          <div className="mb-4 grid w-full grid-cols-[auto_1fr_auto] gap-x-10 gap-y-3">
+            <div className="col-span-3 flex gap-2 md:col-span-1">
+              <FilterButton
+                state="riven"
+                filter={stateFilter}
+                onClick={setStateFilter}
+              />
+              <FilterButton
+                state="hotad"
+                filter={stateFilter}
+                onClick={setStateFilter}
+              />
+              <FilterButton
+                state="räddad"
+                filter={stateFilter}
+                onClick={setStateFilter}
               />
             </div>
-            <div className="col-start-2 col-end-4 row-start-1 bg-black">
-              <DetailsMap building={selectedBuilding} />
+            <div className="text-menu-s sm:text-menu col-span-2 items-center md:col-span-1 md:col-start-2">
+              <input
+                aria-label="Filtrera"
+                id="filter"
+                type="text"
+                name="filter"
+                className="w-full border-b border-current"
+                onChange={handleFilterChange}
+              />
             </div>
-          </div>
-        ) : (
-          <div className="col-start-1 row-start-2 overflow-scroll scroll-smooth px-5">
-            <div className="mb-4 grid w-full grid-cols-[auto_1fr_auto] gap-x-10 gap-y-3">
-              <div className="col-span-3 flex gap-2 md:col-span-1">
-                <FilterButton
-                  state="riven"
-                  filter={stateFilter}
-                  onClick={setStateFilter}
-                />
-                <FilterButton
-                  state="hotad"
-                  filter={stateFilter}
-                  onClick={setStateFilter}
-                />
-                <FilterButton
-                  state="räddad"
-                  filter={stateFilter}
-                  onClick={setStateFilter}
-                />
-              </div>
-              <div className="text-menu-s sm:text-menu col-span-2 items-center md:col-span-1 md:col-start-2">
-                <input
-                  aria-label="Filtrera"
-                  id="filter"
-                  type="text"
-                  name="filter"
-                  className="w-full border-b border-current"
-                  onChange={handleFilterChange}
-                />
-              </div>
-              <div className="text-menu-s sm:text-menu col-start-3 flex items-center gap-2">
-                {/* <SortButton
+            <div className="text-menu-s sm:text-menu col-start-3 flex items-center gap-2">
+              {/* <SortButton
                     sortKey="address"
                     sortBy={sortBy}
                     sortDesc={sortDesc}
@@ -157,66 +178,68 @@ export default function ListPage() {
                   >
                     A &ndash; Ö
                   </SortButton> */}
-                <SortButton
-                  sortKey="buildYear"
-                  sortBy={sortBy}
-                  sortDesc={sortDesc}
-                  onClick={handleSortBy("buildYear")}
-                >
-                  Byggår
-                </SortButton>
-                <SortButton
-                  sortKey="demolitionYear"
-                  sortBy={sortBy}
-                  sortDesc={sortDesc}
-                  onClick={handleSortBy("demolitionYear")}
-                >
-                  Rivningsår
-                </SortButton>
-              </div>
+              <SortButton
+                sortKey="buildYear"
+                sortBy={sortBy}
+                sortDesc={sortDesc}
+                onClick={handleSortBy("buildYear")}
+              >
+                Byggår
+              </SortButton>
+              <SortButton
+                sortKey="demolitionYear"
+                sortBy={sortBy}
+                sortDesc={sortDesc}
+                onClick={handleSortBy("demolitionYear")}
+              >
+                Rivningsår
+              </SortButton>
             </div>
-            {buildings.loading ? (
-              <span>Loading&hellip;</span>
-            ) : (
-              <ul className="grid grid-cols-1 items-baseline gap-10 sm:grid-cols-2 lg:grid-cols-5">
-                {rows.map((building) => (
-                  <li key={building.properties._id}>
-                    <button
-                      onClick={() => setSelectedBuilding(building.properties)}
-                      className="flex w-full flex-col gap-2 text-left hover:text-blue-500"
-                    >
-                      <div className="w-full">
-                        {building.properties.images &&
-                        building.properties.images.length > 0 ? (
-                          <img
-                            src={building.properties.images[0]}
-                            className="w-full"
-                          />
-                        ) : (
-                          <div className="float-left flex aspect-square w-full items-center justify-center bg-gray-100 text-gray-300">
-                            Bild saknas
-                          </div>
-                        )}
-                      </div>
-                      <div className="text-body grid w-full grid-cols-[1fr_auto] gap-2 uppercase">
-                        <div className="w-full min-w-0">
-                          <div className="max-w-full overflow-hidden text-ellipsis whitespace-nowrap">
-                            {building.properties.address}
-                          </div>
-                          <div className="max-w-full overflow-hidden text-ellipsis whitespace-nowrap">
-                            {building.properties.postcode}{" "}
-                            {building.properties.city}
-                          </div>
-                        </div>
-                        <StateIcon state={building.properties.state} />
-                      </div>
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            )}
           </div>
-        )}
+          {buildings.loading ? (
+            <span>Loading&hellip;</span>
+          ) : (
+            <ul className="grid grid-cols-1 items-baseline gap-10 sm:grid-cols-2 lg:grid-cols-5">
+              {rows.map((building) => (
+                <li key={building.properties._id}>
+                  <button
+                    onClick={() => {
+                      setSelectedBuilding(building.properties);
+                      setHasSelectedBuilding(true);
+                    }}
+                    className="flex w-full flex-col gap-2 text-left hover:text-blue-500"
+                  >
+                    <div className="w-full">
+                      {building.properties.images &&
+                      building.properties.images.length > 0 ? (
+                        <img
+                          src={building.properties.images[0]}
+                          className="w-full"
+                        />
+                      ) : (
+                        <div className="float-left flex aspect-square w-full items-center justify-center bg-gray-100 text-gray-300">
+                          Bild saknas
+                        </div>
+                      )}
+                    </div>
+                    <div className="text-body grid w-full grid-cols-[1fr_auto] gap-2 uppercase">
+                      <div className="w-full min-w-0">
+                        <div className="max-w-full overflow-hidden text-ellipsis whitespace-nowrap">
+                          {building.properties.address}
+                        </div>
+                        <div className="max-w-full overflow-hidden text-ellipsis whitespace-nowrap">
+                          {building.properties.postcode}{" "}
+                          {building.properties.city}
+                        </div>
+                      </div>
+                      <StateIcon state={building.properties.state} />
+                    </div>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </main>
       {/* </div> */}
     </>

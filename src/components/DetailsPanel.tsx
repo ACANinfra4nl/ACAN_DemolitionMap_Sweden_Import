@@ -21,7 +21,7 @@ interface DetailsProps {
 }
 
 export const DetailsPanel: FC<DetailsProps> = ({ properties, onClose }) => (
-  <div className="grid grid-rows-[auto_1fr] p-5">
+  <div className="grid grid-rows-[auto_auto_1fr] p-5">
     <div className="z-10 col-start-1 row-start-1 ml-6 mt-6">
       <CloseButton onClick={onClose} />
     </div>
@@ -41,11 +41,13 @@ export const DetailsPanel: FC<DetailsProps> = ({ properties, onClose }) => (
       </div>
     )}
 
-    <BuildingHeading building={properties} />
-    <DetailsTable building={properties} />
-    <div className="text-body prose">
-      {properties.description && <p>{properties.description}</p>}
-      {properties.demolitionCause && <p>{properties.demolitionCause}</p>}
+    <div>
+      <BuildingHeading building={properties} />
+      <DetailsTable building={properties} />
+      <div className="text-body prose">
+        {properties.description && <p>{properties.description}</p>}
+        {properties.demolitionCause && <p>{properties.demolitionCause}</p>}
+      </div>
     </div>
   </div>
 );
