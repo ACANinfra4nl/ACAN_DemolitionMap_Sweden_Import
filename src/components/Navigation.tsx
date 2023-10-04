@@ -29,13 +29,13 @@ export const Navigation: FC<{ scaleLogo?: boolean }> = ({ scaleLogo }) => {
         rivningsatlas
       </Link>
       <div className="col-span-2 col-start-3 flex flex-col">
-        <NavLink href="/" path={path}>
+        <NavLink href="/karta" path={path}>
           Karta
         </NavLink>
         <NavLink href="/lista" path={path}>
           Lista
         </NavLink>
-        <NavLink href="/manifest" path={path}>
+        <NavLink href="/" path={path}>
           Manifest
         </NavLink>
       </div>
