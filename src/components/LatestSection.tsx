@@ -1,12 +1,13 @@
 import { FC } from "react";
 import Link from "next/link";
 import { BuildingHeading } from "./BuildingHeading";
+import classNames from "classnames";
 
 export const LatestSection: FC<{ buildings: FeatureBuilding[] }> = ({
   buildings,
 }) => {
   return (
-    <section className="scrollbar-hide mt-column mb-24 flex snap-x snap-mandatory flex-nowrap items-baseline overflow-scroll">
+    <section className="scrollbar-hide mb-24 mt-column flex snap-x snap-mandatory flex-nowrap items-baseline overflow-scroll">
       {buildings.map((building) => (
         <div
           className="flex shrink-0 grow-0 basis-4/5 snap-start flex-col gap-2 px-5 md:basis-3/5 lg:basis-2/5"
@@ -16,13 +17,14 @@ export const LatestSection: FC<{ buildings: FeatureBuilding[] }> = ({
             {building.images && building.images.length > 0 ? (
               <img
                 src={building.images[0]}
-                className="block w-full object-cover"
+                className={classNames(
+                  "w-full",
+                  building.state === "riven" && "grayscale",
+                )}
                 loading="lazy"
               />
             ) : (
-              <div className="float-left flex aspect-square w-full items-center justify-center bg-gray-100 text-gray-300">
-                Bild saknas
-              </div>
+              <div className="aspect-square w-full bg-acan-blue" />
             )}
           </div>
           <BuildingHeading building={building} showYear />

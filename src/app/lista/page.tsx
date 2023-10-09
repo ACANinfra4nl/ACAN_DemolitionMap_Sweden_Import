@@ -159,7 +159,7 @@ export default function ListPage() {
                 onClick={setStateFilter}
               />
             </div>
-            <div className="text-menu-s sm:text-menu col-span-2 items-center md:col-span-1 md:col-start-2">
+            <div className="col-span-2 items-center text-menu-s sm:text-menu md:col-span-1 md:col-start-2">
               <input
                 aria-label="Filtrera"
                 id="filter"
@@ -169,7 +169,7 @@ export default function ListPage() {
                 onChange={handleFilterChange}
               />
             </div>
-            <div className="text-menu-s sm:text-menu col-start-3 flex items-center gap-2">
+            <div className="col-start-3 flex items-center gap-2 text-menu-s sm:text-menu">
               {/* <SortButton
                     sortKey="address"
                     sortBy={sortBy}
@@ -207,22 +207,25 @@ export default function ListPage() {
                       setSelectedBuilding(building.properties);
                       setHasSelectedBuilding(true);
                     }}
-                    className="flex w-full flex-col gap-2 text-left hover:text-blue-500"
+                    className="hover:acan-blue flex w-full flex-col gap-2 text-left"
                   >
                     <div className="w-full">
                       {building.properties.images &&
                       building.properties.images.length > 0 ? (
                         <img
                           src={building.properties.images[0]}
-                          className="w-full"
+                          className={classNames(
+                            "w-full",
+                            building.properties.state === "riven" &&
+                              "grayscale",
+                          )}
+                          loading="lazy"
                         />
                       ) : (
-                        <div className="float-left flex aspect-square w-full items-center justify-center bg-gray-100 text-gray-300">
-                          Bild saknas
-                        </div>
+                        <div className="aspect-square bg-acan-blue" />
                       )}
                     </div>
-                    <div className="text-body grid w-full grid-cols-[1fr_auto] gap-2 uppercase">
+                    <div className="grid w-full grid-cols-[1fr_auto] gap-2 text-body uppercase">
                       <div className="w-full min-w-0">
                         <div className="max-w-full overflow-hidden text-ellipsis whitespace-nowrap">
                           {building.properties.address}
