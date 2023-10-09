@@ -6,19 +6,43 @@ import { Navigation } from "@/components/Navigation";
 import { NewFeatureForm } from "@/components/NewFeatureForm";
 import { BuildingsContext } from "@/state/buildings";
 import { Feature, Point } from "geojson";
-import { MouseEventHandler, useCallback, useContext, useState } from "react";
+import {
+  MouseEventHandler,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { FilterButton } from "../../components/FilterButton";
 import { Transition } from "@headlessui/react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 export default function MapPage() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const selectedId = searchParams.get("view");
+  const features = useContext(BuildingsContext);
   const [hasSelectedFeature, setHasSelectedFeature] = useState(false);
   const [selectedFeature, setSelectedFeature] =
     useState<Feature<Point, FeatureBuilding>>();
   const [isAdding, setIsAdding] = useState(false);
   const [addingLocation, setAddingLocation] = useState<LatLng>();
-  const features = useContext(BuildingsContext);
   // const dispatch = useContext(BuildingsDispatchContext);
   const [filter, setFilter] = useState<string>();
+
+  useEffect(() => {
+    if (features.loading) return;
+
+    if (selectedId) {
+      setSelectedFeature(
+        features.features.find((f) => f.properties._id === selectedId),
+      );
+      setHasSelectedFeature(true);
+    } else {
+      setHasSelectedFeature(false);
+    }
+  }, [features.loading, features.features, selectedId]);
 
   const handleAddMarker = useCallback((latLng: LatLng) => {
     // show popup with form
@@ -47,13 +71,14 @@ export default function MapPage() {
       const feature = features.features.find((f) => f.properties._id === id);
       setSelectedFeature(feature);
       setHasSelectedFeature(true);
+      router.push(`${pathname}?view=${id}`);
     },
     [features],
   );
-  const clearSelectedFeature = useCallback(
-    () => setHasSelectedFeature(false),
-    [],
-  );
+  const clearSelectedFeature = useCallback(() => {
+    setHasSelectedFeature(false);
+    router.push(pathname);
+  }, []);
   const handleClickAddBuilding: MouseEventHandler<HTMLButtonElement> =
     useCallback((e) => {
       e.stopPropagation();

@@ -10,11 +10,13 @@ import {
   PropsWithChildren,
   useCallback,
   useContext,
+  useEffect,
   useState,
 } from "react";
 import { FilterButton } from "@/components/FilterButton";
 import { StateIcon } from "@/components/StateIcon";
 import { Transition } from "@headlessui/react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 const matchesIgnoreCase = (haystack: string | undefined, needle: string) =>
   haystack?.toLowerCase().includes(needle.toLowerCase());
@@ -70,6 +72,10 @@ const SortArrow: FC<{ descending?: boolean }> = ({ descending }) => (
 );
 
 export default function ListPage() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const selectedId = searchParams.get("view");
   const [filter, setFilter] = useState("");
   const [stateFilter, setStateFilter] = useState<string>();
   const buildings = useContext(BuildingsContext);
@@ -77,6 +83,21 @@ export default function ListPage() {
   const [selectedBuilding, setSelectedBuilding] = useState<FeatureBuilding>();
   const [sortBy, setSortBy] = useState<keyof typeof SORTERS>("buildYear");
   const [sortDesc, setSortDesc] = useState(false);
+
+  useEffect(() => {
+    if (buildings.loading) return;
+
+    if (selectedId) {
+      setSelectedBuilding(
+        buildings.features.find((f) => f.properties._id === selectedId)
+          ?.properties,
+      );
+      setHasSelectedBuilding(true);
+    } else {
+      setHasSelectedBuilding(false);
+    }
+  }, [buildings.loading, buildings.features, selectedId]);
+
   const handleFilterChange: ChangeEventHandler<HTMLInputElement> = useCallback(
     (e) => {
       const value = e.target.value;
@@ -84,6 +105,20 @@ export default function ListPage() {
     },
     [],
   );
+
+  const handleSelectBuilding = useCallback(
+    (building: FeatureBuilding) => {
+      setSelectedBuilding(building);
+      setHasSelectedBuilding(true);
+      router.push(`${pathname}?view=${building._id}`);
+    },
+    [router, pathname],
+  );
+
+  const handleClearSelection = useCallback(() => {
+    setHasSelectedBuilding(false);
+    router.push(pathname);
+  }, [router, pathname]);
 
   const handleSortBy = (key: keyof typeof SORTERS) => () => {
     if (sortBy === key) setSortDesc((old) => !old);
@@ -124,7 +159,7 @@ export default function ListPage() {
             {selectedBuilding && (
               <DetailsPanel
                 properties={selectedBuilding}
-                onClose={() => setHasSelectedBuilding(false)}
+                onClose={handleClearSelection}
               />
             )}
           </Transition.Child>
@@ -203,10 +238,7 @@ export default function ListPage() {
               {rows.map((building) => (
                 <li key={building.properties._id}>
                   <button
-                    onClick={() => {
-                      setSelectedBuilding(building.properties);
-                      setHasSelectedBuilding(true);
-                    }}
+                    onClick={() => handleSelectBuilding(building.properties)}
                     className="hover:acan-blue flex w-full flex-col gap-2 text-left"
                   >
                     <div className="w-full">
