@@ -1,6 +1,6 @@
 import "server-only";
 import type { QueryParams } from "@sanity/client";
-import { cookies, draftMode } from "next/headers";
+import { draftMode } from "next/headers";
 import { client } from "../../sanity/lib/client";
 
 const DEFAULT_PARAMS = {} as QueryParams;
@@ -20,7 +20,7 @@ export async function sanityFetch<QueryResponse>({
   const isDraftMode = draftMode().isEnabled;
   if (isDraftMode && !readToken) {
     throw new Error(
-      "The `SANITY_READ_TOKEN` environment variable is required."
+      "The `SANITY_READ_TOKEN` environment variable is required.",
     );
   }
   const isDevelopment = process.env.NODE_ENV === "development";

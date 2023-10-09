@@ -1,6 +1,26 @@
 import { capitalize } from "@/lib/capitalize";
-import { useEffect, useState } from "react";
+import { FC, InputHTMLAttributes, useEffect, useState } from "react";
 import { CloseButton } from "./CloseButton";
+
+const Input: FC<
+  Exclude<
+    InputHTMLAttributes<HTMLInputElement>,
+    "className" | "id" | "name"
+  > & {
+    name: string;
+    label: string;
+  }
+> = ({ label, ...props }) => (
+  <div className="relative border-b border-current">
+    <input {...props} id={props.name} className="peer w-full" placeholder=" " />
+    <label
+      htmlFor={props.name}
+      className="text-body peer-invalid:text-demolished absolute left-0 top-0 origin-top-left -translate-y-2 scale-50 transition-transform peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-2 peer-focus:scale-50"
+    >
+      {label}
+    </label>
+  </div>
+);
 
 interface NewFeatureFormProps {
   latLng: LatLng;
@@ -23,7 +43,7 @@ export const NewFeatureForm = ({
   // TODO: if user changes address, do a forward geocoding lookup?
   return (
     <div className="bg-white p-4">
-      <div className="text-right mb-4">
+      <div className="mb-4 text-right">
         <CloseButton onClick={onCancel} />
       </div>
       <form action={onSubmit}>
@@ -37,7 +57,7 @@ export const NewFeatureForm = ({
             id="category"
             name="category"
             required
-            className="border border-gray-200 w-full px-2 py-2 capitalize"
+            className="w-full border border-gray-200 px-2 py-2 capitalize"
           >
             <option value=""></option>
             {[
@@ -62,7 +82,7 @@ export const NewFeatureForm = ({
             name="state"
             id="state"
             required
-            className="border border-gray-200 w-full px-2 py-2 capitalize"
+            className="w-full border border-gray-200 px-2 py-2 capitalize"
           >
             <option value=""></option>
             {["hotad", "riven", "räddad"].map((o) => (
@@ -72,6 +92,9 @@ export const NewFeatureForm = ({
             ))}
           </select>
         </div>
+        <div>
+          <Input label="Kvartersnamn" name="blockName" />
+        </div>
         <div className="mb-4">
           <label htmlFor="address" className="block">
             Gatuadress
@@ -80,7 +103,7 @@ export const NewFeatureForm = ({
             type="text"
             id="address"
             name="address"
-            className="border border-gray-200 w-full px-2 py-2"
+            className="w-full border border-gray-200 px-2 py-2"
             defaultValue={lookupResult ? lookupResult.address : undefined}
           />
         </div>
@@ -93,14 +116,14 @@ export const NewFeatureForm = ({
               type="text"
               id="postcode"
               name="postcode"
-              className="border border-gray-200 w-1/4 max-w-xs px-2 py-2"
+              className="w-1/4 max-w-xs border border-gray-200 px-2 py-2"
               defaultValue={lookupResult ? lookupResult.postcode : undefined}
             />
             <input
               type="text"
               id="city"
               name="city"
-              className="border border-gray-200 flex-grow px-2 py-2"
+              className="flex-grow border border-gray-200 px-2 py-2"
               defaultValue={lookupResult ? lookupResult.city : undefined}
             />
           </div>
@@ -113,7 +136,7 @@ export const NewFeatureForm = ({
             type="text"
             name="blockName"
             id="blockName"
-            className="border border-gray-200 w-full px-2 py-2"
+            className="w-full border border-gray-200 px-2 py-2"
           />
         </div>
         <div className="mb-4">
@@ -124,7 +147,7 @@ export const NewFeatureForm = ({
             type="text"
             name="propertyDesignation"
             id="propertyDesignation"
-            className="border border-gray-200 w-full px-2 py-2"
+            className="w-full border border-gray-200 px-2 py-2"
           />
         </div>
         <div className="mb-4">
@@ -135,7 +158,7 @@ export const NewFeatureForm = ({
             type="number"
             name="size"
             id="size"
-            className="border border-gray-200 w-full px-2 py-2"
+            className="w-full border border-gray-200 px-2 py-2"
             min={0}
           />
         </div>
@@ -147,7 +170,7 @@ export const NewFeatureForm = ({
             type="number"
             name="boundCO2"
             id="boundCO2"
-            className="border border-gray-200 w-full px-2 py-2"
+            className="w-full border border-gray-200 px-2 py-2"
             min={0}
           />
         </div>
@@ -159,7 +182,7 @@ export const NewFeatureForm = ({
             type="text"
             name="architect"
             id="architect"
-            className="border border-gray-200 w-full px-2 py-2"
+            className="w-full border border-gray-200 px-2 py-2"
           />
         </div>
         <div className="mb-4">
@@ -170,7 +193,7 @@ export const NewFeatureForm = ({
             type="text"
             name="propertyOwner"
             id="propertyOwner"
-            className="border border-gray-200 w-full px-2 py-2"
+            className="w-full border border-gray-200 px-2 py-2"
           />
         </div>
         <div className="mb-4 flex gap-4">
@@ -185,7 +208,7 @@ export const NewFeatureForm = ({
               required
               min={0}
               max={9999}
-              className="border border-gray-200 w-full px-2 py-2"
+              className="w-full border border-gray-200 px-2 py-2"
             />
           </div>
           <div className="flex-grow">
@@ -199,7 +222,7 @@ export const NewFeatureForm = ({
               required
               min={0}
               max={9999}
-              className="border border-gray-200 w-full px-2 py-2"
+              className="w-full border border-gray-200 px-2 py-2"
             />
           </div>
         </div>
@@ -224,7 +247,7 @@ export const NewFeatureForm = ({
             name="description"
             rows={4}
             autoComplete="false"
-            className="border border-gray-200 w-full px-2 py-2"
+            className="w-full border border-gray-200 px-2 py-2"
           ></textarea>
         </div>
         <div className="mb-4">
@@ -236,7 +259,7 @@ export const NewFeatureForm = ({
             name="demolitionCause"
             rows={4}
             autoComplete="false"
-            className="border border-gray-200 w-full px-2 py-2"
+            className="w-full border border-gray-200 px-2 py-2"
           ></textarea>
         </div>
         <div className="hidden" aria-hidden>
@@ -246,13 +269,13 @@ export const NewFeatureForm = ({
         <div className="flex justify-between">
           <button
             onClick={onCancel}
-            className="border-r-2 bg-black text-white px-4 py-2"
+            className="border-r-2 bg-black px-4 py-2 text-white"
           >
             Avbryt
           </button>
           <button
             type="submit"
-            className="border-r-2 bg-black text-white px-4 py-2"
+            className="border-r-2 bg-black px-4 py-2 text-white"
           >
             Spara
           </button>

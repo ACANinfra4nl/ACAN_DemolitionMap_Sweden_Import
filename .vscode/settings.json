@@ -1,3 +1,6 @@
 {
-    "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "editor.renderControlCharacters": true,
+  "editor.guides.indentation": true,
+  "jest.autoRun": "off"
 }

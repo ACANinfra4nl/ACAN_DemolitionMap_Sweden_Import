@@ -7,10 +7,11 @@ import { defineConfig } from "sanity";
 import { deskTool } from "sanity/desk";
 
 // Go to https://www.sanity.io/docs/api-versioning to learn how API versioning works
-import { dataset, projectId } from "./sanity/env";
+import { apiVersion, dataset, projectId } from "./sanity/env";
 import { schemaTypes } from "./sanity/schemaTypes";
 import { createPreview } from "./sanity/lib/preview";
 import { groq } from "next-sanity";
+import { visionTool } from "@sanity/vision";
 
 const singletonActions = new Set(["publish", "discardChanges", "restore"]);
 const singletonTypes = new Set(["manifest"]);
@@ -38,22 +39,24 @@ export default defineConfig({
               .id("reviewed")
               .child(
                 S.documentTypeList("building").filter(
-                  groq`_type == "building" && reviewed == true`
-                )
+                  groq`_type == "building" && reviewed == true`,
+                ),
               ),
             S.listItem()
               .title("Ogranskade byggnader")
               .id("unreviewed")
               .child(
                 S.documentTypeList("building").filter(
-                  groq`_type == "building" && reviewed != true`
-                )
+                  groq`_type == "building" && reviewed != true`,
+                ),
               ),
             S.listItem()
               .title("Alla byggnader")
               .id("buildings")
               .child(
-                S.documentTypeList("building").filter(groq`_type == "building"`)
+                S.documentTypeList("building").filter(
+                  groq`_type == "building"`,
+                ),
               ),
             S.divider(),
             S.listItem()
@@ -63,14 +66,14 @@ export default defineConfig({
                 S.document()
                   .schemaType("manifest")
                   .id("manifest")
-                  .views(createPreview(S))
+                  .views(createPreview(S)),
               ),
           ]),
     }),
 
     // Vision is a tool that lets you query your content with GROQ in the studio
     // https://www.sanity.io/docs/the-vision-plugin
-    // visionTool({ defaultApiVersion: apiVersion }),
+    visionTool({ defaultApiVersion: apiVersion }),
   ],
   document: {
     actions: (input, context) =>

@@ -1,5 +1,7 @@
 import { SchemaTypeDefinition } from "sanity";
 import { MapInput } from "../components/MapInput";
+import { categories } from "@/lib/categories";
+import { states } from "@/lib/states";
 
 export const building: SchemaTypeDefinition = {
   name: "building",
@@ -29,14 +31,7 @@ export const building: SchemaTypeDefinition = {
       type: "string",
       title: "Kategori",
       options: {
-        list: [
-          "bostad",
-          "kontor",
-          "kommersiell",
-          "samhällsfastighet",
-          "industri",
-          "övrig",
-        ],
+        list: categories,
       },
       validation: (Rule) => Rule.required(),
     },
@@ -45,7 +40,7 @@ export const building: SchemaTypeDefinition = {
       type: "string",
       title: "Status",
       options: {
-        list: ["hotad", "riven", "räddad"],
+        list: states,
         layout: "radio",
       },
       validation: (Rule) => Rule.required(),
