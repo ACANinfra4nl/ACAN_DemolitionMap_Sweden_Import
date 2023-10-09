@@ -1,7 +1,7 @@
 import { FC } from "react";
 import Link from "next/link";
 import { BuildingHeading } from "./BuildingHeading";
-import classNames from "classnames";
+import { BuildingImage } from "./BuildingImage";
 
 export const LatestSection: FC<{ buildings: FeatureBuilding[] }> = ({
   buildings,
@@ -13,20 +13,7 @@ export const LatestSection: FC<{ buildings: FeatureBuilding[] }> = ({
           className="flex shrink-0 grow-0 basis-4/5 snap-start flex-col gap-2 px-5 md:basis-3/5 lg:basis-2/5"
           key={building._id}
         >
-          <div>
-            {building.images && building.images.length > 0 ? (
-              <img
-                src={building.images[0]}
-                className={classNames(
-                  "w-full",
-                  building.state === "riven" && "grayscale",
-                )}
-                loading="lazy"
-              />
-            ) : (
-              <div className="aspect-square w-full bg-acan-blue" />
-            )}
-          </div>
+          <BuildingImage images={building.images} state={building.state} />
           <BuildingHeading building={building} showYear />
         </div>
       ))}

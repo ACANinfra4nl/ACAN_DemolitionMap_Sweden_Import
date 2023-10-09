@@ -17,6 +17,7 @@ import { FilterButton } from "@/components/FilterButton";
 import { StateIcon } from "@/components/StateIcon";
 import { Transition } from "@headlessui/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { BuildingImage } from "../../components/BuildingImage";
 
 const matchesIgnoreCase = (haystack: string | undefined, needle: string) =>
   haystack?.toLowerCase().includes(needle.toLowerCase());
@@ -241,22 +242,10 @@ export default function ListPage() {
                     onClick={() => handleSelectBuilding(building.properties)}
                     className="hover:acan-blue flex w-full flex-col gap-2 text-left"
                   >
-                    <div className="w-full">
-                      {building.properties.images &&
-                      building.properties.images.length > 0 ? (
-                        <img
-                          src={building.properties.images[0]}
-                          className={classNames(
-                            "w-full",
-                            building.properties.state === "riven" &&
-                              "grayscale",
-                          )}
-                          loading="lazy"
-                        />
-                      ) : (
-                        <div className="aspect-square bg-acan-blue" />
-                      )}
-                    </div>
+                    <BuildingImage
+                      images={building.properties.images}
+                      state={building.properties.state}
+                    />
                     <div className="grid w-full grid-cols-[1fr_auto] gap-2 text-body uppercase">
                       <div className="w-full min-w-0">
                         <div className="max-w-full overflow-hidden text-ellipsis whitespace-nowrap">
