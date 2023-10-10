@@ -1,26 +1,106 @@
 import { capitalize } from "@/lib/capitalize";
-import { FC, InputHTMLAttributes, useEffect, useState } from "react";
+import {
+  ChangeEventHandler,
+  DragEventHandler,
+  FC,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { CloseButton } from "./CloseButton";
+import { categories } from "@/lib/categories";
+import { states } from "@/lib/states";
+import { Input } from "./forms/Input";
+import { Select } from "./forms/Select";
+import { TextArea } from "./forms/TextArea";
+import { formatAddress } from "../lib/formatAddress";
+import classNames from "classnames";
 
-const Input: FC<
-  Exclude<
-    InputHTMLAttributes<HTMLInputElement>,
-    "className" | "id" | "name"
-  > & {
-    name: string;
-    label: string;
-  }
-> = ({ label, ...props }) => (
-  <div className="relative border-b border-current">
-    <input {...props} id={props.name} className="peer w-full" placeholder=" " />
+const ImageInput: FC = () => {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const labelRef = useRef<HTMLLabelElement>(null);
+  const [images, setImages] = useState<string[]>([]);
+  const [dragging, setDragging] = useState(false);
+  const processImages = useCallback((files: FileList) => {
+    for (const file of files) {
+      const fr = new FileReader();
+      fr.onload = () => {
+        const url = fr.result as string;
+        setImages((old) => old.concat([url]));
+        fr.onload = null;
+      };
+
+      fr.readAsDataURL(file);
+    }
+  }, []);
+  const handleDrop: DragEventHandler<HTMLLabelElement> = useCallback((e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    e.nativeEvent.stopImmediatePropagation();
+    if (inputRef.current) {
+      const files = e.dataTransfer.files;
+      inputRef.current.files = files;
+      processImages(files);
+    }
+    setDragging(false);
+  }, []);
+  const handleDragEnter: DragEventHandler<HTMLLabelElement> = useCallback(
+    (e) => {
+      e.preventDefault();
+      setDragging(true);
+    },
+    [],
+  );
+  const handleDragExit: DragEventHandler<HTMLLabelElement> = useCallback(
+    (e) => {
+      e.preventDefault();
+      setDragging(false);
+    },
+    [],
+  );
+  const handleUpload: ChangeEventHandler<HTMLInputElement> = useCallback(
+    (e) => {
+      if (e.target.files) processImages(e.target.files);
+    },
+    [],
+  );
+
+  const gridTemplateColumns = `repeat(${Math.ceil(
+    Math.sqrt(images.length),
+  )}, 1fr)`;
+  console.log({ gridTemplateColumns });
+
+  return (
     <label
-      htmlFor={props.name}
-      className="text-body peer-invalid:text-demolished absolute left-0 top-0 origin-top-left -translate-y-2 scale-50 transition-transform peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-2 peer-focus:scale-50"
+      onDragOver={handleDragEnter}
+      onDragLeave={handleDragExit}
+      onDrop={handleDrop}
+      className={classNames(
+        "grid aspect-square w-full overflow-hidden border border-current",
+        dragging && "border-acan-blue",
+      )}
+      style={{
+        gridTemplateColumns,
+      }}
+      ref={labelRef}
     >
-      {label}
+      <input
+        type="file"
+        name="images"
+        multiple
+        ref={inputRef}
+        className="sr-only"
+        onChange={handleUpload}
+      />
+      {images.map((img, i) => (
+        <div key={i}>
+          <img src={img} className="aspect-square w-full object-contain" />
+        </div>
+      ))}
     </label>
-  </div>
-);
+  );
+};
 
 interface NewFeatureFormProps {
   latLng: LatLng;
@@ -43,224 +123,86 @@ export const NewFeatureForm = ({
   // TODO: if user changes address, do a forward geocoding lookup?
   return (
     <div className="bg-white p-4">
-      <div className="mb-4 text-right">
-        <CloseButton onClick={onCancel} />
+      <CloseButton onClick={onCancel} />
+      <div className="mb-4">
+        <h2 className="text-menu-s uppercase sm:text-menu">
+          Lägg till byggnad
+        </h2>
       </div>
       <form action={onSubmit}>
         <input type="hidden" name="lat" value={latLng.lat} />
         <input type="hidden" name="lng" value={latLng.lng} />
         <div className="mb-4">
-          <label htmlFor="category" className="block">
-            Kategori
-          </label>
-          <select
-            id="category"
-            name="category"
-            required
-            className="w-full border border-gray-200 px-2 py-2 capitalize"
-          >
-            <option value=""></option>
-            {[
-              "bostad",
-              "kontor",
-              "kommersiell",
-              "samhällsfastighet",
-              "industri",
-              "övrig",
-            ].map((o) => (
-              <option key={o} value={o}>
-                {o}
-              </option>
-            ))}
-          </select>
+          <ImageInput />
         </div>
         <div className="mb-4">
-          <label htmlFor="state" className="block">
-            Status
-          </label>
-          <select
-            name="state"
-            id="state"
+          <Select
+            label="Kategori"
+            name="category"
+            options={categories}
             required
-            className="w-full border border-gray-200 px-2 py-2 capitalize"
-          >
-            <option value=""></option>
-            {["hotad", "riven", "räddad"].map((o) => (
-              <option key={o} value={o}>
-                {o}
-              </option>
-            ))}
-          </select>
+            autoFocus
+          />
         </div>
-        <div>
+        <div className="mb-4">
+          <Select label="Status" name="state" options={states} required />
+        </div>
+        <div className="mb-4">
+          <Input
+            label="Adress"
+            name=""
+            value={formatAddress(
+              lookupResult?.address,
+              lookupResult?.postcode,
+              lookupResult?.city,
+            )}
+            readOnly
+            disabled
+          />
+          <input type="hidden" name="address" value={lookupResult?.address} />
+          <input type="hidden" name="postcode" value={lookupResult?.postcode} />
+          <input type="hidden" name="city" value={lookupResult?.city} />
+        </div>
+        <div className="mb-4">
           <Input label="Kvartersnamn" name="blockName" />
         </div>
         <div className="mb-4">
-          <label htmlFor="address" className="block">
-            Gatuadress
-          </label>
-          <input
-            type="text"
-            id="address"
-            name="address"
-            className="w-full border border-gray-200 px-2 py-2"
-            defaultValue={lookupResult ? lookupResult.address : undefined}
-          />
+          <Input label="Fastighetsbeteckning" name="propertyDesignation" />
         </div>
         <div className="mb-4">
-          <label htmlFor="postcode" className="block">
-            Postnummer och postort
-          </label>
-          <div className="flex gap-2">
-            <input
-              type="text"
-              id="postcode"
-              name="postcode"
-              className="w-1/4 max-w-xs border border-gray-200 px-2 py-2"
-              defaultValue={lookupResult ? lookupResult.postcode : undefined}
-            />
-            <input
-              type="text"
-              id="city"
-              name="city"
-              className="flex-grow border border-gray-200 px-2 py-2"
-              defaultValue={lookupResult ? lookupResult.city : undefined}
-            />
-          </div>
+          <Input label="Storlek (m²)" name="size" type="number" min={0} />
         </div>
         <div className="mb-4">
-          <label htmlFor="blockName" className="block">
-            Kvartersnamn
-          </label>
-          <input
-            type="text"
-            name="blockName"
-            id="blockName"
-            className="w-full border border-gray-200 px-2 py-2"
-          />
+          <Input label="Arkitekt" name="architect" />
         </div>
         <div className="mb-4">
-          <label htmlFor="propertyDesignation" className="block">
-            Fastighetsbeteckning
-          </label>
-          <input
-            type="text"
-            name="propertyDesignation"
-            id="propertyDesignation"
-            className="w-full border border-gray-200 px-2 py-2"
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="size" className="block">
-            Storlek (m<sup>2</sup>)
-          </label>
-          <input
-            type="number"
-            name="size"
-            id="size"
-            className="w-full border border-gray-200 px-2 py-2"
-            min={0}
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="boundCO2" className="block">
-            Inbunden CO<sub>2</sub> (ton)
-          </label>
-          <input
-            type="number"
-            name="boundCO2"
-            id="boundCO2"
-            className="w-full border border-gray-200 px-2 py-2"
-            min={0}
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="architect" className="block">
-            Arkitekt
-          </label>
-          <input
-            type="text"
-            name="architect"
-            id="architect"
-            className="w-full border border-gray-200 px-2 py-2"
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="propertyOwner" className="block">
-            Fastighetsägare
-          </label>
-          <input
-            type="text"
-            name="propertyOwner"
-            id="propertyOwner"
-            className="w-full border border-gray-200 px-2 py-2"
-          />
+          <Input label="Fastighetsägare" name="propertyOwner" />
         </div>
         <div className="mb-4 flex gap-4">
           <div className="flex-grow">
-            <label htmlFor="buildYear" className="block">
-              Byggår
-            </label>
-            <input
-              type="number"
+            <Input
+              label="Byggår"
               name="buildYear"
-              id="buildYear"
-              required
+              type="number"
               min={0}
               max={9999}
-              className="w-full border border-gray-200 px-2 py-2"
             />
           </div>
           <div className="flex-grow">
-            <label htmlFor="demolitionYear" className="block">
-              Rivningsår
-            </label>
-            <input
-              type="number"
+            <Input
+              label="Rivningsår"
               name="demolitionYear"
-              id="demolitionYear"
-              required
+              type="number"
               min={0}
               max={9999}
-              className="w-full border border-gray-200 px-2 py-2"
             />
           </div>
         </div>
         <div className="mb-4">
-          <label htmlFor="images" className="block">
-            Bilder
-          </label>
-          <input
-            type="file"
-            name="images"
-            id="images"
-            accept="image/jpeg, image/png"
-            multiple
-          />
+          <TextArea label="Arkitektur" name="description" rows={4} />
         </div>
         <div className="mb-4">
-          <label htmlFor="description" className="block">
-            Arkitektur
-          </label>
-          <textarea
-            id="description"
-            name="description"
-            rows={4}
-            autoComplete="false"
-            className="w-full border border-gray-200 px-2 py-2"
-          ></textarea>
-        </div>
-        <div className="mb-4">
-          <label htmlFor="demolitionCause" className="block">
-            Rivningsorsak
-          </label>
-          <textarea
-            id="demolitionCause"
-            name="demolitionCause"
-            rows={4}
-            autoComplete="false"
-            className="w-full border border-gray-200 px-2 py-2"
-          ></textarea>
+          <TextArea label="Rivningsorsak" name="demolitionCause" rows={4} />
         </div>
         <div className="hidden" aria-hidden>
           <label htmlFor="accept">Jag accepterar villkoren</label>
@@ -269,13 +211,13 @@ export const NewFeatureForm = ({
         <div className="flex justify-between">
           <button
             onClick={onCancel}
-            className="border-r-2 bg-black px-4 py-2 text-white"
+            className="border-r-2 bg-black px-4 py-2 text-white outline-none focus-within:bg-acan-blue"
           >
             Avbryt
           </button>
           <button
             type="submit"
-            className="border-r-2 bg-black px-4 py-2 text-white"
+            className="border-r-2 bg-black px-4 py-2 text-white outline-none focus-within:bg-acan-blue"
           >
             Spara
           </button>
