@@ -145,7 +145,7 @@ export default function ListPage() {
       <main className="mt-header grid grid-cols-1 grid-rows-[auto_1fr] pt-[4.125rem] sm:pt-[4.75rem] md:pt-10">
         <Transition
           show={hasSelectedBuilding}
-          className="z-10 col-span-2 col-start-1 row-span-2 row-start-1 grid grid-cols-10 grid-rows-1"
+          className="fixed bottom-0 left-0 right-0 top-0 z-20 grid grid-cols-10 grid-rows-1"
         >
           <Transition.Child
             className="col-span-4 col-start-1 row-start-1 bg-white"
@@ -248,7 +248,7 @@ export default function ListPage() {
           {buildings.loading ? (
             <span>Loading&hellip;</span>
           ) : (
-            <ul className="grid grid-cols-1 items-baseline gap-10 sm:grid-cols-2 lg:grid-cols-5">
+            <ul className="grid auto-rows-fr grid-cols-1 items-start gap-10 sm:grid-cols-2 lg:grid-cols-5">
               {rows.map((building) => (
                 <li key={building.properties._id}>
                   <button
