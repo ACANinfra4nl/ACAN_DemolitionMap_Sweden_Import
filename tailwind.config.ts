@@ -29,6 +29,9 @@ const config: Config = {
       margin: {
         column: "calc(20% - 2.5rem)",
       },
+      spacing: {
+        header: "6.875rem",
+      },
     },
   },
   plugins: [require("@tailwindcss/typography")],

@@ -138,18 +138,17 @@ export default function ListPage() {
   if (sortDesc) rows.reverse();
 
   return (
-    <>
-      <main className="grid h-screen grid-cols-1 grid-rows-[auto_1fr] overflow-hidden">
-        <div className="col-start-1 row-start-1">
-          <Navigation />
-        </div>
-        {/* <main className="grid grid-cols-1 grid-rows-1 overflow-hidden"> */}
+    <div className="h-screen">
+      <header className="fixed left-0 right-0 top-0 z-10">
+        <Navigation />
+      </header>
+      <main className="mt-header grid grid-cols-1 grid-rows-[auto_1fr] pt-[4.125rem] sm:pt-[4.75rem] md:pt-10">
         <Transition
           show={hasSelectedBuilding}
-          className="z-10 col-span-2 col-start-1 row-span-2 row-start-1 grid grid-cols-3 grid-rows-1 overflow-hidden"
+          className="z-10 col-span-2 col-start-1 row-span-2 row-start-1 grid grid-cols-10 grid-rows-1"
         >
           <Transition.Child
-            className="col-start-1 col-end-2 row-start-1 bg-white"
+            className="col-span-4 col-start-1 row-start-1 bg-white"
             enter="transition-transform duration-300 ease-out"
             enterFrom="-translate-x-full"
             enterTo="translate-none"
@@ -165,7 +164,7 @@ export default function ListPage() {
             )}
           </Transition.Child>
           <Transition.Child
-            className="col-start-2 col-end-4 row-start-1 bg-black"
+            className="col-span-6 col-start-5 row-start-1 bg-black"
             enter="transition-transform ease-out duration-300"
             enterFrom="translate-x-full"
             enterTo="translate-none"
@@ -176,37 +175,50 @@ export default function ListPage() {
             {selectedBuilding && <DetailsMap building={selectedBuilding} />}
           </Transition.Child>
         </Transition>
-        <div className="col-start-1 row-start-2 overflow-scroll scroll-smooth px-5">
-          <div className="mb-4 grid w-full grid-cols-[auto_1fr_auto] gap-x-10 gap-y-3">
-            <div className="col-span-3 flex gap-2 md:col-span-1">
-              <FilterButton
-                state="riven"
-                filter={stateFilter}
-                onClick={setStateFilter}
-              />
-              <FilterButton
-                state="hotad"
-                filter={stateFilter}
-                onClick={setStateFilter}
-              />
-              <FilterButton
-                state="räddad"
-                filter={stateFilter}
-                onClick={setStateFilter}
-              />
-            </div>
-            <div className="col-span-2 items-center text-menu-s sm:text-menu md:col-span-1 md:col-start-2">
-              <input
-                aria-label="Filtrera"
-                id="filter"
-                type="text"
-                name="filter"
-                className="w-full border-b border-current"
-                onChange={handleFilterChange}
-              />
-            </div>
-            <div className="col-start-3 flex items-center gap-2 text-menu-s sm:text-menu">
-              {/* <SortButton
+        <div className="top-header fixed z-10 grid w-full grid-cols-[auto_1fr_auto] gap-x-10 gap-y-3 px-5">
+          <div className="col-span-3 flex gap-2 md:col-span-1">
+            <FilterButton
+              state="riven"
+              filter={stateFilter}
+              onClick={setStateFilter}
+            />
+            <FilterButton
+              state="hotad"
+              filter={stateFilter}
+              onClick={setStateFilter}
+            />
+            <FilterButton
+              state="räddad"
+              filter={stateFilter}
+              onClick={setStateFilter}
+            />
+          </div>
+          <div className="relative col-span-2 items-center text-menu-s sm:text-menu md:col-span-1 md:col-start-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="#000"
+              strokeWidth={2}
+              className="absolute bottom-1"
+            >
+              <circle cx="6.5" cy="6.5" r="5.5" />
+              <path d="m10 10 5 5" />
+            </svg>
+            <input
+              aria-label="Filtrera"
+              id="filter"
+              type="text"
+              name="filter"
+              className="w-full border-b border-current bg-transparent pl-6 uppercase placeholder:uppercase placeholder:text-current"
+              onChange={handleFilterChange}
+              placeholder="Sök"
+            />
+          </div>
+          <div className="col-start-3 flex items-center gap-2 text-menu-s sm:text-menu">
+            {/* <SortButton
                     sortKey="address"
                     sortBy={sortBy}
                     sortDesc={sortDesc}
@@ -214,24 +226,25 @@ export default function ListPage() {
                   >
                     A &ndash; Ö
                   </SortButton> */}
-              <SortButton
-                sortKey="buildYear"
-                sortBy={sortBy}
-                sortDesc={sortDesc}
-                onClick={handleSortBy("buildYear")}
-              >
-                Byggår
-              </SortButton>
-              <SortButton
-                sortKey="demolitionYear"
-                sortBy={sortBy}
-                sortDesc={sortDesc}
-                onClick={handleSortBy("demolitionYear")}
-              >
-                Rivningsår
-              </SortButton>
-            </div>
+            <SortButton
+              sortKey="buildYear"
+              sortBy={sortBy}
+              sortDesc={sortDesc}
+              onClick={handleSortBy("buildYear")}
+            >
+              Byggår
+            </SortButton>
+            <SortButton
+              sortKey="demolitionYear"
+              sortBy={sortBy}
+              sortDesc={sortDesc}
+              onClick={handleSortBy("demolitionYear")}
+            >
+              Rivningsår
+            </SortButton>
           </div>
+        </div>
+        <div className="col-start-1 row-start-2 px-5 pb-20">
           {buildings.loading ? (
             <span>Loading&hellip;</span>
           ) : (
@@ -265,8 +278,7 @@ export default function ListPage() {
           )}
         </div>
       </main>
-      {/* </div> */}
-    </>
+    </div>
   );
 }
 const SortButton: FC<
