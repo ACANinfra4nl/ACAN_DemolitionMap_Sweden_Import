@@ -89,7 +89,7 @@ export const Carousel: FC<PropsWithChildren> = ({ children }) => {
         >
           {children}
         </div>
-        {childCount > 0 && (
+        {childCount > 1 && (
           <Dots
             count={childCount}
             onClick={handleGotoSlide}
@@ -122,6 +122,7 @@ const Dots: FC<{
     <nav className="absolute bottom-2 left-0 right-0 flex items-center justify-center">
       {dotsArray.map((n) => (
         <button
+          key={n}
           onClick={() => onClick(n)}
           aria-label={`Bild ${n + 1}`}
           className="p-0.5"
