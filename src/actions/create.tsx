@@ -2,6 +2,7 @@
 
 import { buildingToFeature } from "@/lib/buildingToFeature";
 import { client } from "@/lib/sanityClient";
+import { ImageAsset } from "sanity";
 
 const uploadAssets = async (images: File[]) => {
   const imageAssets = [];
@@ -13,7 +14,7 @@ const uploadAssets = async (images: File[]) => {
       asset: {
         _type: "reference",
         _ref: imageAsset._id,
-        url: imageAsset.url,
+        // url: imageAsset.url,
       },
     });
   }
@@ -70,7 +71,7 @@ export const create = async (formData: FormData) => {
       images: imageAssets.length > 0 ? imageAssets : undefined,
       reviewed: false,
     },
-    { returnDocuments: true }
+    { returnDocuments: true },
   );
 
   // TODO: handle errors

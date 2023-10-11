@@ -89,7 +89,7 @@ export const Map: FC<MapProps> = ({
           <Layer {...CLUSTERED_COUNT_LAYER_STYLE} />
           <Layer {...UNCLUSTERED_LAYER_STYLE} />
         </Source>
-        {addingLocation && (
+        {isAdding && addingLocation && (
           <Marker
             latitude={addingLocation.lat}
             longitude={addingLocation.lng}

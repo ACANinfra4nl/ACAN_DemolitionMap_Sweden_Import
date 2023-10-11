@@ -8,10 +8,11 @@ import { Select } from "./forms/Select";
 import { TextArea } from "./forms/TextArea";
 import { formatAddress } from "../lib/formatAddress";
 import { ImageInput } from "./forms/ImageInput";
+import { Button } from "./Button";
 
 interface NewFeatureFormProps {
   latLng: LatLng;
-  onSubmit: (formData: FormData) => Promise<void>;
+  onSubmit: (formData: FormData) => void;
   onCancel: () => void;
 }
 
@@ -27,7 +28,7 @@ export const NewFeatureForm = ({
       .then((r) => r.json() as unknown as ReverseGeocodeResult)
       .then(setLookupResult);
   }, []);
-  // TODO: if user changes address, do a forward geocoding lookup?
+
   return (
     <>
       <CloseButton onClick={onCancel} />
@@ -115,19 +116,11 @@ export const NewFeatureForm = ({
           <label htmlFor="accept">Jag accepterar villkoren</label>
           <input type="checkbox" name="accept" id="accept" />
         </div>
-        <div className="flex justify-between">
-          <button
-            onClick={onCancel}
-            className="border-r-2 bg-black px-4 py-2 text-white outline-none focus-within:bg-acan-blue"
-          >
-            Avbryt
-          </button>
-          <button
-            type="submit"
-            className="border-r-2 bg-black px-4 py-2 text-white outline-none focus-within:bg-acan-blue"
-          >
+        <div className="flex gap-5">
+          <Button onClick={onCancel}>Avbryt</Button>
+          <Button type="submit" className="w-full">
             Spara
-          </button>
+          </Button>
         </div>
       </form>
     </>

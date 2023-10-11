@@ -16,6 +16,8 @@ import {
 import { FilterButton } from "../../components/FilterButton";
 import { Transition } from "@headlessui/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { MessagePanel } from "@/components/MessagePanel";
+import { Button } from "@/components/Button";
 
 export default function MapPage() {
   const router = useRouter();
@@ -31,6 +33,8 @@ export default function MapPage() {
   const [addingLocation, setAddingLocation] = useState<LatLng>();
   // const dispatch = useContext(BuildingsDispatchContext);
   const [filter, setFilter] = useState<string>();
+  const [addedBuilding, setAddedBuilding] = useState<boolean | undefined>();
+  const [savingBuilding, setSavingBuilding] = useState(false);
 
   useEffect(() => {
     if (features.loading) return;
@@ -55,19 +59,20 @@ export default function MapPage() {
     setIsAdding(false);
     setShowNewBuildingForm(false);
   }, []);
-  const handleSubmitFeature = useCallback(async (formData: FormData) => {
+  const handleSubmitFeature = useCallback((formData: FormData) => {
     // save info from form
     // const feature =
-    await create(formData);
-
-    // TODO: show some sort of "thank you for contributing, someone will publish your entry shortly" message
-    alert(
-      "Tack för ditt bidrag! Informationen verifieras innan den syns på kartan.",
-    );
-    // add new marker
-    // dispatch({ type: ACTIONS.ADD_BUILDING, payload: feature });
-    setAddingLocation(undefined);
-    setIsAdding(false);
+    setSavingBuilding(true);
+    create(formData)
+      .then(() => {
+        setAddingLocation(undefined);
+        setIsAdding(false);
+        setAddedBuilding(true);
+      })
+      .catch(() => {
+        setAddedBuilding(false);
+      })
+      .finally(() => setSavingBuilding(false));
   }, []);
   const handleClickFeature: (id: string) => void = useCallback(
     (id) => {
@@ -85,6 +90,7 @@ export default function MapPage() {
   const handleClickAddBuilding: MouseEventHandler<HTMLButtonElement> =
     useCallback((e) => {
       e.stopPropagation();
+      setAddingLocation(undefined);
       setIsAdding(true);
     }, []);
 
@@ -108,10 +114,7 @@ export default function MapPage() {
         </div>
         <div className="relative col-start-1 row-start-2 mx-5 mb-5">
           <div className="absolute bottom-12 left-5 z-10 sm:bottom-[40px]">
-            <button
-              onClick={handleClickAddBuilding}
-              className="h-12 rounded-md bg-black px-4 text-white transition-colors hover:bg-black/50"
-            >
+            <Button onClick={handleClickAddBuilding}>
               {isAdding ? (
                 "Välj plats på kartan"
               ) : (
@@ -119,7 +122,7 @@ export default function MapPage() {
                   Lägg till<span className="hidden sm:inline"> byggnad</span>
                 </>
               )}
-            </button>
+            </Button>
           </div>
           <Map
             className="h-full w-full"
@@ -150,14 +153,43 @@ export default function MapPage() {
       </Transition>
       <Transition
         show={showNewBuildingForm}
-        className="relative z-10 col-span-10 col-start-1 row-span-2 row-start-1 grid overflow-scroll scroll-smooth bg-white p-4 sm:col-span-6 sm:col-start-1 md:col-span-4 md:col-start-1"
+        className="relative z-10 col-span-10 col-start-1 row-span-2 row-start-1 grid overflow-scroll scroll-smooth bg-white p-5 sm:col-span-6 sm:col-start-1 md:col-span-4 md:col-start-1"
       >
-        {addingLocation && (
+        {addingLocation && !savingBuilding && (
           <NewFeatureForm
             latLng={addingLocation}
             onCancel={handleCancelFeature}
             onSubmit={handleSubmitFeature}
           />
+        )}
+        {addingLocation && savingBuilding && <div>Sparar...</div>}
+        {addedBuilding === true && (
+          <MessagePanel
+            title="Tack för ditt bidrag"
+            onClose={() => {
+              setShowNewBuildingForm(false);
+              setAddedBuilding(undefined);
+            }}
+          >
+            <p className="mb-4">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste,
+              ullam.
+            </p>
+          </MessagePanel>
+        )}
+        {addedBuilding === false && (
+          <MessagePanel
+            title="Något gick fel"
+            onClose={() => {
+              setShowNewBuildingForm(false);
+              setAddedBuilding(undefined);
+            }}
+          >
+            <p className="mb-4">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste,
+              ullam.
+            </p>
+          </MessagePanel>
         )}
       </Transition>
     </div>
