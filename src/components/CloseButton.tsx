@@ -15,5 +15,9 @@ export const CloseButton: FC<CloseButtonProps> = ({ onClick }) => {
     return () => document.removeEventListener("keyup", handleKeypress);
   }, [onClick]);
 
-  return null;
+  return (
+    <button aria-label="Stäng" onClick={onClick} className="font-bold">
+      &times;
+    </button>
+  );
 };
