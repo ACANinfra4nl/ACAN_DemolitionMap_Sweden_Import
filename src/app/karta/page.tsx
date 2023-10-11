@@ -93,43 +93,54 @@ export default function MapPage() {
   };
 
   return (
-    <main className="grid min-h-screen w-full grid-cols-2 grid-rows-[auto_auto_1fr]">
-      <div className="col-span-2 col-start-1 row-start-1">
+    <div className="grid h-screen grid-cols-10 grid-rows-[auto_1fr]">
+      <header className="col-span-10 col-start-1 row-start-1">
         <Navigation />
-      </div>
-
-      <div className="col-span-2 col-start-1 row-start-2 mx-5 flex gap-2 pb-2">
-        <FilterButton state="riven" onClick={setFilter} filter={filter} />
-        <FilterButton state="hotad" onClick={setFilter} filter={filter} />
-        <FilterButton state="räddad" onClick={setFilter} filter={filter} />
-      </div>
-      <div className="relative col-span-2 col-start-1 row-start-3 mx-5 mb-5">
-        <div className="absolute bottom-12 left-5 z-10 sm:bottom-[40px]">
-          <button
-            onClick={handleClickAddBuilding}
-            className="h-12 rounded-md bg-black px-4 text-white transition-colors hover:bg-black/50"
-          >
-            {isAdding ? (
-              "Välj plats på kartan"
-            ) : (
-              <>
-                Lägg till<span className="hidden sm:inline"> byggnad</span>
-              </>
-            )}
-          </button>
+      </header>
+      <main className="col-span-10 col-start-1 row-start-2 grid w-full grid-cols-1 grid-rows-[auto_1fr]">
+        <div className="col-start-1 row-start-1 mx-5 flex gap-2 pb-2">
+          <FilterButton state="riven" onClick={setFilter} filter={filter} />
+          <FilterButton state="hotad" onClick={setFilter} filter={filter} />
+          <FilterButton state="räddad" onClick={setFilter} filter={filter} />
         </div>
-        <Map
-          className="h-full w-full"
-          features={filteredFeatures}
-          isAdding={isAdding}
-          addingLocation={addingLocation}
-          onAddMarker={handleAddMarker}
-          onClickFeature={handleClickFeature}
-        />
-      </div>
+        <div className="relative col-start-1 row-start-2 mx-5 mb-5">
+          <div className="absolute bottom-12 left-5 z-10 sm:bottom-[40px]">
+            <button
+              onClick={handleClickAddBuilding}
+              className="h-12 rounded-md bg-black px-4 text-white transition-colors hover:bg-black/50"
+            >
+              {isAdding ? (
+                "Välj plats på kartan"
+              ) : (
+                <>
+                  Lägg till<span className="hidden sm:inline"> byggnad</span>
+                </>
+              )}
+            </button>
+          </div>
+          <Map
+            className="h-full w-full"
+            features={filteredFeatures}
+            isAdding={isAdding}
+            addingLocation={addingLocation}
+            onAddMarker={handleAddMarker}
+            onClickFeature={handleClickFeature}
+          />
+        </div>
+
+        {addingLocation && (
+          <div className="z-10 col-span-1 col-start-1 row-span-3 row-start-1 grid">
+            <NewFeatureForm
+              latLng={addingLocation}
+              onCancel={handleCancelFeature}
+              onSubmit={handleSubmitFeature}
+            />
+          </div>
+        )}
+      </main>
       <Transition
         show={hasSelectedFeature}
-        className="relative z-10 col-span-1 col-start-1 row-span-3 row-start-1 grid bg-white"
+        className="relative z-10 col-span-10 col-start-1 row-span-2 row-start-1 grid bg-white sm:col-span-6 sm:col-start-1 md:col-span-4 md:col-start-1"
         enter="transition-transform duration-300 ease-out"
         enterFrom="-translate-x-full"
         enterTo="translate-none"
@@ -144,15 +155,6 @@ export default function MapPage() {
           />
         )}
       </Transition>
-      {addingLocation && (
-        <div className="relative z-10 col-span-1 col-start-1 row-span-3 row-start-1 grid">
-          <NewFeatureForm
-            latLng={addingLocation}
-            onCancel={handleCancelFeature}
-            onSubmit={handleSubmitFeature}
-          />
-        </div>
-      )}
-    </main>
+    </div>
   );
 }
