@@ -1,13 +1,5 @@
 import { capitalize } from "@/lib/capitalize";
-import {
-  ChangeEventHandler,
-  DragEventHandler,
-  FC,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { useEffect, useState } from "react";
 import { CloseButton } from "./CloseButton";
 import { categories } from "@/lib/categories";
 import { states } from "@/lib/states";
@@ -15,92 +7,7 @@ import { Input } from "./forms/Input";
 import { Select } from "./forms/Select";
 import { TextArea } from "./forms/TextArea";
 import { formatAddress } from "../lib/formatAddress";
-import classNames from "classnames";
-
-const ImageInput: FC = () => {
-  const inputRef = useRef<HTMLInputElement>(null);
-  const labelRef = useRef<HTMLLabelElement>(null);
-  const [images, setImages] = useState<string[]>([]);
-  const [dragging, setDragging] = useState(false);
-  const processImages = useCallback((files: FileList) => {
-    for (const file of files) {
-      const fr = new FileReader();
-      fr.onload = () => {
-        const url = fr.result as string;
-        setImages((old) => old.concat([url]));
-        fr.onload = null;
-      };
-
-      fr.readAsDataURL(file);
-    }
-  }, []);
-  const handleDrop: DragEventHandler<HTMLLabelElement> = useCallback((e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    e.nativeEvent.stopImmediatePropagation();
-    if (inputRef.current) {
-      const files = e.dataTransfer.files;
-      inputRef.current.files = files;
-      processImages(files);
-    }
-    setDragging(false);
-  }, []);
-  const handleDragEnter: DragEventHandler<HTMLLabelElement> = useCallback(
-    (e) => {
-      e.preventDefault();
-      setDragging(true);
-    },
-    [],
-  );
-  const handleDragExit: DragEventHandler<HTMLLabelElement> = useCallback(
-    (e) => {
-      e.preventDefault();
-      setDragging(false);
-    },
-    [],
-  );
-  const handleUpload: ChangeEventHandler<HTMLInputElement> = useCallback(
-    (e) => {
-      if (e.target.files) processImages(e.target.files);
-    },
-    [],
-  );
-
-  const gridTemplateColumns = `repeat(${Math.ceil(
-    Math.sqrt(images.length),
-  )}, 1fr)`;
-  console.log({ gridTemplateColumns });
-
-  return (
-    <label
-      onDragOver={handleDragEnter}
-      onDragLeave={handleDragExit}
-      onDrop={handleDrop}
-      className={classNames(
-        "grid aspect-square w-full overflow-hidden border border-current",
-        dragging && "border-acan-blue",
-      )}
-      style={{
-        gridTemplateColumns,
-      }}
-      ref={labelRef}
-    >
-      <input
-        type="file"
-        name="images"
-        multiple
-        ref={inputRef}
-        className="sr-only"
-        onChange={handleUpload}
-      />
-      {images.map((img, i) => (
-        <div key={i}>
-          <img src={img} className="aspect-square w-full object-contain" />
-        </div>
-      ))}
-    </label>
-  );
-};
+import { ImageInput } from "./ImageInput";
 
 interface NewFeatureFormProps {
   latLng: LatLng;
