@@ -16,7 +16,11 @@ export const CloseButton: FC<CloseButtonProps> = ({ onClick }) => {
   }, [onClick]);
 
   return (
-    <button aria-label="Stäng" onClick={onClick} className="font-bold">
+    <button
+      aria-label="Stäng"
+      onClick={onClick}
+      className="flex h-8 w-8 items-center justify-center rounded-full bg-black p-2 text-2xl font-bold leading-none text-white"
+    >
       &times;
     </button>
   );
