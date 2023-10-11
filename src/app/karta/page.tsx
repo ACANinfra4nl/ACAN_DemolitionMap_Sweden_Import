@@ -27,6 +27,7 @@ export default function MapPage() {
   const [selectedFeature, setSelectedFeature] =
     useState<Feature<Point, FeatureBuilding>>();
   const [isAdding, setIsAdding] = useState(false);
+  const [showNewBuildingForm, setShowNewBuildingForm] = useState(false);
   const [addingLocation, setAddingLocation] = useState<LatLng>();
   // const dispatch = useContext(BuildingsDispatchContext);
   const [filter, setFilter] = useState<string>();
@@ -46,11 +47,13 @@ export default function MapPage() {
 
   const handleAddMarker = useCallback((latLng: LatLng) => {
     // show popup with form
+    setShowNewBuildingForm(true);
     setAddingLocation(latLng);
   }, []);
   const handleCancelFeature = useCallback(() => {
-    setAddingLocation(undefined);
+    // setAddingLocation(undefined);
     setIsAdding(false);
+    setShowNewBuildingForm(false);
   }, []);
   const handleSubmitFeature = useCallback(async (formData: FormData) => {
     // save info from form
@@ -127,16 +130,6 @@ export default function MapPage() {
             onClickFeature={handleClickFeature}
           />
         </div>
-
-        {addingLocation && (
-          <div className="z-10 col-span-1 col-start-1 row-span-3 row-start-1 grid">
-            <NewFeatureForm
-              latLng={addingLocation}
-              onCancel={handleCancelFeature}
-              onSubmit={handleSubmitFeature}
-            />
-          </div>
-        )}
       </main>
       <Transition
         show={hasSelectedFeature}
@@ -152,6 +145,18 @@ export default function MapPage() {
           <DetailsPanel
             properties={selectedFeature.properties}
             onClose={clearSelectedFeature}
+          />
+        )}
+      </Transition>
+      <Transition
+        show={showNewBuildingForm}
+        className="relative z-10 col-span-10 col-start-1 row-span-2 row-start-1 grid overflow-scroll scroll-smooth bg-white p-4 sm:col-span-6 sm:col-start-1 md:col-span-4 md:col-start-1"
+      >
+        {addingLocation && (
+          <NewFeatureForm
+            latLng={addingLocation}
+            onCancel={handleCancelFeature}
+            onSubmit={handleSubmitFeature}
           />
         )}
       </Transition>

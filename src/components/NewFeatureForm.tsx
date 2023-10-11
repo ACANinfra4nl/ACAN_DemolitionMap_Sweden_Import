@@ -7,7 +7,7 @@ import { Input } from "./forms/Input";
 import { Select } from "./forms/Select";
 import { TextArea } from "./forms/TextArea";
 import { formatAddress } from "../lib/formatAddress";
-import { ImageInput } from "./ImageInput";
+import { ImageInput } from "./forms/ImageInput";
 
 interface NewFeatureFormProps {
   latLng: LatLng;
@@ -29,7 +29,7 @@ export const NewFeatureForm = ({
   }, []);
   // TODO: if user changes address, do a forward geocoding lookup?
   return (
-    <div className="bg-white p-4">
+    <>
       <CloseButton onClick={onCancel} />
       <div className="mb-4">
         <h2 className="text-menu-s uppercase sm:text-menu">
@@ -130,6 +130,6 @@ export const NewFeatureForm = ({
           </button>
         </div>
       </form>
-    </div>
+    </>
   );
 };
