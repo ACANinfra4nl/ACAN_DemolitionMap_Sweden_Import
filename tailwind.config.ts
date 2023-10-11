@@ -13,6 +13,7 @@ const config: Config = {
         threatened: "#FFB800",
         saved: "#41B82E",
         "acan-blue": "#2637f3",
+        disabled: "#9E9E9E",
       },
       fontSize: {
         intro: ["clamp(1.25rem,3vw,3rem)", "1.05"],

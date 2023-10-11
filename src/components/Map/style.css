@@ -23,14 +23,15 @@
   background: black;
   border-radius: 6px;
   color: inherit;
-  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  outline: none;
 
   & + button {
     margin-left: 0.25rem;
   }
 }
-.maplibregl-ctrl button:not(:disabled):hover {
-  background-color: rgba(0, 0, 0, 0.5);
+.maplibregl-ctrl button:not(:disabled):hover,
+.maplibregl-ctrl button:not(:disabled):focus-visible {
+  background-color: #2637f3;
 }
 
 .maplibregl-ctrl-group button:focus:first-child {

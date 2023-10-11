@@ -148,7 +148,7 @@ export default function ListPage() {
           className="fixed bottom-0 left-0 right-0 top-0 z-20 grid grid-cols-10 grid-rows-1"
         >
           <Transition.Child
-            className="col-span-4 col-start-1 row-start-1 bg-white"
+            className="col-span-10 row-start-1 bg-white sm:col-span-6 sm:col-start-1 md:col-span-4 md:col-start-1"
             enter="transition-transform duration-300 ease-out"
             enterFrom="-translate-x-full"
             enterTo="translate-none"
@@ -164,7 +164,7 @@ export default function ListPage() {
             )}
           </Transition.Child>
           <Transition.Child
-            className="col-span-6 col-start-5 row-start-1 bg-black"
+            className="row-start-1 hidden bg-black sm:col-span-4 sm:col-start-7 sm:block md:col-span-6 md:col-start-5"
             enter="transition-transform ease-out duration-300"
             enterFrom="translate-x-full"
             enterTo="translate-none"

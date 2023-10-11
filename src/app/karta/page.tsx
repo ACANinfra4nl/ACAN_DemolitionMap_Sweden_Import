@@ -16,6 +16,8 @@ import {
 import { FilterButton } from "../../components/FilterButton";
 import { Transition } from "@headlessui/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { MessagePanel } from "@/components/MessagePanel";
+import { Button } from "@/components/Button";
 
 export default function MapPage() {
   const router = useRouter();
@@ -27,9 +29,12 @@ export default function MapPage() {
   const [selectedFeature, setSelectedFeature] =
     useState<Feature<Point, FeatureBuilding>>();
   const [isAdding, setIsAdding] = useState(false);
+  const [showNewBuildingForm, setShowNewBuildingForm] = useState(false);
   const [addingLocation, setAddingLocation] = useState<LatLng>();
   // const dispatch = useContext(BuildingsDispatchContext);
   const [filter, setFilter] = useState<string>();
+  const [addedBuilding, setAddedBuilding] = useState<boolean | undefined>();
+  const [savingBuilding, setSavingBuilding] = useState(false);
 
   useEffect(() => {
     if (features.loading) return;
@@ -46,25 +51,28 @@ export default function MapPage() {
 
   const handleAddMarker = useCallback((latLng: LatLng) => {
     // show popup with form
+    setShowNewBuildingForm(true);
     setAddingLocation(latLng);
   }, []);
   const handleCancelFeature = useCallback(() => {
-    setAddingLocation(undefined);
+    // setAddingLocation(undefined);
     setIsAdding(false);
+    setShowNewBuildingForm(false);
   }, []);
-  const handleSubmitFeature = useCallback(async (formData: FormData) => {
+  const handleSubmitFeature = useCallback((formData: FormData) => {
     // save info from form
     // const feature =
-    await create(formData);
-
-    // TODO: show some sort of "thank you for contributing, someone will publish your entry shortly" message
-    alert(
-      "Tack för ditt bidrag! Informationen verifieras innan den syns på kartan.",
-    );
-    // add new marker
-    // dispatch({ type: ACTIONS.ADD_BUILDING, payload: feature });
-    setAddingLocation(undefined);
-    setIsAdding(false);
+    setSavingBuilding(true);
+    create(formData)
+      .then(() => {
+        setAddingLocation(undefined);
+        setIsAdding(false);
+        setAddedBuilding(true);
+      })
+      .catch(() => {
+        setAddedBuilding(false);
+      })
+      .finally(() => setSavingBuilding(false));
   }, []);
   const handleClickFeature: (id: string) => void = useCallback(
     (id) => {
@@ -82,6 +90,7 @@ export default function MapPage() {
   const handleClickAddBuilding: MouseEventHandler<HTMLButtonElement> =
     useCallback((e) => {
       e.stopPropagation();
+      setAddingLocation(undefined);
       setIsAdding(true);
     }, []);
 
@@ -93,43 +102,41 @@ export default function MapPage() {
   };
 
   return (
-    <main className="grid min-h-screen w-full grid-cols-2 grid-rows-[auto_auto_1fr]">
-      <div className="col-span-2 col-start-1 row-start-1">
+    <div className="grid h-screen grid-cols-10 grid-rows-[auto_1fr]">
+      <header className="col-span-10 col-start-1 row-start-1">
         <Navigation />
-      </div>
-
-      <div className="col-span-2 col-start-1 row-start-2 mx-5 flex gap-2 pb-2">
-        <FilterButton state="riven" onClick={setFilter} filter={filter} />
-        <FilterButton state="hotad" onClick={setFilter} filter={filter} />
-        <FilterButton state="räddad" onClick={setFilter} filter={filter} />
-      </div>
-      <div className="relative col-span-2 col-start-1 row-start-3 mx-5 mb-5">
-        <div className="absolute bottom-12 left-5 z-10 sm:bottom-[40px]">
-          <button
-            onClick={handleClickAddBuilding}
-            className="h-12 rounded-md bg-black px-4 text-white transition-colors hover:bg-black/50"
-          >
-            {isAdding ? (
-              "Välj plats på kartan"
-            ) : (
-              <>
-                Lägg till<span className="hidden sm:inline"> byggnad</span>
-              </>
-            )}
-          </button>
+      </header>
+      <main className="col-span-10 col-start-1 row-start-2 grid w-full grid-cols-1 grid-rows-[auto_1fr]">
+        <div className="col-start-1 row-start-1 mx-5 flex gap-2 pb-2">
+          <FilterButton state="riven" onClick={setFilter} filter={filter} />
+          <FilterButton state="hotad" onClick={setFilter} filter={filter} />
+          <FilterButton state="räddad" onClick={setFilter} filter={filter} />
         </div>
-        <Map
-          className="h-full w-full"
-          features={filteredFeatures}
-          isAdding={isAdding}
-          addingLocation={addingLocation}
-          onAddMarker={handleAddMarker}
-          onClickFeature={handleClickFeature}
-        />
-      </div>
+        <div className="relative col-start-1 row-start-2 mx-5 mb-5">
+          <div className="absolute bottom-12 left-5 z-10 sm:bottom-[40px]">
+            <Button onClick={handleClickAddBuilding}>
+              {isAdding ? (
+                "Välj plats på kartan"
+              ) : (
+                <>
+                  Lägg till<span className="hidden sm:inline"> byggnad</span>
+                </>
+              )}
+            </Button>
+          </div>
+          <Map
+            className="h-full w-full"
+            features={filteredFeatures}
+            isAdding={isAdding}
+            addingLocation={addingLocation}
+            onAddMarker={handleAddMarker}
+            onClickFeature={handleClickFeature}
+          />
+        </div>
+      </main>
       <Transition
         show={hasSelectedFeature}
-        className="relative z-10 col-span-1 col-start-1 row-span-3 row-start-1 grid bg-white"
+        className="relative z-10 col-span-10 col-start-1 row-span-2 row-start-1 grid bg-white sm:col-span-6 sm:col-start-1 md:col-span-4 md:col-start-1"
         enter="transition-transform duration-300 ease-out"
         enterFrom="-translate-x-full"
         enterTo="translate-none"
@@ -144,15 +151,47 @@ export default function MapPage() {
           />
         )}
       </Transition>
-      {addingLocation && (
-        <div className="relative z-10 col-span-1 col-start-1 row-span-3 row-start-1 grid">
+      <Transition
+        show={showNewBuildingForm}
+        className="relative z-10 col-span-10 col-start-1 row-span-2 row-start-1 grid overflow-scroll scroll-smooth bg-white p-5 sm:col-span-6 sm:col-start-1 md:col-span-4 md:col-start-1"
+      >
+        {addingLocation && !savingBuilding && (
           <NewFeatureForm
             latLng={addingLocation}
             onCancel={handleCancelFeature}
             onSubmit={handleSubmitFeature}
           />
-        </div>
-      )}
-    </main>
+        )}
+        {addingLocation && savingBuilding && <div>Sparar...</div>}
+        {addedBuilding === true && (
+          <MessagePanel
+            title="Tack för ditt bidrag"
+            onClose={() => {
+              setShowNewBuildingForm(false);
+              setAddedBuilding(undefined);
+            }}
+          >
+            <p className="mb-4">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste,
+              ullam.
+            </p>
+          </MessagePanel>
+        )}
+        {addedBuilding === false && (
+          <MessagePanel
+            title="Något gick fel"
+            onClose={() => {
+              setShowNewBuildingForm(false);
+              setAddedBuilding(undefined);
+            }}
+          >
+            <p className="mb-4">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste,
+              ullam.
+            </p>
+          </MessagePanel>
+        )}
+      </Transition>
+    </div>
   );
 }
