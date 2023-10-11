@@ -293,7 +293,7 @@ const SortButton: FC<
     <button
       onClick={onClick}
       className={classNames(
-        "whitespace-nowrap",
+        "whitespace-nowrap uppercase",
         sortBy === sortKey && "underline",
       )}
     >
