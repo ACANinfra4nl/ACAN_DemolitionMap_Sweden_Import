@@ -22,11 +22,11 @@ const NavLink: FC<{ href: string; path: string; children: ReactNode }> = ({
 export const Navigation: FC<{ scaleLogo?: boolean }> = ({ scaleLogo }) => {
   const path = usePathname();
   return (
-    <nav className="text-menu-s sm:text-menu grid w-full grid-cols-5 items-start justify-between gap-10 p-5 uppercase">
+    <nav className="grid w-full grid-cols-5 items-start justify-between gap-10 p-5 text-menu-s uppercase sm:text-menu">
       <Link href="/" className="col-span-2">
-        Svensk
-        <br />
-        rivningsatlas
+        Rivnings
+        <wbr />
+        kartan
       </Link>
       <div className="col-span-2 col-start-3 flex flex-col">
         <NavLink href="/karta" path={path}>
