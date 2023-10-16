@@ -10,6 +10,7 @@ interface SanityBuilding<T extends LatLng> {
   location: T;
   category: string;
   state: string;
+  name?: string;
   address?: string;
   postcode?: string;
   city?: string;
@@ -20,7 +21,7 @@ interface SanityBuilding<T extends LatLng> {
   architect?: string;
   propertyOwner?: string;
   buildYear: number;
-  demolitionYear: number;
+  demolitionYear?: number;
   description?: string;
   demolitionCause?: string;
   images?: {
@@ -34,6 +35,7 @@ interface FeatureBuilding {
   location: LatLng;
   category: string;
   state: string;
+  name?: string;
   address?: string;
   postcode?: string;
   city?: string;
@@ -44,7 +46,7 @@ interface FeatureBuilding {
   architect?: string;
   propertyOwner?: string;
   buildYear: number;
-  demolitionYear: number;
+  demolitionYear?: number;
   description?: string;
   demolitionCause?: string;
   images?: string[];

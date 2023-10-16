@@ -21,7 +21,7 @@ export const NewFeatureForm = ({
   onSubmit,
 }: NewFeatureFormProps) => {
   const [lookupResult, setLookupResult] = useState<ReverseGeocodeResult>();
-  const [state, setState] = useState("");
+  const [isDemolished, setIsDemolished] = useState(false);
   useEffect(() => {
     // do reverse geocoding of latlng and populate address fields
     fetch(`/api/reverse?lat=${latLng.lat}&lng=${latLng.lng}`)
@@ -30,10 +30,9 @@ export const NewFeatureForm = ({
   }, []);
 
   const handleChangeState: ChangeEventHandler<HTMLSelectElement> = useCallback(
-    (e) => setState(e.currentTarget.value),
+    (e) => setIsDemolished(e.currentTarget.value === "riven"),
     [],
   );
-  console.log({ state });
 
   return (
     <>
@@ -43,7 +42,7 @@ export const NewFeatureForm = ({
           Lägg till byggnad
         </h2>
       </div>
-      <form action={onSubmit}>
+      <form action={onSubmit} autoComplete="off">
         <input type="hidden" name="lat" value={latLng.lat} />
         <input type="hidden" name="lng" value={latLng.lng} />
         <div className="mb-4">
@@ -64,15 +63,17 @@ export const NewFeatureForm = ({
             name="state"
             options={states}
             required
-            value={state}
             onChange={handleChangeState}
           />
+        </div>
+        <div className="mb-4">
+          <Input label="Byggnadens namn" name="buildingName" />
         </div>
         <div className="mb-4">
           <Input
             label="Adress"
             name=""
-            value={formatAddress(
+            defaultValue={formatAddress(
               lookupResult?.address,
               lookupResult?.postcode,
               lookupResult?.city,
@@ -80,9 +81,17 @@ export const NewFeatureForm = ({
             readOnly
             disabled
           />
-          <input type="hidden" name="address" value={lookupResult?.address} />
-          <input type="hidden" name="postcode" value={lookupResult?.postcode} />
-          <input type="hidden" name="city" value={lookupResult?.city} />
+          <input
+            type="hidden"
+            name="address"
+            defaultValue={lookupResult?.address}
+          />
+          <input
+            type="hidden"
+            name="postcode"
+            defaultValue={lookupResult?.postcode}
+          />
+          <input type="hidden" name="city" defaultValue={lookupResult?.city} />
         </div>
         <div className="mb-4">
           <Input label="Kvartersnamn" name="blockName" />
@@ -116,7 +125,7 @@ export const NewFeatureForm = ({
               type="number"
               min={0}
               max={9999}
-              disabled={state !== "riven"}
+              disabled={!isDemolished}
             />
           </div>
         </div>

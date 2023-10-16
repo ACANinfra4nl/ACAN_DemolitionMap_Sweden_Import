@@ -45,6 +45,7 @@ export const building: SchemaTypeDefinition = {
       },
       validation: (Rule) => Rule.required(),
     },
+    { name: "name", type: "string", title: "Byggnadens namn" },
     {
       name: "address",
       type: "string",
@@ -95,7 +96,14 @@ export const building: SchemaTypeDefinition = {
       name: "demolitionYear",
       type: "number",
       title: "Rivningsår",
-      validation: (Rule) => Rule.required().min(0).max(9999),
+      validation: (Rule) =>
+        Rule.min(0)
+          .max(9999)
+          .custom<number | undefined>((value, context) =>
+            context.document?.state === "riven" && !value
+              ? "Vänligen fyll i rivningsår"
+              : true,
+          ),
     },
     {
       name: "description",

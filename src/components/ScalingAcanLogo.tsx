@@ -10,7 +10,6 @@ export const ScalingAcanLogo: FC = () => {
   useEffect(() => {
     const resizeLogo = () => {
       if (!el.current) return;
-      console.log("recalculating logo size");
       const maxWidth = (document.body.clientWidth - 40 - 160) / 5;
       const maxScale = Math.max(1, maxWidth / el.current.offsetWidth);
       if (window.scrollY > 0) {

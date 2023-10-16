@@ -21,6 +21,8 @@ const uploadAssets = async (images: File[]) => {
   return imageAssets;
 };
 
+type OptionalString = string | undefined;
+
 export const create = async (formData: FormData) => {
   //   TODO: validate input!
   // save info from form
@@ -38,16 +40,18 @@ export const create = async (formData: FormData) => {
       category: formData.get("category") as string,
       // Status - hotad (rivningslov), riven, räddad - färgkodad
       state: formData.get("state") as string,
+      // Byggnadens namn
+      name: formData.get("buildingName") as OptionalString,
       // Adress
-      address: formData.get("address") as string | undefined,
-      postcode: formData.get("postcode") as string | undefined,
-      city: formData.get("city") as string | undefined,
+      address: formData.get("address") as OptionalString,
+      postcode: formData.get("postcode") as OptionalString,
+      city: formData.get("city") as OptionalString,
       // Kvartersnamn
-      blockName: formData.get("blockName") as string | undefined,
+      blockName: formData.get("blockName") as OptionalString,
       // Fastighetsbeteckning
-      propertyDesignation: formData.get("propertyDesignation") as
-        | string
-        | undefined,
+      propertyDesignation: formData.get(
+        "propertyDesignation",
+      ) as OptionalString,
       // Storlek m2
       size: formData.has("size") ? Number(formData.get("size")) : undefined,
       // (Inbunden C02)
@@ -55,17 +59,19 @@ export const create = async (formData: FormData) => {
         ? Number(formData.get("boundCO2"))
         : undefined,
       // Arkitekt
-      architect: formData.get("architect") as string | undefined,
+      architect: formData.get("architect") as OptionalString,
       // Fastighetsägare
-      propertyOwner: formData.get("propertyOwner") as string | undefined,
+      propertyOwner: formData.get("propertyOwner") as OptionalString,
       // Byggår
       buildYear: Number(formData.get("buildYear")),
       // Rivningsår
-      demolitionYear: Number(formData.get("demolitionYear")),
+      demolitionYear: formData.has("demolitionYear")
+        ? Number(formData.get("demolitionYear"))
+        : undefined,
       // Arkitektur, historik - fritext (nuvarande verksamhet)
-      description: formData.get("description") as string | undefined,
+      description: formData.get("description") as OptionalString,
       // Anledning till rivning, fritext (vad planeras i dess ställe)
-      demolitionCause: formData.get("demolitionCause") as string | undefined,
+      demolitionCause: formData.get("demolitionCause") as OptionalString,
       // (Datum för inlägget)
       // Minnen, öppet för alla att lägga till
       images: imageAssets.length > 0 ? imageAssets : undefined,

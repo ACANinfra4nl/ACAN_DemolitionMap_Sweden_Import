@@ -60,7 +60,6 @@ export const ImageInput: FC = () => {
   const gridTemplateColumns = `repeat(${Math.ceil(
     Math.sqrt(images.length),
   )}, 1fr)`;
-  console.log({ gridTemplateColumns });
 
   return (
     <label
