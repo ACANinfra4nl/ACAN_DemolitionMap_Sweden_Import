@@ -1,4 +1,4 @@
-import { FC, ReactNode, useCallback, useState } from "react";
+import { FC, ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import { CloseButton } from "./CloseButton";
 import { Carousel } from "./Carousel";
 import { StateIcon } from "./StateIcon";
@@ -23,10 +23,20 @@ interface DetailsProps {
 }
 
 export const DetailsPanel: FC<DetailsProps> = ({ properties, onClose }) => {
+  const panelEl = useRef<HTMLDivElement>(null);
   const [shareSuccessState, setShareSuccessState] = useState<
     string | false | undefined
   >();
 
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (!panelEl.current || panelEl.current.contains(e.target as Node))
+        return;
+      onClose();
+    };
+    void document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, []);
   const handleShareSuccess = useCallback((type: string) => {
     setShareSuccessState(type);
     setTimeout(setShareSuccessState, 2000, undefined);
@@ -38,7 +48,7 @@ export const DetailsPanel: FC<DetailsProps> = ({ properties, onClose }) => {
   }, []);
 
   return (
-    <div className="grid grid-rows-[auto_auto_1fr] p-5">
+    <div className="grid grid-rows-[auto_auto_1fr] p-5" ref={panelEl}>
       <div className="z-10 col-start-1 row-start-1 ml-6 mt-6">
         <CloseButton onClick={onClose} />
       </div>

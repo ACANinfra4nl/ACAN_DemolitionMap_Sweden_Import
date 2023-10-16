@@ -57,7 +57,9 @@ export const Map: FC<MapProps> = ({
           });
         } else {
           // show info panel for feature
-          onClickFeature(
+          setTimeout(
+            onClickFeature,
+            0,
             (feature as unknown as Feature<Point, FeatureBuilding>).properties
               ._id,
           );

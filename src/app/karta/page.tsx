@@ -140,7 +140,7 @@ export default function MapPage() {
         enter="transition-transform duration-300 ease-out"
         enterFrom="-translate-x-full"
         enterTo="translate-none"
-        leave="transition-transform duration-300 ease-out"
+        leave="transition-transform duration-300 ease-out delay-[10ms]"
         leaveFrom="translate-none"
         leaveTo="-translate-x-full"
       >
