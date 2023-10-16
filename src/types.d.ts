@@ -28,6 +28,10 @@ interface SanityBuilding<T extends LatLng> {
     _type: string;
     asset: { _type: string; _ref: string; url?: string };
   }[];
+  contributor?: {
+    name?: string;
+    email?: string;
+  };
 }
 
 interface FeatureBuilding {
@@ -50,6 +54,10 @@ interface FeatureBuilding {
   description?: string;
   demolitionCause?: string;
   images?: string[];
+  contributor?: {
+    name?: string;
+    email?: string;
+  };
 }
 
 interface ReverseGeocodeResult {
