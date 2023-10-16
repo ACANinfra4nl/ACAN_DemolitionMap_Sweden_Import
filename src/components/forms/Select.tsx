@@ -16,15 +16,17 @@ export const Select: FC<
     label: string;
     options: string[];
   }
-> = ({ label, ...props }) => {
+> = ({ label, onChange, ...props }) => {
   const [hasValue, setHasValue] = useState(false);
   const [interacted, setInteracted] = useState(false);
   const handleChange: ChangeEventHandler<HTMLSelectElement> = useCallback(
-    (e) => setHasValue(e.target.value.length > 0),
+    (e) => {
+      setHasValue(e.target.value.length > 0);
+      onChange?.(e);
+    },
     [],
   );
   const handleInteracted = useCallback(() => setInteracted(true), []);
-  console.log({ hasValue, name: props.name });
 
   return (
     <div className="relative">

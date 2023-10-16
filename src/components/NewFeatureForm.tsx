@@ -1,5 +1,4 @@
-import { capitalize } from "@/lib/capitalize";
-import { useEffect, useState } from "react";
+import { ChangeEventHandler, useCallback, useEffect, useState } from "react";
 import { CloseButton } from "./CloseButton";
 import { categories } from "@/lib/categories";
 import { states } from "@/lib/states";
@@ -22,12 +21,19 @@ export const NewFeatureForm = ({
   onSubmit,
 }: NewFeatureFormProps) => {
   const [lookupResult, setLookupResult] = useState<ReverseGeocodeResult>();
+  const [state, setState] = useState("");
   useEffect(() => {
     // do reverse geocoding of latlng and populate address fields
     fetch(`/api/reverse?lat=${latLng.lat}&lng=${latLng.lng}`)
       .then((r) => r.json() as unknown as ReverseGeocodeResult)
       .then(setLookupResult);
   }, []);
+
+  const handleChangeState: ChangeEventHandler<HTMLSelectElement> = useCallback(
+    (e) => setState(e.currentTarget.value),
+    [],
+  );
+  console.log({ state });
 
   return (
     <>
@@ -53,7 +59,14 @@ export const NewFeatureForm = ({
           />
         </div>
         <div className="mb-4">
-          <Select label="Status" name="state" options={states} required />
+          <Select
+            label="Status"
+            name="state"
+            options={states}
+            required
+            value={state}
+            onChange={handleChangeState}
+          />
         </div>
         <div className="mb-4">
           <Input
@@ -103,6 +116,7 @@ export const NewFeatureForm = ({
               type="number"
               min={0}
               max={9999}
+              disabled={state !== "riven"}
             />
           </div>
         </div>
