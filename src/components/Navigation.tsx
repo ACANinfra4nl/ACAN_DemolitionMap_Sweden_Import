@@ -23,21 +23,25 @@ export const Navigation: FC<{ scaleLogo?: boolean }> = ({ scaleLogo }) => {
   const path = usePathname();
   return (
     <nav className="grid w-full grid-cols-5 items-start justify-between gap-10 p-5 text-menu-s uppercase sm:text-menu">
-      <Link href="/" className="col-span-2">
-        Rivnings
-        <wbr />
-        kartan
-      </Link>
+      <div className="col-span-2">
+        <Link href="/">Rivnings&shy;kartan</Link>
+      </div>
       <div className="col-span-2 col-start-3 flex flex-col">
-        <NavLink href="/karta" path={path}>
-          Karta
-        </NavLink>
-        <NavLink href="/lista" path={path}>
-          Lista
-        </NavLink>
-        <NavLink href="/" path={path}>
-          Manifest
-        </NavLink>
+        <div>
+          <NavLink href="/karta" path={path}>
+            Karta
+          </NavLink>
+        </div>
+        <div>
+          <NavLink href="/lista" path={path}>
+            Lista
+          </NavLink>
+        </div>
+        <div>
+          <NavLink href="/" path={path}>
+            Manifest
+          </NavLink>
+        </div>
       </div>
       <div className="col-start-5 sm:col-start-5">
         {scaleLogo ? (
