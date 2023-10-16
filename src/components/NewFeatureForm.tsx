@@ -37,18 +37,22 @@ export const NewFeatureForm = ({
   return (
     <>
       <CloseButton onClick={onCancel} />
-      <div className="mb-4">
+      <div>
         <h2 className="text-menu-s uppercase sm:text-menu">
           Lägg till byggnad
         </h2>
       </div>
-      <form action={onSubmit} autoComplete="off">
+      <form
+        action={onSubmit}
+        autoComplete="off"
+        className="flex flex-col gap-4"
+      >
         <input type="hidden" name="lat" value={latLng.lat} />
         <input type="hidden" name="lng" value={latLng.lng} />
-        <div className="mb-4">
+        <div>
           <ImageInput />
         </div>
-        <div className="mb-4">
+        <div>
           <Select
             label="Kategori"
             name="category"
@@ -57,7 +61,7 @@ export const NewFeatureForm = ({
             autoFocus
           />
         </div>
-        <div className="mb-4">
+        <div>
           <Select
             label="Status"
             name="state"
@@ -66,10 +70,10 @@ export const NewFeatureForm = ({
             onChange={handleChangeState}
           />
         </div>
-        <div className="mb-4">
+        <div>
           <Input label="Byggnadens namn" name="buildingName" />
         </div>
-        <div className="mb-4">
+        <div>
           <Input
             label="Adress"
             name=""
@@ -93,22 +97,22 @@ export const NewFeatureForm = ({
           />
           <input type="hidden" name="city" defaultValue={lookupResult?.city} />
         </div>
-        <div className="mb-4">
+        <div>
           <Input label="Kvartersnamn" name="blockName" />
         </div>
-        <div className="mb-4">
+        <div>
           <Input label="Fastighetsbeteckning" name="propertyDesignation" />
         </div>
-        <div className="mb-4">
+        <div>
           <Input label="Storlek (m²)" name="size" type="number" min={0} />
         </div>
-        <div className="mb-4">
+        <div>
           <Input label="Arkitekt" name="architect" />
         </div>
-        <div className="mb-4">
+        <div>
           <Input label="Fastighetsägare" name="propertyOwner" />
         </div>
-        <div className="mb-4 flex gap-4">
+        <div className="flex gap-4">
           <div className="flex-grow">
             <Input
               label="Byggår"
@@ -129,12 +133,35 @@ export const NewFeatureForm = ({
             />
           </div>
         </div>
-        <div className="mb-4">
-          <TextArea label="Arkitektur" name="description" rows={4} />
+        <div>
+          <TextArea
+            label="Berättelser om byggnaden"
+            name="description"
+            rows={4}
+          />
         </div>
-        <div className="mb-4">
-          <TextArea label="Rivningsorsak" name="demolitionCause" rows={4} />
+        <div>
+          <TextArea
+            label="Bakgrund till rivning"
+            name="demolitionCause"
+            rows={4}
+          />
         </div>
+        <fieldset>
+          <legend className="mb-4 text-body">Avsändare</legend>
+          <div className="flex w-full flex-col items-stretch justify-stretch gap-4 md:flex-row">
+            <div className="flex-grow">
+              <Input label="Namn" name="contributor" />
+            </div>
+            <div className="flex-grow">
+              <Input label="E-post" name="contributor-email" type="email" />
+            </div>
+          </div>
+          <p className="mt-2 text-sm">
+            Ange din e-post-adress om du vill få en notis när ditt bidrag
+            granskats.
+          </p>
+        </fieldset>
         <div className="hidden" aria-hidden>
           <label htmlFor="accept">Jag accepterar villkoren</label>
           <input type="checkbox" name="accept" id="accept" />

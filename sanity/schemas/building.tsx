@@ -2,6 +2,7 @@ import { SchemaTypeDefinition } from "sanity";
 import { MapInput } from "../components/MapInput";
 import { categories } from "@/lib/categories";
 import { states } from "@/lib/states";
+import { emailValidator } from "../lib/validation";
 
 export const building: SchemaTypeDefinition = {
   name: "building",
@@ -121,6 +122,18 @@ export const building: SchemaTypeDefinition = {
       type: "array",
       of: [{ type: "image" }],
       title: "Bilder",
+    },
+    {
+      name: "contributor",
+      type: "object",
+      fields: [
+        { name: "name", type: "string" },
+        {
+          name: "email",
+          type: "string",
+          validation: (Rule) => Rule.custom(emailValidator),
+        },
+      ],
     },
   ],
   preview: {

@@ -40,7 +40,7 @@ export const create = async (formData: FormData) => {
       category: formData.get("category") as string,
       // Status - hotad (rivningslov), riven, räddad - färgkodad
       state: formData.get("state") as string,
-      // Byggnadens namn
+      // Byggnadens namn, use `buildingName` instead of name to not trigger autocomplete
       name: formData.get("buildingName") as OptionalString,
       // Adress
       address: formData.get("address") as OptionalString,
@@ -75,6 +75,11 @@ export const create = async (formData: FormData) => {
       // (Datum för inlägget)
       // Minnen, öppet för alla att lägga till
       images: imageAssets.length > 0 ? imageAssets : undefined,
+      // Avsändare
+      contributor: {
+        name: formData.get("contributor") as OptionalString,
+        email: formData.get("contributor-email") as OptionalString,
+      },
       reviewed: false,
     },
     { returnDocuments: true },
