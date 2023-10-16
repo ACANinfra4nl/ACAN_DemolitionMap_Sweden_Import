@@ -18,6 +18,7 @@ import { StateIcon } from "@/components/StateIcon";
 import { Transition } from "@headlessui/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { BuildingImage } from "../../components/BuildingImage";
+import { buildingToQueryParams } from "@/lib/buildingToQueryParams";
 
 const matchesIgnoreCase = (haystack: string | undefined, needle: string) =>
   haystack?.toLowerCase().includes(needle.toLowerCase());
@@ -111,7 +112,7 @@ export default function ListPage() {
     (building: FeatureBuilding) => {
       setSelectedBuilding(building);
       setHasSelectedBuilding(true);
-      router.push(`${pathname}?view=${building._id}`);
+      router.push(`${pathname}?${buildingToQueryParams(building)}`);
     },
     [router, pathname],
   );
@@ -175,7 +176,7 @@ export default function ListPage() {
             {selectedBuilding && <DetailsMap building={selectedBuilding} />}
           </Transition.Child>
         </Transition>
-        <div className="top-header fixed z-10 grid w-full grid-cols-[auto_1fr_auto] gap-x-10 gap-y-3 px-5">
+        <div className="fixed top-header z-10 grid w-full grid-cols-[auto_1fr_auto] gap-x-10 gap-y-3 px-5">
           <div className="col-span-3 flex gap-2 md:col-span-1">
             <FilterButton
               state="riven"
