@@ -15,7 +15,7 @@ export const FilterButton: FC<{
   return (
     <button
       className={classNames(
-        "text-menu-s sm:text-menu flex items-center gap-2 uppercase",
+        "acan-text-menu flex items-center gap-2",
         filter && state !== filter && "opacity-50",
       )}
       onClick={handleClick}

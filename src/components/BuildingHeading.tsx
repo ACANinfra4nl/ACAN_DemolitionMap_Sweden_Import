@@ -6,7 +6,7 @@ export const BuildingHeading: FC<{
   showYear?: boolean;
 }> = ({ building, showYear }) => {
   return (
-    <div className="text-menu-s sm:text-menu flex items-start justify-between gap-2 uppercase">
+    <div className="acan-text-menu flex items-start justify-between gap-2">
       <div>
         {building.address}
         <br />

@@ -20,7 +20,7 @@ export const LatestSection: FC<{ buildings: FeatureBuilding[] }> = ({
         </Link>
       ))}
       <div className="flex shrink-0 grow-0 basis-4/5 snap-start items-center justify-center self-stretch md:basis-3/5 lg:basis-2/5">
-        <Link href="/lista" className="text-xl font-bold">
+        <Link href="/lista" className="acan-text-menu">
           <span className="underline">Visa alla</span> &rarr;
         </Link>
       </div>

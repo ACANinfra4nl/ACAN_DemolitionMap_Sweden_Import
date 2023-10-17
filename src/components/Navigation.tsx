@@ -22,7 +22,7 @@ const NavLink: FC<{ href: string; path: string; children: ReactNode }> = ({
 export const Navigation: FC<{ scaleLogo?: boolean }> = ({ scaleLogo }) => {
   const path = usePathname();
   return (
-    <nav className="grid w-full grid-cols-5 items-start justify-between gap-10 p-5 text-menu-s uppercase sm:text-menu">
+    <nav className="acan-text-menu grid w-full grid-cols-5 items-start justify-between gap-10 p-5">
       <div className="col-span-2">
         <Link href="/">Rivnings&shy;kartan</Link>
       </div>

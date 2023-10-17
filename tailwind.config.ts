@@ -16,9 +16,12 @@ const config: Config = {
         disabled: "#9E9E9E",
       },
       fontSize: {
-        intro: ["clamp(1.25rem,3vw,3rem)", "1.05"],
-        menu: ["1.375rem", { fontWeight: "700", lineHeight: "1.05" }],
-        "menu-s": ["1.125rem", { fontWeight: "700", lineHeight: "1.05" }],
+        intro: [
+          "clamp(1.25rem,3vw,3rem)",
+          { fontWeight: "600", lineHeight: "1.05" },
+        ],
+        menu: ["1.375rem", { fontWeight: "600", lineHeight: "1.05" }],
+        "menu-s": ["1.125rem", { fontWeight: "600", lineHeight: "1.05" }],
         body: [
           "1rem",
           {
@@ -32,6 +35,17 @@ const config: Config = {
       },
       spacing: {
         header: "6.875rem",
+      },
+      fontFamily: {
+        sans: ["Arial", "sans-serif"],
+        condensed: [
+          "SpeziaCondensed",
+          "Spezia",
+          '"Helvetica Neue"',
+          "Helvetica",
+          "Arial",
+          "sans-serif",
+        ],
       },
     },
   },

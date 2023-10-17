@@ -22,7 +22,7 @@ export const Content: FC<{ data: SanityDocument<ManifestDocumentType> }> = ({
         {/* <h1 className="mb-4 text-4xl font-bold">{data.heading}</h1> */}
         <div className="grid grid-cols-5 items-end gap-10">
           <IntroText>{data.intro}</IntroText>
-          <div className="text-intro col-start-4 font-bold sm:col-start-5">
+          <div className="acan-text-intro col-start-4 sm:col-start-5">
             <Link href="/karta" className="block whitespace-nowrap">
               <span className="underline">Karta</span> &rarr;
             </Link>
@@ -34,7 +34,7 @@ export const Content: FC<{ data: SanityDocument<ManifestDocumentType> }> = ({
       </div>
       <LatestSection buildings={data.latestBuildings.map(fixBuildingImages)} />
       <div className="mx-5 grid grid-cols-5">
-        <div className="text-body prose col-span-4 col-start-2 max-w-none sm:col-span-3 sm:col-start-3">
+        <div className="prose col-span-4 col-start-2 max-w-none text-body sm:col-span-3 sm:col-start-3">
           <PortableText
             value={data.content}
             components={{

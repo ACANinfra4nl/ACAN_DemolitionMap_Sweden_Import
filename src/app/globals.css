@@ -3,6 +3,28 @@
 @tailwind utilities;
 
 @layer base {
+  @font-face {
+    font-family: "SpeziaCondensed";
+    src:
+      url("../fonts/SpeziaWeb-CondensedSemiBold.woff2") format("woff2"),
+      url("../fonts/SpeziaWeb-CondensedSemiBold.woff") format("woff");
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    unicode-range: U+000D-FB04;
+  }
+
+  /* @font-face {
+    font-family: "Spezia";
+    src:
+      url("../fonts/SpeziaWeb-Regular.woff2") format("woff2"),
+      url("../fonts/SpeziaWeb-Regular.woff") format("woff");
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    unicode-range: U+000D-FB04;
+  } */
+
   input[type="number"]::-webkit-inner-spin-button,
   input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -25,4 +47,13 @@
 
 @layer components {
   /* @import "../components/Map/LegendControl.css"; */
+  .acan-text-body {
+    @apply font-sans text-body;
+  }
+  .acan-text-intro {
+    @apply font-condensed text-intro uppercase;
+  }
+  .acan-text-menu {
+    @apply font-condensed text-menu-s uppercase sm:text-menu;
+  }
 }
