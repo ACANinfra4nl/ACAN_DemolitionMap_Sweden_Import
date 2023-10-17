@@ -1,4 +1,4 @@
-import { FC, useCallback, useRef } from "react";
+import { FC, useCallback, useRef, useState } from "react";
 import ReactMapGl, {
   MapLayerMouseEvent,
   Source,
@@ -38,6 +38,7 @@ export const Map: FC<MapProps> = ({
   className,
 }) => {
   const mapRef = useRef<MapRef>(null);
+  const [cursor, setCursor] = useState("grab");
 
   const handleClickMap: (e: MapLayerMouseEvent) => void = useCallback(
     (e) => {
@@ -69,6 +70,9 @@ export const Map: FC<MapProps> = ({
     [isAdding, onAddMarker, onClickFeature],
   );
 
+  const handleMouseEnter = useCallback(() => setCursor("pointer"), []);
+  const handleMouseLeave = useCallback(() => setCursor("grab"), []);
+
   return (
     <div className={classNames("text-white", className)}>
       <ReactMapGl
@@ -78,6 +82,9 @@ export const Map: FC<MapProps> = ({
         onClick={handleClickMap}
         ref={mapRef}
         interactiveLayerIds={["cluster", "unclustered-points"]}
+        cursor={isAdding ? (addingLocation ? "grab" : "crosshair") : cursor}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
       >
         <Source
           id="annotations"

@@ -6,8 +6,8 @@ export const BuildingHeading: FC<{
   showYear?: boolean;
 }> = ({ building, showYear }) => {
   return (
-    <div className="acan-text-menu flex items-start justify-between gap-2">
-      <div>
+    <div className="acan-text-menu flex w-full items-start justify-between gap-2">
+      <div className="flex-grow">
         {(building.name || building.propertyDesignation) && (
           <div>{building.name ?? building.propertyDesignation}</div>
         )}

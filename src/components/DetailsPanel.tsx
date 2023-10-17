@@ -6,6 +6,7 @@ import { BuildingHeading } from "./BuildingHeading";
 import { DetailsTable } from "./DetailsTable";
 import { ShareButton } from "./ShareButton";
 import { Transition } from "@headlessui/react";
+import { useClickOutside } from "@/app/hooks/useClickOutside";
 
 const Detail: FC<{ label: string; value: string | number | ReactNode }> = ({
   label,
@@ -27,16 +28,8 @@ export const DetailsPanel: FC<DetailsProps> = ({ properties, onClose }) => {
   const [shareSuccessState, setShareSuccessState] = useState<
     string | false | undefined
   >();
+  useClickOutside(panelEl, onClose);
 
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (!panelEl.current || panelEl.current.contains(e.target as Node))
-        return;
-      onClose();
-    };
-    void document.addEventListener("click", handleClickOutside);
-    return () => document.removeEventListener("click", handleClickOutside);
-  }, []);
   const handleShareSuccess = useCallback((type: string) => {
     setShareSuccessState(type);
     setTimeout(setShareSuccessState, 2000, undefined);

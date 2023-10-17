@@ -30,6 +30,11 @@
     -webkit-appearance: none;
     margin: 0;
   }
+
+  a:focus-visible,
+  a:hover {
+    @apply text-acan-blue outline-none;
+  }
 }
 
 @layer utilities {

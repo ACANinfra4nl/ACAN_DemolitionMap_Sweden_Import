@@ -1,19 +1,32 @@
 "use client";
-import { FC, ReactNode } from "react";
+import { FC, MouseEventHandler, ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import classNames from "classnames";
 import { AcanLogoCircle } from "./AcanLogoCircle";
 import { ScalingAcanLogo } from "./ScalingAcanLogo";
 
-const NavLink: FC<{ href: string; path: string; children: ReactNode }> = ({
-  href,
-  path,
-  children,
-}) => (
+const stopPropagation: MouseEventHandler<HTMLAnchorElement> = (e) => {
+  e.nativeEvent.stopImmediatePropagation();
+};
+
+const NavLink: FC<{
+  href: string;
+  path: string;
+  children: ReactNode;
+  className?: string;
+  inverted?: boolean;
+}> = ({ href, path, children, className, inverted }) => (
   <Link
-    className={classNames(path === href && "pointer-events-none")}
+    className={classNames(
+      "outline-none",
+      inverted
+        ? "bg-black px-1 text-white hover:bg-acan-blue hover:text-white focus-visible:bg-acan-blue focus-visible:text-white"
+        : "hover:text-acan-blue focus-visible:text-acan-blue",
+      path === href && "pointer-events-none",
+    )}
     href={href}
+    onClick={stopPropagation}
   >
     {children}
   </Link>
@@ -22,11 +35,16 @@ const NavLink: FC<{ href: string; path: string; children: ReactNode }> = ({
 export const Navigation: FC<{ scaleLogo?: boolean }> = ({ scaleLogo }) => {
   const path = usePathname();
   return (
-    <nav className="acan-text-menu grid w-full grid-cols-5 items-start justify-between gap-10 p-5">
+    <nav className="acan-text-menu grid w-full grid-cols-6 items-start justify-between gap-10 p-5">
       <div className="col-span-2">
-        <Link href="/">Rivnings&shy;kartan</Link>
+        <Link
+          href="/"
+          className="outline-none hover:text-acan-blue focus-visible:text-acan-blue"
+        >
+          Rivnings&shy;kartan
+        </Link>
       </div>
-      <div className="col-span-2 col-start-3 flex flex-col">
+      <div className="col-span-2 flex flex-col">
         <div>
           <NavLink href="/karta" path={path}>
             Karta
@@ -42,8 +60,13 @@ export const Navigation: FC<{ scaleLogo?: boolean }> = ({ scaleLogo }) => {
             Manifest
           </NavLink>
         </div>
+        <div>
+          <NavLink href="/karta?add" path={path} inverted>
+            Lägg till<span className="hidden sm:inline"> byggnad</span>
+          </NavLink>
+        </div>
       </div>
-      <div className="col-start-5 sm:col-start-5">
+      <div className="col-span-2">
         {scaleLogo ? (
           <ScalingAcanLogo />
         ) : (

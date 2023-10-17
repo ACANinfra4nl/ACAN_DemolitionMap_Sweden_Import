@@ -3,6 +3,7 @@ import {
   FC,
   InputHTMLAttributes,
   useCallback,
+  useEffect,
   useState,
 } from "react";
 import classNames from "classnames";
@@ -16,7 +17,7 @@ export const Select: FC<
     label: string;
     options: string[];
   }
-> = ({ label, onChange, ...props }) => {
+> = ({ label, onChange, autoFocus, ...props }) => {
   const [hasValue, setHasValue] = useState(false);
   const [interacted, setInteracted] = useState(false);
   const handleChange: ChangeEventHandler<HTMLSelectElement> = useCallback(
@@ -26,6 +27,12 @@ export const Select: FC<
     },
     [],
   );
+  useEffect(() => {
+    if (!autoFocus) return;
+    // HACK: using autofocus on the element breaks transitions for some reason
+    const el = document.querySelector(`select[id="${props.name}"]`);
+    if (el) (el as HTMLElement).focus();
+  }, []);
   const handleInteracted = useCallback(() => setInteracted(true), []);
 
   return (

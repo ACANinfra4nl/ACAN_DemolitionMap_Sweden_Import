@@ -34,7 +34,8 @@ const config: Config = {
         column: "calc(20% - 2.5rem)",
       },
       spacing: {
-        header: "6.875rem",
+        "header-s": "7.25rem",
+        header: "8.25rem",
       },
       fontFamily: {
         sans: ["Arial", "sans-serif"],
@@ -46,6 +47,9 @@ const config: Config = {
           "Arial",
           "sans-serif",
         ],
+      },
+      screens: {
+        xl: "1400px",
       },
     },
   },

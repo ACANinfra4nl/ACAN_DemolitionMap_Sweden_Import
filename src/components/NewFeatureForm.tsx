@@ -1,4 +1,10 @@
-import { ChangeEventHandler, useCallback, useEffect, useState } from "react";
+import {
+  ChangeEventHandler,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { CloseButton } from "./CloseButton";
 import { categories } from "@/lib/categories";
 import { states } from "@/lib/states";
@@ -8,6 +14,7 @@ import { TextArea } from "./forms/TextArea";
 import { formatAddress } from "../lib/formatAddress";
 import { ImageInput } from "./forms/ImageInput";
 import { Button } from "./Button";
+import { useClickOutside } from "@/app/hooks/useClickOutside";
 
 interface NewFeatureFormProps {
   latLng: LatLng;
@@ -20,6 +27,7 @@ export const NewFeatureForm = ({
   onCancel,
   onSubmit,
 }: NewFeatureFormProps) => {
+  const panelEl = useRef<HTMLDivElement>(null);
   const [lookupResult, setLookupResult] = useState<ReverseGeocodeResult>();
   const [isDemolished, setIsDemolished] = useState(false);
   useEffect(() => {
@@ -28,6 +36,7 @@ export const NewFeatureForm = ({
       .then((r) => r.json() as unknown as ReverseGeocodeResult)
       .then(setLookupResult);
   }, []);
+  useClickOutside(panelEl, onCancel);
 
   const handleChangeState: ChangeEventHandler<HTMLSelectElement> = useCallback(
     (e) => setIsDemolished(e.currentTarget.value === "riven"),
@@ -35,7 +44,7 @@ export const NewFeatureForm = ({
   );
 
   return (
-    <>
+    <div ref={panelEl}>
       <CloseButton onClick={onCancel} />
       <div>
         <h2 className="text-menu-s uppercase sm:text-menu">
@@ -52,6 +61,7 @@ export const NewFeatureForm = ({
         <div>
           <ImageInput />
         </div>
+
         <div>
           <Select
             label="Kategori"
@@ -173,6 +183,6 @@ export const NewFeatureForm = ({
           </Button>
         </div>
       </form>
-    </>
+    </div>
   );
 };
