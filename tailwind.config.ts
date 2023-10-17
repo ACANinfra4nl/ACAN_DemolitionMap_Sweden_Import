@@ -49,7 +49,7 @@ const config: Config = {
         ],
       },
       screens: {
-        xl: "1400px",
+        xl: "1600px",
       },
     },
   },
