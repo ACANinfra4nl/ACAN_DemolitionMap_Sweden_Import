@@ -9,6 +9,7 @@ export const buildingsQuery = groq`*[_type == "building" && reviewed == true] {
     _id,
     category,
     state,
+    name,
     address,
     postcode,
     city,

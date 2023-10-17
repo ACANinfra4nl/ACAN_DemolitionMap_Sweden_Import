@@ -14,11 +14,11 @@ import {
   useState,
 } from "react";
 import { FilterButton } from "@/components/FilterButton";
-import { StateIcon } from "@/components/StateIcon";
 import { Transition } from "@headlessui/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { BuildingImage } from "../../components/BuildingImage";
 import { buildingToQueryParams } from "@/lib/buildingToQueryParams";
+import { BuildingHeading } from "@/components/BuildingHeading";
 
 const matchesIgnoreCase = (haystack: string | undefined, needle: string) =>
   haystack?.toLowerCase().includes(needle.toLowerCase());
@@ -28,6 +28,7 @@ const filterBuildings = (filters: string) => (feature: BuildingFeature) =>
     .split(/\s+/)
     .every(
       (filter) =>
+        matchesIgnoreCase(feature.properties.name, filter) ||
         matchesIgnoreCase(feature.properties.description, filter) ||
         matchesIgnoreCase(feature.properties.demolitionCause, filter) ||
         matchesIgnoreCase(feature.properties.address, filter) ||
@@ -40,11 +41,19 @@ const filterBuildings = (filters: string) => (feature: BuildingFeature) =>
         matchesIgnoreCase(feature.properties.category, filter),
     );
 
-const buildYearSorter = (a: BuildingFeature, b: BuildingFeature) =>
-  a.properties.buildYear - b.properties.buildYear;
-const demolitionYearSorter = (a: BuildingFeature, b: BuildingFeature) =>
-  a.properties.demolitionYear - b.properties.demolitionYear;
-const addressSorter = (a: BuildingFeature, b: BuildingFeature) =>
+type BuildingSorter = (
+  descending: boolean,
+) => (a: BuildingFeature, b: BuildingFeature) => number;
+const buildYearSorter: BuildingSorter = (desc) => (a, b) =>
+  (a.properties.buildYear - b.properties.buildYear) * (desc ? -1 : 1);
+const demolitionYearSorter: BuildingSorter = (desc) => (a, b) =>
+  a.properties.demolitionYear && b.properties.demolitionYear
+    ? (a.properties.demolitionYear - b.properties.demolitionYear) *
+      (desc ? -1 : 1)
+    : a.properties.demolitionYear
+    ? -1
+    : 1;
+const addressSorter: BuildingSorter = (desc) => (a, b) =>
   a.properties.address &&
   b.properties.address &&
   a.properties.address < b.properties.address
@@ -56,16 +65,6 @@ const SORTERS = {
   demolitionYear: demolitionYearSorter,
   address: addressSorter,
 };
-
-const StateIndicator: FC<{ state: string }> = ({ state }) => (
-  <div
-    className={classNames("h-6 w-6 rounded-full", {
-      "bg-yellow-400": state === "hotad",
-      "bg-green-500": state === "räddad",
-      "bg-red-600": state === "riven",
-    })}
-  />
-);
 
 const SortArrow: FC<{ descending?: boolean }> = ({ descending }) => (
   <span className="inline-block w-4 text-center">
@@ -135,8 +134,7 @@ export default function ListPage() {
         b.properties.state === stateFilter,
     )
     .filter(filterBuildings(filter))
-    .sort(SORTERS[sortBy]);
-  if (sortDesc) rows.reverse();
+    .sort(SORTERS[sortBy](sortDesc));
 
   return (
     <div className="h-screen">
@@ -260,18 +258,7 @@ export default function ListPage() {
                       images={building.properties.images}
                       state={building.properties.state}
                     />
-                    <div className="grid w-full grid-cols-[1fr_auto] gap-2 text-body uppercase">
-                      <div className="w-full min-w-0">
-                        <div className="max-w-full overflow-hidden text-ellipsis whitespace-nowrap">
-                          {building.properties.address}
-                        </div>
-                        <div className="max-w-full overflow-hidden text-ellipsis whitespace-nowrap">
-                          {building.properties.postcode}{" "}
-                          {building.properties.city}
-                        </div>
-                      </div>
-                      <StateIcon state={building.properties.state} />
-                    </div>
+                    <BuildingHeading building={building.properties} />
                   </button>
                 </li>
               ))}

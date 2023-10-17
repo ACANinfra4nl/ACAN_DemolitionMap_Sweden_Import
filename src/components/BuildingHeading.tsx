@@ -8,9 +8,14 @@ export const BuildingHeading: FC<{
   return (
     <div className="acan-text-menu flex items-start justify-between gap-2">
       <div>
-        {building.address}
-        <br />
-        {building.postcode} {building.city}
+        {(building.name || building.propertyDesignation) && (
+          <div>{building.name ?? building.propertyDesignation}</div>
+        )}
+        <div>
+          {building.address}
+          <br />
+          {building.postcode} {building.city}
+        </div>
       </div>
       <div className="flex shrink-0 items-center gap-2">
         <StateIcon state={building.state} />

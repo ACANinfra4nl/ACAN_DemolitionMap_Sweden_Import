@@ -12,6 +12,7 @@ import { schemaTypes } from "./sanity/schemaTypes";
 import { createPreview } from "./sanity/lib/preview";
 import { groq } from "next-sanity";
 import { visionTool } from "@sanity/vision";
+import { media } from "sanity-plugin-media";
 
 const singletonActions = new Set(["publish", "discardChanges", "restore"]);
 const singletonTypes = new Set(["manifest"]);
@@ -74,6 +75,7 @@ export default defineConfig({
     // Vision is a tool that lets you query your content with GROQ in the studio
     // https://www.sanity.io/docs/the-vision-plugin
     visionTool({ defaultApiVersion: apiVersion }),
+    media(),
   ],
   document: {
     actions: (input, context) =>

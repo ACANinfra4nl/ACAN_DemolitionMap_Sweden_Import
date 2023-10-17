@@ -76,7 +76,8 @@ export async function DELETE(request: NextRequest) {
 
   // delete all uploaded content, for development only!
   const result = await client.delete({
-    query: groq`*[_type=="building" && !defined(reviewed)]`,
+    // query: groq`*[_type=="building" && !defined(reviewed)]`,
+    query: groq`*[_type=="building" || (_type=="manifest" && _id!="manifest")]`,
   });
   return NextResponse.json({ deleted: result.documentIds });
 }
