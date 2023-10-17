@@ -157,6 +157,9 @@ export const NewFeatureForm = ({
             rows={4}
           />
         </div>
+        <div>
+          <TextArea label="Källor (t.ex. bildkälla)" name="sources" rows={4} />
+        </div>
         <fieldset>
           <legend className="mb-4 text-body">Avsändare</legend>
           <div className="flex w-full flex-col items-stretch justify-stretch gap-4 md:flex-row">

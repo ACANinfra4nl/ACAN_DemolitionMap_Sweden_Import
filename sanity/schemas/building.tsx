@@ -120,17 +120,25 @@ export const building: SchemaTypeDefinition = {
     {
       name: "images",
       type: "array",
-      of: [{ type: "image" }],
       title: "Bilder",
+      of: [{ type: "image" }],
+    },
+    {
+      name: "sources",
+      type: "text",
+      title: "Källor (t.ex. bildkälla)",
+      rows: 4,
     },
     {
       name: "contributor",
       type: "object",
+      title: "Avsändare",
       fields: [
-        { name: "name", type: "string" },
+        { name: "name", type: "string", title: "Namn" },
         {
           name: "email",
           type: "string",
+          title: "E-post",
           validation: (Rule) => Rule.custom(emailValidator),
         },
       ],
