@@ -139,86 +139,88 @@ export const ListPageContent = () => {
       .sort(SORTERS[sortBy](sortDesc)) ?? [];
 
   return (
-    <div className="h-screen">
-      <header className="fixed left-0 right-0 top-0 z-10">
-        <Navigation />
-      </header>
-      <main className="mt-header-s grid grid-cols-1 grid-rows-[auto_1fr] pt-[4.125rem] sm:mt-header sm:pt-[4.75rem] md:pt-10">
-        <Transition
-          show={hasSelectedBuilding}
-          className="fixed bottom-0 left-0 right-0 top-0 z-20 grid grid-cols-12 grid-rows-1"
-        >
-          <Transition.Child
-            className="col-span-12 row-start-1 bg-white sm:col-span-6 sm:col-start-1 md:col-span-5 md:col-start-1"
-            enter="transition-transform duration-300 ease-out"
-            enterFrom="-translate-x-full"
-            enterTo="translate-none"
-            leave="transition-transform ease-in duration-300"
-            leaveFrom="translate-none"
-            leaveTo="-translate-x-full"
+    <>
+      <div className="h-screen">
+        <div className="min-h-[1px]"></div>
+        <header className="fixed left-0 right-0 top-0 z-10">
+          <Navigation />
+        </header>
+        <main className="mt-header-s grid grid-cols-1 grid-rows-[auto_1fr] pt-[4.125rem] sm:mt-header sm:pt-[4.75rem] md:pt-10">
+          <Transition
+            show={hasSelectedBuilding}
+            className="fixed bottom-0 left-0 right-0 top-0 z-20 grid grid-cols-12 grid-rows-1"
           >
-            {selectedBuilding && (
-              <DetailsPanel
-                properties={selectedBuilding}
-                onClose={handleClearSelection}
-              />
-            )}
-          </Transition.Child>
-          <Transition.Child
-            className="row-start-1 hidden bg-black sm:col-span-6 sm:col-start-7 sm:block md:col-span-7 md:col-start-6"
-            enter="transition-transform ease-out duration-300"
-            enterFrom="translate-x-full"
-            enterTo="translate-none"
-            leave="transition-transform ease-in duration-300"
-            leaveFrom="translate-none"
-            leaveTo="translate-x-full"
-          >
-            {selectedBuilding && <DetailsMap building={selectedBuilding} />}
-          </Transition.Child>
-        </Transition>
-        <div className="top-header-s acan-text-menu fixed z-10 grid w-full grid-cols-[auto_1fr_auto] gap-x-10 gap-y-3 px-5 sm:top-header">
-          <div className="col-span-3 flex gap-2 md:col-span-1">
-            <FilterButton
-              state="riven"
-              filter={stateFilter}
-              onClick={setStateFilter}
-            />
-            <FilterButton
-              state="hotad"
-              filter={stateFilter}
-              onClick={setStateFilter}
-            />
-            <FilterButton
-              state="räddad"
-              filter={stateFilter}
-              onClick={setStateFilter}
-            />
-          </div>
-          <div className="relative col-span-2 items-center text-menu-s sm:text-menu md:col-span-1 md:col-start-2">
-            <input
-              aria-label="Filtrera"
-              id="filter"
-              type="text"
-              name="filter"
-              className="peer w-full border-b border-current bg-transparent pl-6 uppercase outline-none placeholder:uppercase placeholder:text-current focus:border-b-acan-blue"
-              onChange={handleFilterChange}
-              placeholder="Sök"
-            />
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-              strokeWidth={2}
-              className="absolute bottom-1 left-0 stroke-black peer-focus:stroke-acan-blue"
+            <Transition.Child
+              className="col-span-12 row-start-1 bg-white sm:col-span-6 sm:col-start-1 md:col-span-5 md:col-start-1"
+              enter="transition-transform duration-300 ease-out"
+              enterFrom="-translate-x-full"
+              enterTo="translate-none"
+              leave="transition-transform ease-in duration-300"
+              leaveFrom="translate-none"
+              leaveTo="-translate-x-full"
             >
-              <circle cx="6.5" cy="6.5" r="5.5" />
-              <path d="m10 10 5 5" />
-            </svg>
-          </div>
-          <div className="col-start-3 flex items-center gap-2 text-menu-s sm:text-menu">
-            {/* <SortButton
+              {selectedBuilding && (
+                <DetailsPanel
+                  properties={selectedBuilding}
+                  onClose={handleClearSelection}
+                />
+              )}
+            </Transition.Child>
+            <Transition.Child
+              className="row-start-1 hidden bg-black sm:col-span-6 sm:col-start-7 sm:block md:col-span-7 md:col-start-6"
+              enter="transition-transform ease-out duration-300"
+              enterFrom="translate-x-full"
+              enterTo="translate-none"
+              leave="transition-transform ease-in duration-300"
+              leaveFrom="translate-none"
+              leaveTo="translate-x-full"
+            >
+              {selectedBuilding && <DetailsMap building={selectedBuilding} />}
+            </Transition.Child>
+          </Transition>
+          <div className="top-header-s acan-text-menu fixed z-10 grid w-full grid-cols-[auto_1fr_auto] gap-x-10 gap-y-3 px-5 sm:top-header">
+            <div className="col-span-3 flex gap-2 md:col-span-1">
+              <FilterButton
+                state="riven"
+                filter={stateFilter}
+                onClick={setStateFilter}
+              />
+              <FilterButton
+                state="hotad"
+                filter={stateFilter}
+                onClick={setStateFilter}
+              />
+              <FilterButton
+                state="räddad"
+                filter={stateFilter}
+                onClick={setStateFilter}
+              />
+            </div>
+            <div className="relative col-span-2 items-center text-menu-s sm:text-menu md:col-span-1 md:col-start-2">
+              <input
+                aria-label="Filtrera"
+                id="filter"
+                type="text"
+                name="filter"
+                className="peer w-full border-b border-current bg-transparent pl-6 uppercase outline-none placeholder:uppercase placeholder:text-current focus:border-b-acan-blue"
+                onChange={handleFilterChange}
+                placeholder="Sök"
+              />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                strokeWidth={2}
+                className="absolute bottom-1 left-0 stroke-black peer-focus:stroke-acan-blue"
+              >
+                <circle cx="6.5" cy="6.5" r="5.5" />
+                <path d="m10 10 5 5" />
+              </svg>
+            </div>
+            <div className="col-start-3 flex items-center gap-2 text-menu-s sm:text-menu">
+              {/* <SortButton
                     sortKey="address"
                     sortBy={sortBy}
                     sortDesc={sortDesc}
@@ -226,55 +228,56 @@ export const ListPageContent = () => {
                   >
                     A &ndash; Ö
                   </SortButton> */}
-            <SortButton
-              sortKey="buildYear"
-              sortBy={sortBy}
-              sortDesc={sortDesc}
-              onClick={handleSortBy("buildYear")}
-            >
-              Byggår
-            </SortButton>
-            <SortButton
-              sortKey="demolitionYear"
-              sortBy={sortBy}
-              sortDesc={sortDesc}
-              onClick={handleSortBy("demolitionYear")}
-            >
-              Rivningsår
-            </SortButton>
+              <SortButton
+                sortKey="buildYear"
+                sortBy={sortBy}
+                sortDesc={sortDesc}
+                onClick={handleSortBy("buildYear")}
+              >
+                Byggår
+              </SortButton>
+              <SortButton
+                sortKey="demolitionYear"
+                sortBy={sortBy}
+                sortDesc={sortDesc}
+                onClick={handleSortBy("demolitionYear")}
+              >
+                Rivningsår
+              </SortButton>
+            </div>
           </div>
-        </div>
-        <div className="col-start-1 row-start-2 px-5 pb-20">
-          {loading ? (
-            <span>Loading&hellip;</span>
-          ) : (
-            buildings && (
-              <ul className="grid auto-rows-fr grid-cols-1 items-start gap-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
-                {rows.map((building) => (
-                  <li key={building.properties._id}>
-                    <a
-                      href={`${pathname}?${buildingToQueryParams(
-                        building.properties,
-                      )}`}
-                      onClick={(e) =>
-                        handleSelectBuilding(building.properties, e)
-                      }
-                      className="hover:acan-blue flex w-full flex-col gap-2 text-left"
-                    >
-                      <BuildingImage
-                        images={building.properties.images}
-                        state={building.properties.state}
-                      />
-                      <BuildingHeading building={building.properties} />
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            )
-          )}
-        </div>
-      </main>
-    </div>
+          <div className="col-start-1 row-start-2 px-5 pb-20">
+            {loading ? (
+              <span>Loading&hellip;</span>
+            ) : (
+              buildings && (
+                <ul className="grid auto-rows-fr grid-cols-1 items-start gap-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+                  {rows.map((building) => (
+                    <li key={building.properties._id}>
+                      <a
+                        href={`${pathname}?${buildingToQueryParams(
+                          building.properties,
+                        )}`}
+                        onClick={(e) =>
+                          handleSelectBuilding(building.properties, e)
+                        }
+                        className="hover:acan-blue flex w-full flex-col gap-2 text-left"
+                      >
+                        <BuildingImage
+                          images={building.properties.images}
+                          state={building.properties.state}
+                        />
+                        <BuildingHeading building={building.properties} />
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              )
+            )}
+          </div>
+        </main>
+      </div>
+    </>
   );
 };
 const SortButton: FC<
