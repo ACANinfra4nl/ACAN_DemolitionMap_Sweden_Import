@@ -15,9 +15,18 @@ export const manifest: SchemaTypeDefinition = {
     },
     {
       name: "intro",
-      type: "text",
+      type: "array",
       title: "Ingress",
-      rows: 5,
+      of: [
+        {
+          type: "block",
+          styles: [],
+          lists: [],
+          marks: {
+            decorators: [],
+          },
+        },
+      ],
       validation: (Rule) => Rule.required(),
     },
     {

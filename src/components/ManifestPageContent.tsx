@@ -22,7 +22,9 @@ export const ManifestPageContent: FC<{
       <div className="mx-5">
         {/* <h1 className="mb-4 text-4xl font-bold">{data.heading}</h1> */}
         <div className="grid grid-cols-5 items-end gap-10">
-          <IntroText>{data.intro}</IntroText>
+          <div className="acan-text-intro col-span-5 sm:col-span-3">
+            <PortableText value={data.intro} />
+          </div>
           <div className="acan-text-intro col-start-4 sm:col-start-5">
             <Link href="/karta" className="block whitespace-nowrap">
               <span className="underline">Karta</span> &rarr;
