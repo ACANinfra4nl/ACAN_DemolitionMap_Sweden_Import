@@ -12,7 +12,7 @@ export const LatestSection: FC<{ buildings: FeatureBuilding[] }> = ({
       {buildings.map((building) => (
         <Link
           href={`/lista?${buildingToQueryParams(building)}`}
-          className="flex shrink-0 grow-0 basis-4/5 snap-start flex-col gap-2 px-5 md:basis-3/5 lg:basis-2/5"
+          className="flex shrink-0 grow-0 basis-10/12 snap-start flex-col gap-2 px-5 sm:basis-8/12 md:basis-5/12"
           key={building._id}
         >
           <BuildingImage images={building.images} state={building.state} />
