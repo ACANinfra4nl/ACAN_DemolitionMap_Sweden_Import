@@ -69,7 +69,7 @@ export const Navigation: FC<{ scaleLogo?: boolean }> = ({ scaleLogo }) => {
         {scaleLogo ? (
           <ScalingAcanLogo />
         ) : (
-          <div className="ml-auto w-14">
+          <div className="w-logo ml-auto">
             <AcanLogoCircle />
           </div>
         )}

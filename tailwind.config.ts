@@ -51,6 +51,9 @@ const config: Config = {
       screens: {
         xl: "1600px",
       },
+      width: {
+        logo: "5.75rem",
+      },
     },
   },
   plugins: [require("@tailwindcss/typography")],
