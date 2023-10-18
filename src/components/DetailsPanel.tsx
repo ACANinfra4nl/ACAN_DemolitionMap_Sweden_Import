@@ -7,6 +7,7 @@ import { DetailsTable } from "./DetailsTable";
 import { ShareButton } from "./ShareButton";
 import { Transition } from "@headlessui/react";
 import { useClickOutside } from "@/app/hooks/useClickOutside";
+import { Image } from "./Image";
 
 const Detail: FC<{ label: string; value: string | number | ReactNode }> = ({
   label,
@@ -50,11 +51,13 @@ export const DetailsPanel: FC<DetailsProps> = ({ properties, onClose }) => {
         <div className="col-start-1 row-span-2 row-start-1 mb-2">
           <Carousel>
             {properties.images.map((image) => (
-              <img
-                key={image}
-                src={image}
-                role="presentation"
+              <Image
+                key={image.asset.url}
+                image={image}
+                alt=""
                 className="aspect-video w-full snap-start object-cover"
+                width={image.asset.metadata.dimensions.width}
+                height={image.asset.metadata.dimensions.height}
               />
             ))}
           </Carousel>

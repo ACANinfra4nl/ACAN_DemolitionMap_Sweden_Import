@@ -4,6 +4,18 @@ interface LatLng {
   lat: number;
   lng: number;
 }
+interface SanityImageType {
+  asset: {
+    url: string;
+    metadata: {
+      dimensions: {
+        width: number;
+        height: number;
+        aspectRatio: number;
+      };
+    };
+  };
+}
 
 interface SanityBuilding<T extends LatLng> {
   _id: string;
@@ -24,10 +36,7 @@ interface SanityBuilding<T extends LatLng> {
   demolitionYear?: number;
   description?: string;
   demolitionCause?: string;
-  images?: {
-    _type: string;
-    asset: { _type: string; _ref: string; url?: string };
-  }[];
+  images?: SanityImageType[];
   contributor?: {
     name?: string;
     email?: string;
@@ -53,7 +62,7 @@ interface FeatureBuilding {
   demolitionYear?: number;
   description?: string;
   demolitionCause?: string;
-  images?: string[];
+  images?: SanityImageType[];
   contributor?: {
     name?: string;
     email?: string;

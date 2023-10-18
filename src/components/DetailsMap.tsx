@@ -1,4 +1,4 @@
-import { toFeature } from "@/lib/buildingToFeature";
+import { toFeature } from "@/lib/toFeature";
 import { FC, useCallback, useState } from "react";
 import ReactMapGl, {
   Source,

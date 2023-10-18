@@ -42,6 +42,7 @@ export const LatestSection: FC<{ buildings: FeatureBuilding[] }> = ({
     setShowDetails(false);
     setTimeout(setSelectedId, 300, null);
   }, []);
+  console.log(buildings.map((b) => b.images));
 
   return (
     <section className="scrollbar-hide mb-24 mt-column flex snap-x snap-mandatory flex-nowrap items-baseline overflow-scroll">
@@ -52,7 +53,11 @@ export const LatestSection: FC<{ buildings: FeatureBuilding[] }> = ({
           className="flex shrink-0 grow-0 basis-10/12 snap-start flex-col gap-2 px-5 sm:basis-8/12 md:basis-5/12"
           key={building._id}
         >
-          <BuildingImage images={building.images} state={building.state} />
+          <BuildingImage
+            images={building.images}
+            state={building.state}
+            sizes="(min-width: 768px) 23vw, (min-width: 640px) 66vw, 83vw"
+          />
           <BuildingHeading building={building} showYear />
         </Link>
       ))}

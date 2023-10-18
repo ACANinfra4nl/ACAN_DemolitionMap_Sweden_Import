@@ -18,7 +18,7 @@ const NavLink: FC<{
 }> = ({ href, path, children, inverted }) => (
   <Link
     className={classNames(
-      "outline-none",
+      "pointer-events-auto outline-none",
       inverted
         ? "bg-black px-1 text-white hover:bg-acan-blue hover:text-white focus-visible:bg-acan-blue focus-visible:text-white"
         : "hover:text-acan-blue focus-visible:text-acan-blue",
@@ -38,7 +38,7 @@ export const Navigation: FC<{ scaleLogo?: boolean }> = ({ scaleLogo }) => {
       <div className="col-span-2">
         <Link
           href="/"
-          className="outline-none hover:text-acan-blue focus-visible:text-acan-blue"
+          className="pointer-events-auto outline-none hover:text-acan-blue focus-visible:text-acan-blue"
         >
           Rivnings&shy;kartan
         </Link>

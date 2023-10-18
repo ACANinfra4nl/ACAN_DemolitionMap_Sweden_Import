@@ -5,7 +5,6 @@ import { Image } from "@/components/portableText/Image";
 import { SallyLogo } from "./SallyLogo";
 import { AcanLogoText } from "./AcanLogoText";
 import { IntroText } from "./IntroText";
-import { fixBuildingImages } from "@/lib/buildingToFeature";
 import { Navigation } from "./Navigation";
 import Link from "next/link";
 import { LatestSection } from "./LatestSection";
@@ -15,7 +14,7 @@ export const ManifestPageContent: FC<{
 }> = ({ data }) => (
   <>
     <div className="min-h-[1px]"></div>
-    <header className="sticky top-0">
+    <header className="pointer-events-none sticky top-0 z-10">
       <Navigation scaleLogo />
     </header>
     <main className="mt-column">
@@ -35,7 +34,7 @@ export const ManifestPageContent: FC<{
           </div>
         </div>
       </div>
-      <LatestSection buildings={data.latestBuildings.map(fixBuildingImages)} />
+      <LatestSection buildings={data.latestBuildings} />
       <div className="mx-5 grid grid-cols-5">
         <div className="acan-text-body prose col-span-4 col-start-2 max-w-none sm:col-span-3 sm:col-start-3">
           <PortableText

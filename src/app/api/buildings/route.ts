@@ -1,8 +1,7 @@
-import { buildingToFeature } from "@/lib/buildingToFeature";
 import { client } from "@/lib/sanityClient";
 import { NextRequest, NextResponse } from "next/server";
 import { buildingsQuery } from "../../../../sanity/lib/queries";
-import { wait } from "@/lib/wait";
+import { toFeature } from "@/lib/toFeature";
 
 export const runtime = "edge";
 
@@ -18,7 +17,7 @@ export async function GET(request: NextRequest) {
   );
 
   // transform to features
-  const features = buildings.map((b) => buildingToFeature(b));
+  const features = buildings.map(toFeature);
 
   // return
   return NextResponse.json(features);
@@ -108,5 +107,5 @@ export async function POST(request: NextRequest) {
   // TODO: handle errors
   // invalidate cache
   // revalidateTag("buildings"); // not needed when creating drafts
-  return NextResponse.json(buildingToFeature(createdBuilding));
+  return NextResponse.json(toFeature(createdBuilding));
 }
