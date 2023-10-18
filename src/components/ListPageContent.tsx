@@ -112,14 +112,16 @@ export const ListPageContent = () => {
       e.preventDefault();
       setSelectedBuilding(building);
       setHasSelectedBuilding(true);
-      router.push(`${pathname}?${buildingToQueryParams(building)}`);
+      router.push(`${pathname}?${buildingToQueryParams(building)}`, {
+        scroll: false,
+      });
     },
     [router, pathname],
   );
 
   const handleClearSelection = useCallback(() => {
     setHasSelectedBuilding(false);
-    router.push(pathname);
+    router.push(pathname, { scroll: false });
   }, [router, pathname]);
 
   const handleSortBy = (key: keyof typeof SORTERS) => () => {

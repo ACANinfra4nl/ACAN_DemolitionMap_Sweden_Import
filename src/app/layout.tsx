@@ -16,7 +16,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         {children}
-        {/* <BuildingsProvider>{children}</BuildingsProvider> */}
+        <div id="portal"></div>
       </body>
     </html>
   );

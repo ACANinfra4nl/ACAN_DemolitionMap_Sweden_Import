@@ -1,11 +1,10 @@
-import { Navigation } from "@/components/Navigation";
 import { SanityDocument } from "next-sanity";
 import { draftMode } from "next/headers";
 import PreviewProvider from "@/components/PreviewProvider";
-import { Content } from "@/components/Content";
+import { ManifestPageContent } from "@/components/ManifestPageContent";
 import { manifestQuery } from "../../sanity/lib/queries";
 import { readToken, sanityFetch } from "@/lib/sanityFetch";
-import { PreviewContent } from "@/components/PreviewContent";
+import { PreviewManifestPageContent } from "@/components/PreviewManifestPageContent";
 
 export default async function ManifestPage() {
   const data = await sanityFetch<SanityDocument<ManifestDocumentType>>({
@@ -16,10 +15,10 @@ export default async function ManifestPage() {
   if (isDraftMode && readToken) {
     return (
       <PreviewProvider token={readToken}>
-        <PreviewContent data={data} query={manifestQuery} />
+        <PreviewManifestPageContent data={data} query={manifestQuery} />
       </PreviewProvider>
     );
   }
 
-  return <Content data={data} />;
+  return <ManifestPageContent data={data} />;
 }

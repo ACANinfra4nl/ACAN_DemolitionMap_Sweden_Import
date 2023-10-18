@@ -4,14 +4,14 @@ import { SanityDocument } from "next-sanity";
 import { FC } from "react";
 import { useParams } from "next/navigation";
 import { useLiveQuery } from "next-sanity/preview";
-import { Content } from "./Content";
+import { ManifestPageContent } from "./ManifestPageContent";
 
-export const PreviewContent: FC<{
+export const PreviewManifestPageContent: FC<{
   data: SanityDocument<ManifestDocumentType>;
   query: string;
 }> = ({ data, query }) => {
   const params = useParams();
   const [liveData] = useLiveQuery(data, query);
 
-  return <Content data={liveData} />;
+  return <ManifestPageContent data={liveData} />;
 };

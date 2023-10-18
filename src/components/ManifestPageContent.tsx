@@ -4,19 +4,20 @@ import { FC } from "react";
 import { Image } from "@/components/portableText/Image";
 import { SallyLogo } from "./SallyLogo";
 import { AcanLogoText } from "./AcanLogoText";
-import { LatestSection } from "./LatestSection";
 import { IntroText } from "./IntroText";
 import { fixBuildingImages } from "@/lib/buildingToFeature";
 import { Navigation } from "./Navigation";
 import Link from "next/link";
+import { LatestSection } from "./LatestSection";
 
-export const Content: FC<{ data: SanityDocument<ManifestDocumentType> }> = ({
-  data,
-}) => (
+export const ManifestPageContent: FC<{
+  data: SanityDocument<ManifestDocumentType>;
+}> = ({ data }) => (
   <>
-    <div className="sticky top-0">
+    <div className="min-h-[1px]"></div>
+    <header className="sticky top-0">
       <Navigation scaleLogo />
-    </div>
+    </header>
     <main className="mt-column">
       <div className="mx-5">
         {/* <h1 className="mb-4 text-4xl font-bold">{data.heading}</h1> */}
