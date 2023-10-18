@@ -14,9 +14,8 @@ const NavLink: FC<{
   href: string;
   path: string;
   children: ReactNode;
-  className?: string;
   inverted?: boolean;
-}> = ({ href, path, children, className, inverted }) => (
+}> = ({ href, path, children, inverted }) => (
   <Link
     className={classNames(
       "outline-none",

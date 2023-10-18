@@ -69,6 +69,10 @@ export default defineConfig({
                   .id("manifest")
                   .views(createPreview(S)),
               ),
+            S.listItem()
+              .title("Inställningar")
+              .id("settings")
+              .child(S.document().schemaType("settings").id("settings")),
           ]),
     }),
 

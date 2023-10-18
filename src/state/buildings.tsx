@@ -33,7 +33,7 @@ type Action = SET_BUILDINGS_ACTION | ADD_BUILDING_ACTION;
 
 const reducer: Reducer<typeof INITIAL_STATE, Action> = (
   state,
-  { type, payload }
+  { type, payload },
 ) => {
   switch (type) {
     case ACTIONS.SET_BUILDINGS:
@@ -50,7 +50,7 @@ const reducer: Reducer<typeof INITIAL_STATE, Action> = (
 export const BuildingsContext =
   createContext<typeof INITIAL_STATE>(INITIAL_STATE); // ts-ignore-line
 export const BuildingsDispatchContext = createContext<Dispatch<Action>>(
-  () => null
+  () => null,
 );
 
 export const BuildingsProvider: FC<PropsWithChildren> = ({ children }) => {
@@ -61,7 +61,7 @@ export const BuildingsProvider: FC<PropsWithChildren> = ({ children }) => {
       dispatch({
         type: ACTIONS.SET_BUILDINGS,
         payload: { type: "FeatureCollection", features: b },
-      })
+      }),
     );
   }, []);
   return (

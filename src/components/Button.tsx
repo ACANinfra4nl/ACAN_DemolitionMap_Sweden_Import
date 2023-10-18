@@ -6,7 +6,7 @@ export const Button: FC<
 > = ({ className, children, ...props }) => (
   <button
     className={classNames(
-      "font-condensed border-r-2 border-none bg-black px-5 py-4 uppercase leading-none text-white outline-none focus-within:bg-acan-blue hover:bg-acan-blue",
+      "font-condensed border-r-2 border-none bg-black px-5 py-4 uppercase leading-none text-white outline-none focus-within:bg-acan-blue hover:bg-acan-blue disabled:bg-disabled disabled:text-white",
       className,
     )}
     {...props}

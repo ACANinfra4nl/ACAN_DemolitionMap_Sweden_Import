@@ -78,3 +78,13 @@ interface ManifestDocumentType {
   content: import("sanity").PortableTextBlock[];
   latestBuildings: SanityBuilding<LatLng>[];
 }
+
+interface MessageType {
+  heading: string;
+  body: import("sanity").PortableTextBlock[];
+}
+
+interface SettingsType {
+  confirmationMessage: MessageType;
+  errorMessage: MessageType;
+}

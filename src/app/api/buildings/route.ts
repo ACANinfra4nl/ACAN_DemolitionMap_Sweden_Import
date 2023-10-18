@@ -2,12 +2,6 @@ import { buildingToFeature } from "@/lib/buildingToFeature";
 import { client } from "@/lib/sanityClient";
 import { NextRequest, NextResponse } from "next/server";
 import { buildingsQuery } from "../../../../sanity/lib/queries";
-import * as papa from "papaparse";
-import { csvDataToSanityBuilding } from "@/lib/csvDataToSanityBuilding";
-import { stripLines } from "../../../lib/stripLines";
-import { notFound } from "next/navigation";
-import { groq } from "next-sanity";
-import { reverse } from "@/lib/reverse";
 import { wait } from "@/lib/wait";
 
 export const runtime = "edge";
@@ -19,7 +13,7 @@ export async function GET(request: NextRequest) {
     undefined,
     {
       perspective: "published",
-      next: { tags: ["buildings"], revalidate: 600 },
+      next: { tags: ["buildings"] },
     },
   );
 
@@ -30,54 +24,89 @@ export async function GET(request: NextRequest) {
   return NextResponse.json(features);
 }
 
+const uploadAssets = async (images: File[]) => {
+  const imageAssets = [];
+  for (const image of images) {
+    if (image.size <= 0) continue;
+    const imageAsset = await client.assets.upload("image", image);
+    imageAssets.push({
+      _type: "image",
+      asset: {
+        _type: "reference",
+        _ref: imageAsset._id,
+        // url: imageAsset.url,
+      },
+    });
+  }
+  return imageAssets;
+};
+
 export async function POST(request: NextRequest) {
-  // TODO: check auth token
-  // get body and remove first 2 lines
-  const body = stripLines(await request.text(), 2);
+  const formData = await request.formData();
+  //   TODO: validate input!
 
-  if (!body)
-    return NextResponse.json({ error: "Invalid body" }, { status: 400 });
-  try {
-    // parse posted csv
-    const parsedBody = papa.parse(body, { header: true });
-    // convert csv to sanity models
-    const buildings = parsedBody.data.map((data) =>
-      csvDataToSanityBuilding(data as Record<string, string>),
-    );
-    const allCreated = [];
-    for (const building of buildings) {
-      if (!building) continue;
-      const addressData = await reverse(
-        building.location.lat,
-        building.location.lng,
-      );
-      const createBuilding = addressData
-        ? Object.assign({}, building, addressData)
-        : building;
-      const created = await client.create(createBuilding);
-      allCreated.push(created);
-      await wait(1000 / 5); // at most 5/sec
-    }
+  // save info from form
+  const formImages = formData.getAll("images") as File[];
+  const imageAssets = await uploadAssets(formImages);
+  const createdBuilding = await client.create(
+    {
+      _type: "building",
+      location: {
+        _type: "geopoint",
+        lat: Number(formData.get("lat")),
+        lng: Number(formData.get("lng")),
+      },
+      // Kategori - bostad, kontor, kommersiell, samhällsfastighet, industri, övrig
+      category: formData.get("category") as string,
+      // Status - hotad (rivningslov), riven, räddad - färgkodad
+      state: formData.get("state") as string,
+      // Byggnadens namn, use `buildingName` instead of name to not trigger autocomplete
+      name: formData.get("buildingName") as string | undefined,
+      // Adress
+      address: formData.get("address") as string | undefined,
+      postcode: formData.get("postcode") as string | undefined,
+      city: formData.get("city") as string | undefined,
+      // Kvartersnamn
+      blockName: formData.get("blockName") as string | undefined,
+      // Fastighetsbeteckning
+      propertyDesignation: formData.get("propertyDesignation") as
+        | string
+        | undefined,
+      // Storlek m2
+      size: formData.has("size") ? Number(formData.get("size")) : undefined,
+      // (Inbunden C02)
+      boundCO2: formData.has("boundCO2")
+        ? Number(formData.get("boundCO2"))
+        : undefined,
+      // Arkitekt
+      architect: formData.get("architect") as string | undefined,
+      // Fastighetsägare
+      propertyOwner: formData.get("propertyOwner") as string | undefined,
+      // Byggår
+      buildYear: Number(formData.get("buildYear")),
+      // Rivningsår
+      demolitionYear: formData.has("demolitionYear")
+        ? Number(formData.get("demolitionYear"))
+        : undefined,
+      // Arkitektur, historik - fritext (nuvarande verksamhet)
+      description: formData.get("description") as string | undefined,
+      // Anledning till rivning, fritext (vad planeras i dess ställe)
+      demolitionCause: formData.get("demolitionCause") as string | undefined,
+      // (Datum för inlägget)
+      // Minnen, öppet för alla att lägga till
+      images: imageAssets.length > 0 ? imageAssets : undefined,
+      // Avsändare
+      contributor: {
+        name: formData.get("contributor") as string | undefined,
+        email: formData.get("contributor-email") as string | undefined,
+      },
+      reviewed: false,
+    },
+    { returnDocuments: true },
+  );
 
-    return NextResponse.json(allCreated);
-  } catch (e) {
-    console.error(e);
-    return NextResponse.json(
-      { error: (e as Error).toString() },
-      { status: 500 },
-    );
-  }
-}
-
-export async function DELETE(request: NextRequest) {
-  if (process.env.NODE_ENV !== "development") {
-    notFound();
-  }
-
-  // delete all uploaded content, for development only!
-  const result = await client.delete({
-    // query: groq`*[_type=="building" && !defined(reviewed)]`,
-    query: groq`*[_type=="building" || (_type=="manifest" && _id!="manifest")]`,
-  });
-  return NextResponse.json({ deleted: result.documentIds });
+  // TODO: handle errors
+  // invalidate cache
+  // revalidateTag("buildings"); // not needed when creating drafts
+  return NextResponse.json(buildingToFeature(createdBuilding));
 }

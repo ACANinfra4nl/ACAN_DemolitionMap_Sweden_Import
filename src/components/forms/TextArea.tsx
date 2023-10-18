@@ -10,7 +10,7 @@ export const TextArea: FC<
     <textarea
       id={props.name}
       {...props}
-      className="peer block w-full border border-current p-4 outline-none focus-visible:border-acan-blue"
+      className="peer block w-full border border-current bg-white p-4 outline-none focus-visible:border-acan-blue"
       placeholder=" "
     ></textarea>
     <label

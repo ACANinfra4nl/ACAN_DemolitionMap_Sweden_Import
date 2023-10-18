@@ -17,7 +17,7 @@ export const Select: FC<
     label: string;
     options: string[];
   }
-> = ({ label, onChange, autoFocus, ...props }) => {
+> = ({ label, onChange, autoFocus, options, ...props }) => {
   const [hasValue, setHasValue] = useState(false);
   const [interacted, setInteracted] = useState(false);
   const handleChange: ChangeEventHandler<HTMLSelectElement> = useCallback(
@@ -45,7 +45,7 @@ export const Select: FC<
         onBlur={handleInteracted}
       >
         <option></option>
-        {props.options.map((opt) => (
+        {options.map((opt) => (
           <option key={opt}>{opt}</option>
         ))}
       </select>

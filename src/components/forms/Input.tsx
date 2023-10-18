@@ -19,14 +19,14 @@ export const Input: FC<
       <input
         {...props}
         id={props.name}
-        className="peer w-full appearance-none border-b border-current bg-transparent outline-none focus-within:border-acan-blue disabled:text-disabled"
+        className="peer w-full appearance-none border-b border-current bg-transparent outline-none focus-within:border-acan-blue"
         placeholder=" "
         onBlur={handleInteracted}
       />
       <label
         htmlFor={props.name}
         className={classNames(
-          "absolute left-0 top-0 origin-top-left -translate-y-2 scale-50 text-body transition-transform peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-2 peer-focus:scale-50 peer-disabled:text-disabled",
+          "absolute left-0 top-0 origin-top-left -translate-y-2 scale-50 text-body transition-transform peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-2 peer-focus:scale-50",
           interacted && "peer-invalid:text-demolished",
         )}
       >

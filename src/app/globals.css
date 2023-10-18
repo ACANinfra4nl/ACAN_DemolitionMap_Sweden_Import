@@ -61,4 +61,8 @@
   .acan-text-menu {
     @apply font-condensed text-menu-s uppercase sm:text-menu;
   }
+  .waiting,
+  .waiting * {
+    @apply !cursor-wait;
+  }
 }

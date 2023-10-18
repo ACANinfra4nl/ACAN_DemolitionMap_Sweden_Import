@@ -26,3 +26,14 @@ export const buildingsQuery = groq`*[_type == "building" && reviewed == true] {
     location { lat, lng },
     images
 }`;
+
+export const settingsQuery = groq`*[_id == "settings"][0] {
+    confirmationMessage {
+        heading,
+        body,
+    },
+    errorMessage {
+        heading,
+        body,
+    },
+}`;

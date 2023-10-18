@@ -12,7 +12,6 @@ export const PreviewContent: FC<{
 }> = ({ data, query }) => {
   const params = useParams();
   const [liveData] = useLiveQuery(data, query);
-  console.log("updated", liveData);
 
   return <Content data={liveData} />;
 };

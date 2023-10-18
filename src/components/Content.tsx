@@ -34,7 +34,7 @@ export const Content: FC<{ data: SanityDocument<ManifestDocumentType> }> = ({
       </div>
       <LatestSection buildings={data.latestBuildings.map(fixBuildingImages)} />
       <div className="mx-5 grid grid-cols-5">
-        <div className="prose col-span-4 col-start-2 max-w-none text-body sm:col-span-3 sm:col-start-3">
+        <div className="acan-text-body prose col-span-4 col-start-2 max-w-none sm:col-span-3 sm:col-start-3">
           <PortableText
             value={data.content}
             components={{
