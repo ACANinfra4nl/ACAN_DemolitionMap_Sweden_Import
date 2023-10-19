@@ -63,7 +63,7 @@ export const ImageInput: FC = () => {
       onDragLeave={handleDragExit}
       onDrop={handleDrop}
       className={classNames(
-        "aspect-wide flex w-full flex-wrap gap-5 overflow-scroll border border-current p-5",
+        "aspect-wide flex w-full flex-wrap items-center justify-center gap-5 overflow-scroll border border-current p-5",
         dragging && "border-acan-blue",
       )}
       ref={labelRef}
@@ -76,12 +76,21 @@ export const ImageInput: FC = () => {
         className="sr-only"
         onChange={handleUpload}
       />
-      {images.map((img, i) => (
-        <figure key={i} className="flex-grow basis-1/4">
-          <img src={img.url} className="aspect-square w-full object-contain" />
-          <figcaption className="text-sm">{img.name}</figcaption>
-        </figure>
-      ))}
+      {images.length > 0 ? (
+        images.map((img, i) => (
+          <figure key={i} className="flex-grow basis-1/4">
+            <img
+              src={img.url}
+              className="aspect-square w-full object-contain"
+            />
+            <figcaption className="text-sm">{img.name}</figcaption>
+          </figure>
+        ))
+      ) : (
+        <span className="acan-text-body">
+          Dra och släpp dina bilder här för att ladda upp
+        </span>
+      )}
     </label>
   );
 };
