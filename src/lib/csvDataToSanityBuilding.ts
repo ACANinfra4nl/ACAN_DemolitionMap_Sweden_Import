@@ -1,26 +1,3 @@
-// Fields:
-// ------
-// "NAMN",
-// "BILD",
-// "KATEGORI",
-// "STATUS",
-// "FASTIGHETSBETECKNING",
-// "BYGGÅR",
-// "RIVNINGSÅR",
-// "GATUADRESS",
-// "POSTNR",
-// "POSTORT",
-// "KVARTERSNAMN",
-// "POSITION",
-// "LAT",
-// "LONG",
-// "STORLEK (m2)",
-// "ARKITEKT",
-// "FASTIGHETSÄGARE",
-// "ARKITEKTUR",
-// "RIVNINGSORSAK",
-// "ÖVRIGT/BERÄTTELSE"
-
 import { GeopointValue } from "sanity";
 import { categories } from "./categories";
 import { states } from "./states";
@@ -31,9 +8,10 @@ const parseCategory = (str: string) =>
 const parseState = (str: string) =>
   states.find((state) => state === clean(str)) ?? "";
 
-const fieldMapping2 = {
+const fieldMapping2: Record<string, keyof CsvRow> = {
   category: "KATEGORI",
   state: "STATUS",
+  name: "BYGGNADENS NAMN",
   propertyDesignation: "FASTIGHETSBETECKNING",
   buildYear: "BYGGÅR",
   demolitionYear: "RIVNINGSÅR",
@@ -44,58 +22,55 @@ const fieldMapping2 = {
   size: "STORLEK (m2)",
   architect: "ARKITEKT",
   propertyOwner: "FASTIGHETSÄGARE",
-  description: "ARKITEKTUR",
-  demolitionCause: "RIVNINGSORSAK",
+  description: "ÖVRIGT/BERÄTTELSE",
+  demolitionCause: "BAKGRUND TILL RIVNING (KÄLLA)",
 };
-const fieldMapping: Record<
-  string,
-  string | [string, (str: string) => unknown]
-> = {
-  //   NAMN: undefined,
-  //   BILD: undefined,
-  KATEGORI: ["category", clean],
-  STATUS: [
-    "state",
-    (str: string) =>
-      ["hotad", "riven", "räddad"].includes(
-        clean(str).replace("rivet", "riven"),
-      )
-        ? clean(str)
-        : undefined,
-  ],
-  FASTIGHETSBETECKNING: "propertyDesignation",
-  BYGGÅR: ["buildYear", Number],
-  RIVNINGSÅR: ["demolitionYear", Number],
-  GATUADRESS: "address",
-  POSTNR: "postCode",
-  POSTORT: "city",
-  KVARTERSNAMN: "blockName",
-  //   POSITION: undefined,
-  //   LAT: undefined,
-  //   LONG: undefined,
-  "STORLEK (m2)": ["size", Number],
-  ARKITEKT: "architect",
-  FASTIGHETSÄGARE: "propertyOwner",
-  ARKITEKTUR: "description",
-  RIVNINGSORSAK: "demolitionCause",
-  //   "ÖVRIGT/BERÄTTELSE": undefined,
-};
-type FieldMapKeyType = keyof typeof fieldMapping;
 
-export const csvDataToSanityBuilding = (src: Record<string, string>) => {
+export interface CsvRow {
+  POSITION: string;
+  LAT: string;
+  LONG: string;
+  BILD: string;
+  "BILD UPPHOVSRÄTT ": string;
+  STATUS: string;
+  "BYGGNADENS NAMN": string;
+  GATUADRESS: string;
+  POSTNR: string;
+  POSTORT: string;
+  KVARTERSNAMN: string;
+  FASTIGHETSBETECKNING: string;
+  ARKITEKT: string;
+  FASTIGHETSÄGARE: string;
+  "STORLEK (m2)": string;
+  BYGGÅR: string;
+  RIVNINGSÅR: string;
+  "ÖVRIGT/BERÄTTELSE": string;
+  "BAKGRUND TILL RIVNING (KÄLLA)": string;
+  KATEGORI: string;
+}
+
+export const csvDataToSanityBuilding = (src: CsvRow) => {
   if (!src.LAT || !src.LONG) return undefined;
   const location: GeopointValue = {
     _type: "geopoint",
     lat: Number(src.LAT.replace(",", ".")),
     lng: Number(src.LONG.replace(",", ".")),
   };
-  const dest: Omit<SanityBuilding<GeopointValue>, "_id"> & {
+  const dest: Omit<SanityBuilding<GeopointValue>, "_id" | "images"> & {
     _type: "building";
+    images?: {
+      _type: string;
+      asset: {
+        _type: string;
+        _ref: string;
+      };
+    }[];
   } = {
     _type: "building",
     location,
     category: parseCategory(src[fieldMapping2.category]),
     state: parseState(src[fieldMapping2.state]),
+    name: src[fieldMapping2.name],
     propertyDesignation: src[fieldMapping2.propertyDesignation],
     buildYear: Number(src[fieldMapping2.buildYear]),
     demolitionYear: Number(src[fieldMapping2.demolitionYear]),

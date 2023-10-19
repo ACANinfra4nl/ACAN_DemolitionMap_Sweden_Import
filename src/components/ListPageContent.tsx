@@ -180,7 +180,7 @@ export const ListPageContent = () => {
               {selectedBuilding && <DetailsMap building={selectedBuilding} />}
             </Transition.Child>
           </Transition>
-          <div className="top-header-s acan-text-menu fixed z-10 grid w-full grid-cols-[auto_1fr_auto] gap-x-10 gap-y-3 px-5 sm:top-header">
+          <div className="acan-text-menu fixed top-header-s z-10 grid w-full grid-cols-[auto_1fr_auto] gap-x-10 gap-y-3 px-5 sm:top-header">
             <div className="col-span-3 flex gap-2 md:col-span-1">
               <FilterButton
                 state="riven"

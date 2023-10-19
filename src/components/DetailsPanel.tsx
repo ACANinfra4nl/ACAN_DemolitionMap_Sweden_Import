@@ -64,7 +64,7 @@ export const DetailsPanel: FC<DetailsProps> = ({ properties, onClose }) => {
         </div>
       )}
 
-      <div>
+      <div className="min-w-0">
         <BuildingHeading building={properties} />
         <DetailsTable building={properties} />
         <div className="prose text-body">

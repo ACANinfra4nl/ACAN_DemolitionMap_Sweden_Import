@@ -7,15 +7,21 @@ export const BuildingHeading: FC<{
 }> = ({ building, showYear }) => {
   return (
     <div className="acan-text-menu flex w-full items-start justify-between gap-2">
-      <div className="flex-grow">
-        {(building.name || building.propertyDesignation) && (
-          <div>{building.name ?? building.propertyDesignation}</div>
+      <div
+        className="min-w-0 flex-grow overflow-hidden text-ellipsis whitespace-nowrap"
+        title={`${building.name || building.propertyDesignation}\n${
+          building.address
+        }\n${building.city}`}
+      >
+        {Boolean(building.name || building.propertyDesignation) && (
+          <>
+            {building.name || building.propertyDesignation}
+            <br />
+          </>
         )}
-        <div>
-          {building.address}
-          <br />
-          {building.postcode} {building.city}
-        </div>
+        {building.address}
+        <br />
+        {building.city}
       </div>
       <div className="flex shrink-0 items-center gap-2">
         <StateIcon state={building.state} />
