@@ -63,7 +63,7 @@ export const NewFeatureForm = ({
           disabled={isSaving}
           className="flex flex-col gap-4 disabled:text-disabled"
         >
-          <legend className="acan-text-menu">Lägg till byggnad</legend>
+          <legend className="acan-text-menu mb-4">Lägg till byggnad</legend>
           <input type="hidden" name="lat" value={latLng.lat} />
           <input type="hidden" name="lng" value={latLng.lng} />
           <div>
@@ -159,21 +159,21 @@ export const NewFeatureForm = ({
             <TextArea
               label="Berättelser om byggnaden"
               name="description"
-              rows={4}
+              rows={3}
             />
           </div>
           <div>
             <TextArea
               label="Bakgrund till rivning"
               name="demolitionCause"
-              rows={4}
+              rows={3}
             />
           </div>
           <div>
             <TextArea
               label="Källor (t.ex. bildkälla)"
               name="sources"
-              rows={4}
+              rows={3}
             />
           </div>
           <div>

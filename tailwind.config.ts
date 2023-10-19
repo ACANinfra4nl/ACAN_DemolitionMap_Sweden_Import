@@ -54,6 +54,9 @@ const config: Config = {
       width: {
         logo: "5.75rem",
       },
+      aspectRatio: {
+        wide: "2/1",
+      },
     },
   },
   plugins: [require("@tailwindcss/typography")],

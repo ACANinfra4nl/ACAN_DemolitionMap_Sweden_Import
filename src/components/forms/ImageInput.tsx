@@ -11,14 +11,14 @@ import classNames from "classnames";
 export const ImageInput: FC = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const labelRef = useRef<HTMLLabelElement>(null);
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState<{ name: string; url: string }[]>([]);
   const [dragging, setDragging] = useState(false);
   const processImages = useCallback((files: FileList) => {
     for (const file of files) {
       const fr = new FileReader();
       fr.onload = () => {
         const url = fr.result as string;
-        setImages((old) => old.concat([url]));
+        setImages((old) => old.concat([{ name: file.name, url }]));
         fr.onload = null;
       };
 
@@ -57,22 +57,15 @@ export const ImageInput: FC = () => {
     [],
   );
 
-  const gridTemplateColumns = `repeat(${Math.ceil(
-    Math.sqrt(images.length),
-  )}, 1fr)`;
-
   return (
     <label
       onDragOver={handleDragEnter}
       onDragLeave={handleDragExit}
       onDrop={handleDrop}
       className={classNames(
-        "grid aspect-square w-full overflow-hidden border border-current",
+        "aspect-wide flex w-full flex-wrap gap-5 overflow-scroll border border-current p-5",
         dragging && "border-acan-blue",
       )}
-      style={{
-        gridTemplateColumns,
-      }}
       ref={labelRef}
     >
       <input
@@ -84,9 +77,10 @@ export const ImageInput: FC = () => {
         onChange={handleUpload}
       />
       {images.map((img, i) => (
-        <div key={i}>
-          <img src={img} className="aspect-square w-full object-contain" />
-        </div>
+        <figure key={i} className="flex-grow basis-1/4">
+          <img src={img.url} className="aspect-square w-full object-contain" />
+          <figcaption className="text-sm">{img.name}</figcaption>
+        </figure>
       ))}
     </label>
   );
