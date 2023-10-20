@@ -1,13 +1,21 @@
-import { FC, ReactNode, useCallback, useEffect, useRef, useState } from "react";
+import {
+  FC,
+  Fragment,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { CloseButton } from "./CloseButton";
 import { Carousel } from "./Carousel";
-import { StateIcon } from "./StateIcon";
 import { BuildingHeading } from "./BuildingHeading";
 import { DetailsTable } from "./DetailsTable";
 import { ShareButton } from "./ShareButton";
 import { Transition } from "@headlessui/react";
 import { useClickOutside } from "@/app/hooks/useClickOutside";
 import { Image } from "./Image";
+import { Linkify } from "./Linkify";
 
 const Detail: FC<{ label: string; value: string | number | ReactNode }> = ({
   label,
@@ -68,8 +76,17 @@ export const DetailsPanel: FC<DetailsProps> = ({ properties, onClose }) => {
         <BuildingHeading building={properties} />
         <DetailsTable building={properties} />
         <div className="prose text-body">
-          {properties.description && <p>{properties.description}</p>}
-          {properties.demolitionCause && <p>{properties.demolitionCause}</p>}
+          {properties.description && (
+            <p>
+              Berättelser om byggnaden:{" "}
+              <Linkify>{properties.description}</Linkify>
+            </p>
+          )}
+          {properties.demolitionCause && (
+            <p>
+              Rivningsorsak: <Linkify>{properties.demolitionCause}</Linkify>
+            </p>
+          )}
         </div>
         <div className="mt-8 flex gap-4">
           <ShareButton

@@ -57,6 +57,15 @@ const config: Config = {
       aspectRatio: {
         wide: "2/1",
       },
+      typography: {
+        DEFAULT: {
+          css: {
+            a: {
+              fontWeight: "inherit",
+            },
+          },
+        },
+      },
     },
   },
   plugins: [require("@tailwindcss/typography")],
