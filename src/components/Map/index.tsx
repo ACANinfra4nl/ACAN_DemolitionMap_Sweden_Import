@@ -15,6 +15,8 @@ import {
   UNCLUSTERED_LAYER_STYLE,
 } from "./layers";
 import { mapStyle } from "./style";
+import pointerImage from "@/img/pointer.svg";
+import markerImage from "@/img/marker.svg";
 
 // Include style sheets
 import "maplibre-gl/dist/maplibre-gl.css";
@@ -82,7 +84,13 @@ export const Map: FC<MapProps> = ({
         onClick={handleClickMap}
         ref={mapRef}
         interactiveLayerIds={["cluster", "unclustered-points"]}
-        cursor={isAdding ? (addingLocation ? "grab" : "crosshair") : cursor}
+        cursor={
+          isAdding
+            ? addingLocation
+              ? "grab"
+              : `url("${pointerImage.src}") 18 30, crosshair`
+            : cursor
+        }
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
@@ -102,7 +110,11 @@ export const Map: FC<MapProps> = ({
           <Marker
             latitude={addingLocation.lat}
             longitude={addingLocation.lng}
-          />
+            anchor="bottom"
+            offset={[0, 6]}
+          >
+            <img src={markerImage.src} alt="" />
+          </Marker>
         )}
         <NavigationControl
           showZoom
