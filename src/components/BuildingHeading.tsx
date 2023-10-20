@@ -25,9 +25,11 @@ export const BuildingHeading: FC<{
       </div>
       <div className="flex shrink-0 items-center gap-2">
         <StateIcon state={building.state} />
-        <span>
-          {building.state} {showYear ? building.demolitionYear : null}
-        </span>
+        {showYear && (
+          <span>
+            {building.state} {building.demolitionYear}
+          </span>
+        )}
       </div>
     </div>
   );

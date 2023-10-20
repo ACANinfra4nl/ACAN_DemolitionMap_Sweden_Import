@@ -1,3 +1,4 @@
+import { capitalize } from "@/lib/capitalize";
 import classNames from "classnames";
 import { FC } from "react";
 
@@ -11,6 +12,7 @@ export const StateIcon: FC<{ state: string }> = ({ state }) => (
         ? "bg-threatened"
         : "bg-saved",
     )}
-    aria-label={state}
+    aria-label={capitalize(state)}
+    title={capitalize(state)}
   ></div>
 );
