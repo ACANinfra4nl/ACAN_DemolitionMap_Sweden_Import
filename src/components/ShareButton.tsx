@@ -29,7 +29,7 @@ export const ShareButton: FC<PropsWithChildren<ShareButtonProps>> = ({
   return (
     <button
       onClick={handleShare}
-      className="text-body underline"
+      className="text-body underline hover:text-acan-blue focus-visible:text-acan-blue"
       disabled={disabled}
     >
       {children}
