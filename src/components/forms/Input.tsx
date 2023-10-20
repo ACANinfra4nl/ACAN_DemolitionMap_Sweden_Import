@@ -4,7 +4,7 @@ import classNames from "classnames";
 export const Input: FC<
   Exclude<
     InputHTMLAttributes<HTMLInputElement>,
-    "className" | "id" | "name"
+    "className" | "id" | "name" | "autoFocus"
   > & {
     name: string;
     label: string;

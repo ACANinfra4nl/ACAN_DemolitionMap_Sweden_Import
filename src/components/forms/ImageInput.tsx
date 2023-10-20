@@ -63,7 +63,7 @@ export const ImageInput: FC = () => {
       onDragLeave={handleDragExit}
       onDrop={handleDrop}
       className={classNames(
-        "aspect-wide flex w-full flex-wrap items-center justify-center gap-5 overflow-scroll border border-current p-5",
+        "flex aspect-wide w-full flex-wrap items-center justify-center gap-5 overflow-scroll border border-current p-5 focus-within:border-acan-blue",
         dragging && "border-acan-blue",
       )}
       ref={labelRef}

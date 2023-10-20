@@ -11,7 +11,7 @@ import classNames from "classnames";
 export const Select: FC<
   Exclude<
     InputHTMLAttributes<HTMLSelectElement>,
-    "className" | "id" | "name"
+    "className" | "id" | "name" | "autoFocus"
   > & {
     name: string;
     label: string;
@@ -27,12 +27,6 @@ export const Select: FC<
     },
     [],
   );
-  useEffect(() => {
-    if (!autoFocus) return;
-    // HACK: using autofocus on the element breaks transitions for some reason
-    const el = document.querySelector(`select[id="${props.name}"]`);
-    if (el) (el as HTMLElement).focus();
-  }, []);
   const handleInteracted = useCallback(() => setInteracted(true), []);
 
   return (

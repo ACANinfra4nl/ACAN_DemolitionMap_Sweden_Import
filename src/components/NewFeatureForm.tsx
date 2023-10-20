@@ -40,6 +40,12 @@ export const NewFeatureForm = ({
     fetch(`/api/reverse?lat=${latLng.lat}&lng=${latLng.lng}`)
       .then((r) => r.json() as unknown as ReverseGeocodeResult)
       .then(setLookupResult);
+    // focus first enabled input
+    (
+      panelEl.current?.querySelector(
+        "form *:is(input, textarea, select):not([type=hidden], :disabled)",
+      ) as HTMLElement | undefined
+    )?.focus();
   }, []);
 
   const handleChangeState: ChangeEventHandler<HTMLSelectElement> = useCallback(
@@ -76,7 +82,6 @@ export const NewFeatureForm = ({
               name="category"
               options={categories}
               required
-              autoFocus
             />
           </div>
           <div>
