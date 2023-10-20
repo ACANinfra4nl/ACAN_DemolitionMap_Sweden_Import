@@ -42,7 +42,6 @@ export const LatestSection: FC<{ buildings: FeatureBuilding[] }> = ({
     setShowDetails(false);
     setTimeout(setSelectedId, 300, null);
   }, []);
-  console.log(buildings.map((b) => b.images));
 
   return (
     <section className="scrollbar-hide mb-24 mt-column flex snap-x snap-mandatory flex-nowrap items-baseline overflow-scroll">
