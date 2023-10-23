@@ -1,12 +1,19 @@
 import { FC } from "react";
 import { StateIcon } from "./StateIcon";
+import classNames from "classnames";
 
 export const BuildingHeading: FC<{
   building: FeatureBuilding;
   showYear?: boolean;
-}> = ({ building, showYear }) => {
+  list?: boolean;
+}> = ({ building, showYear, list }) => {
   return (
-    <div className="acan-text-menu flex w-full items-start justify-between gap-2">
+    <div
+      className={classNames(
+        "flex w-full items-start justify-between gap-2",
+        list ? "text-list" : "acan-text-menu",
+      )}
+    >
       <div
         className="min-w-0 flex-grow overflow-hidden text-ellipsis whitespace-nowrap"
         title={`${building.name || building.propertyDesignation}\n${
@@ -27,7 +34,8 @@ export const BuildingHeading: FC<{
         <StateIcon state={building.state} />
         {showYear && (
           <span>
-            {building.state} {building.demolitionYear}
+            {building.state}{" "}
+            {building.state === "riven" ? building.demolitionYear : null}
           </span>
         )}
       </div>

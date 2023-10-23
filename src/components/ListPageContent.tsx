@@ -263,13 +263,13 @@ export const ListPageContent = () => {
                         onClick={(e) =>
                           handleSelectBuilding(building.properties, e)
                         }
-                        className="hover:acan-blue flex w-full flex-col gap-2 text-left"
+                        className="hover:acan-blue text-gray-list flex w-full flex-col gap-2 text-left focus-visible:text-acan-blue"
                       >
                         <BuildingImage
                           images={building.properties.images}
                           state={building.properties.state}
                         />
-                        <BuildingHeading building={building.properties} />
+                        <BuildingHeading building={building.properties} list />
                       </a>
                     </li>
                   ))}

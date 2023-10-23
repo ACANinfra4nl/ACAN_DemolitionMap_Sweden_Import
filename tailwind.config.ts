@@ -14,6 +14,9 @@ const config: Config = {
         saved: "#41B82E",
         "acan-blue": "#2637f3",
         disabled: "#9E9E9E",
+        gray: {
+          list: "#292929",
+        },
       },
       fontSize: {
         intro: [
@@ -29,6 +32,7 @@ const config: Config = {
             lineHeight: "1.05",
           },
         ],
+        list: ["0.875rem", { fontWeight: 700, lineHeight: "1.05" }],
       },
       margin: {
         column: "calc(20% - 2.5rem)",

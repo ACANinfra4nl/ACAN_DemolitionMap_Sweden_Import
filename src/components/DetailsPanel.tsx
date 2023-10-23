@@ -73,7 +73,7 @@ export const DetailsPanel: FC<DetailsProps> = ({ properties, onClose }) => {
       )}
 
       <div className="min-w-0">
-        <BuildingHeading building={properties} />
+        <BuildingHeading building={properties} showYear />
         <DetailsTable building={properties} />
         <div className="prose text-body">
           {properties.description && (
