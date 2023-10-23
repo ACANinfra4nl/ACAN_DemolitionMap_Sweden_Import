@@ -2,23 +2,36 @@ import {
   ChangeEventHandler,
   DragEventHandler,
   FC,
+  MouseEventHandler,
   useCallback,
   useRef,
   useState,
 } from "react";
 import classNames from "classnames";
 
+interface ImageType {
+  name: string;
+  url: string;
+  file: File;
+}
+
+const filterFileList = (files: FileList, img: ImageType): FileList => {
+  const dataTransfer = new DataTransfer();
+  for (const f of files) if (f !== img.file) dataTransfer.items.add(f);
+  return dataTransfer.files;
+};
+
 export const ImageInput: FC = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const labelRef = useRef<HTMLLabelElement>(null);
-  const [images, setImages] = useState<{ name: string; url: string }[]>([]);
+  const [images, setImages] = useState<ImageType[]>([]);
   const [dragging, setDragging] = useState(false);
   const processImages = useCallback((files: FileList) => {
     for (const file of files) {
       const fr = new FileReader();
       fr.onload = () => {
         const url = fr.result as string;
-        setImages((old) => old.concat([{ name: file.name, url }]));
+        setImages((old) => old.concat([{ name: file.name, url, file }]));
         fr.onload = null;
       };
 
@@ -56,6 +69,11 @@ export const ImageInput: FC = () => {
     },
     [],
   );
+  const handleRemoveImage = useCallback((img: ImageType) => {
+    setImages((old) => old.filter((i) => i !== img));
+    if (inputRef.current && inputRef.current.files)
+      inputRef.current.files = filterFileList(inputRef.current?.files, img);
+  }, []);
 
   return (
     <label
@@ -78,12 +96,24 @@ export const ImageInput: FC = () => {
       />
       {images.length > 0 ? (
         images.map((img, i) => (
-          <figure key={i} className="flex-grow basis-1/4">
+          <figure key={i} className="relative flex-grow basis-1/4">
             <img
               src={img.url}
               className="aspect-square w-full object-contain"
             />
-            <figcaption className="text-sm">{img.name}</figcaption>
+            <div className="flex justify-between gap-2">
+              <figcaption className="text-sm">{img.name}</figcaption>
+              <button
+                onClick={(e) => {
+                  handleRemoveImage(img);
+                  e.preventDefault();
+                }}
+                aria-label={`Ta bort ${img.name}`}
+                className="p-2 text-body leading-none hover:text-acan-blue focus-visible:text-acan-blue"
+              >
+                &times;
+              </button>
+            </div>
           </figure>
         ))
       ) : (
