@@ -9,6 +9,7 @@ export const manifestQuery = groq`*[_type == "manifest" && _id == "manifest"] | 
       ...,
       asset-> {
         _id,
+        url,
         metadata {
           dimensions { width, height }
         }
@@ -24,6 +25,21 @@ export const buildingsQuery = groq`*[_type == "building" && reviewed == true] {
     ...,
     asset-> {
       _id,
+      url,
+      metadata {
+        dimensions { width, height }
+      }
+    }
+  }
+}`;
+
+export const buildingMetaQuery = groq`*[_type == "building" && _id == $id] {
+  _id,
+  images[] {
+    ...,
+    asset-> {
+      _id,
+      url,
       metadata {
         dimensions { width, height }
       }
@@ -40,4 +56,17 @@ export const settingsQuery = groq`*[_id == "settings"][0] {
     heading,
     body,
   },
+  seo {
+    description,
+    image {
+      ...,
+      asset-> {
+        _id,
+        url,
+        metadata {
+          dimensions { width, height }
+        }
+      }
+    }
+  }
 }`;

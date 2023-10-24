@@ -11,7 +11,6 @@ interface SanityImageType {
       dimensions: {
         width: number;
         height: number;
-        aspectRatio: number;
       };
     };
   };
@@ -98,4 +97,8 @@ interface MessageType {
 interface SettingsType {
   confirmationMessage: MessageType;
   errorMessage: MessageType;
+  seo: {
+    description: string;
+    image: SanityImageType;
+  };
 }

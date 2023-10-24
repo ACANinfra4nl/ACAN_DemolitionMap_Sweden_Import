@@ -1,11 +1,22 @@
-import { BuildingsProvider } from "@/state/buildings";
-import "./globals.css";
 import type { Metadata } from "next";
+import "./globals.css";
+import { sanityFetch } from "@/lib/sanityFetch";
+import { settingsQuery } from "../../sanity/lib/queries";
 
-export const metadata: Metadata = {
-  title: "Rivningskartan",
-  description: "En karta med rivningshotade hus",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await sanityFetch<SettingsType>({
+    query: settingsQuery,
+    tags: ["buildings"],
+  });
+
+  return {
+    title: "Rivningskartan",
+    description: settings.seo.description,
+    openGraph: {
+      images: [settings.seo.image.asset.url],
+    },
+  };
+}
 
 export default function RootLayout({
   children,

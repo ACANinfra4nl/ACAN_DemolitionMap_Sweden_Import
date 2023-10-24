@@ -61,8 +61,16 @@ export const settings: SchemaTypeDefinition = {
           type: "image",
           title: "Bild",
           description: "Bild som används när sajten delas",
+          validation: (Rule) => Rule.required(),
         },
       ],
     },
   ],
+  preview: {
+    prepare() {
+      return {
+        title: "Inställningar",
+      };
+    },
+  },
 };
