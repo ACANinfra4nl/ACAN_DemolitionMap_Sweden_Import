@@ -22,22 +22,24 @@ export const ManifestPageContent: FC<{
     <main className="mt-column">
       <div className="mx-5">
         {/* <h1 className="mb-4 text-4xl font-bold">{data.heading}</h1> */}
-        <div className="grid grid-cols-5 items-end gap-10">
-          <div className="acan-text-intro col-span-5 sm:col-span-3">
+        <div className="grid grid-cols-6 items-end gap-10">
+          <div className="acan-text-intro col-span-6 sm:col-span-4">
             <PortableText value={data.intro} />
           </div>
-          <div className="acan-text-intro col-start-4 sm:col-start-5">
-            <Link href="/karta" className="block whitespace-nowrap">
-              Karta &rarr;
-            </Link>
-            <Link href="/lista" className="block whitespace-nowrap">
-              Lista &rarr;
-            </Link>
+          <div className="acan-text-intro col-span-2 col-start-5 flex justify-end sm:col-span-1 sm:col-start-6 sm:justify-start">
+            <div>
+              <Link href="/karta" className="block whitespace-nowrap">
+                Karta &rarr;
+              </Link>
+              <Link href="/lista" className="block whitespace-nowrap">
+                Lista &rarr;
+              </Link>
+            </div>
           </div>
         </div>
       </div>
       <LatestSection buildings={data.latestBuildings} />
-      <div className="mx-5 grid grid-cols-5">
+      <div className="mx-5 grid grid-cols-6 gap-x-10">
         <div className="acan-text-body prose col-span-4 col-start-2 max-w-none sm:col-span-3 sm:col-start-3">
           <PortableText
             value={data.content}
