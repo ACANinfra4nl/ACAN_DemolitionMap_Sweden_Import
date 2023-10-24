@@ -126,7 +126,7 @@ export const building: SchemaTypeDefinition = {
     {
       name: "sources",
       type: "text",
-      title: "Källor (t.ex. bildkälla)",
+      title: "BildKällor",
       rows: 4,
     },
     {

@@ -89,6 +89,11 @@ export const DetailsPanel: FC<DetailsProps> = ({ properties, onClose }) => {
               Rivningsorsak: <Linkify>{properties.demolitionCause}</Linkify>
             </p>
           )}
+          {properties.sources && (
+            <p>
+              Bildkällor: <Linkify>{properties.sources}</Linkify>
+            </p>
+          )}
         </div>
         <div className="mt-8 flex gap-4">
           <ShareButton

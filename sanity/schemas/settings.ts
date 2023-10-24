@@ -44,5 +44,25 @@ export const settings: SchemaTypeDefinition = {
         },
       ],
     },
+    {
+      name: "seo",
+      type: "object",
+      title: "SEO",
+      fields: [
+        {
+          name: "description",
+          type: "text",
+          title: "Beskrivning",
+          description: "Beskrivning av sajten för sökmotorer, sökresultat osv.",
+          validation: (Rule) => Rule.required(),
+        },
+        {
+          name: "image",
+          type: "image",
+          title: "Bild",
+          description: "Bild som används när sajten delas",
+        },
+      ],
+    },
   ],
 };

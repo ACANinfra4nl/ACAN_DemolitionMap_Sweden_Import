@@ -169,17 +169,13 @@ export const NewFeatureForm = ({
           </div>
           <div>
             <TextArea
-              label="Bakgrund till rivning"
+              label="Bakgrund till rivning (ange gärna källa)"
               name="demolitionCause"
               rows={3}
             />
           </div>
           <div>
-            <TextArea
-              label="Källor (t.ex. bildkälla)"
-              name="sources"
-              rows={3}
-            />
+            <TextArea label="Bildkällor" name="sources" rows={3} />
           </div>
           <div>
             <div className="mb-4 text-body">Avsändare</div>

@@ -37,6 +37,7 @@ interface SanityBuilding<T extends LatLng> {
   description?: string;
   demolitionCause?: string;
   images?: SanityImageType[];
+  sources?: string;
   contributor?: {
     name?: string;
     email?: string;
@@ -63,6 +64,7 @@ interface FeatureBuilding {
   description?: string;
   demolitionCause?: string;
   images?: SanityImageType[];
+  sources?: string;
   contributor?: {
     name?: string;
     email?: string;
