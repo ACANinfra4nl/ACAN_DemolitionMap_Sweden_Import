@@ -28,10 +28,10 @@ export const ManifestPageContent: FC<{
           </div>
           <div className="acan-text-intro col-start-4 sm:col-start-5">
             <Link href="/karta" className="block whitespace-nowrap">
-              <span className="underline">Karta</span> &rarr;
+              Karta &rarr;
             </Link>
             <Link href="/lista" className="block whitespace-nowrap">
-              <span className="underline">Lista</span> &rarr;
+              Lista &rarr;
             </Link>
           </div>
         </div>

@@ -66,7 +66,7 @@ export const LatestSection: FC<{ buildings: FeatureBuilding[] }> = ({
           className="acan-text-menu"
           onClick={(e) => e.nativeEvent.stopImmediatePropagation()}
         >
-          <span className="underline">Visa alla</span> &rarr;
+          Visa alla &rarr;
         </Link>
       </div>
       {renderPortal &&
