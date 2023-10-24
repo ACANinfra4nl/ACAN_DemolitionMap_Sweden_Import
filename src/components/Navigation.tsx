@@ -22,7 +22,7 @@ const NavLink: FC<{
       inverted
         ? "bg-black px-1 text-white hover:bg-acan-blue hover:text-white focus-visible:bg-acan-blue focus-visible:text-white"
         : "hover:text-acan-blue focus-visible:text-acan-blue",
-      path === href && "pointer-events-none",
+      path === href && "pointer-events-none text-acan-blue",
     )}
     href={href}
     onClick={stopPropagation}
@@ -69,7 +69,7 @@ export const Navigation: FC<{ scaleLogo?: boolean }> = ({ scaleLogo }) => {
         {scaleLogo ? (
           <ScalingAcanLogo />
         ) : (
-          <div className="w-logo ml-auto">
+          <div className="ml-auto w-logo">
             <AcanLogoCircle />
           </div>
         )}
