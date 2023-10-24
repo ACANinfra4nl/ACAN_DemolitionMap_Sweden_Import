@@ -73,7 +73,7 @@ export const LatestSection: FC<{ buildings: FeatureBuilding[] }> = ({
         createPortal(
           <Transition
             show={showDetails}
-            className="fixed bottom-0 left-0 top-0 z-10 grid w-full bg-white sm:w-1/2 md:w-5/12"
+            className="fixed bottom-0 left-0 top-0 z-10 grid w-full overflow-scroll scroll-smooth bg-white sm:w-1/2 md:w-5/12"
             enter="transition-transform duration-300 ease-out"
             enterFrom="-translate-x-full"
             enterTo="translate-none"

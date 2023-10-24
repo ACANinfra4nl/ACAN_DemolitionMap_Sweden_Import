@@ -155,7 +155,7 @@ export const ListPageContent = () => {
             className="fixed bottom-0 left-0 right-0 top-0 z-20 grid grid-cols-12 grid-rows-1"
           >
             <Transition.Child
-              className="col-span-12 row-start-1 bg-white sm:col-span-6 sm:col-start-1 md:col-span-5 md:col-start-1"
+              className="col-span-12 row-start-1 overflow-scroll scroll-smooth bg-white sm:col-span-6 sm:col-start-1 md:col-span-5 md:col-start-1"
               enter="transition-transform duration-300 ease-out"
               enterFrom="-translate-x-full"
               enterTo="translate-none"
