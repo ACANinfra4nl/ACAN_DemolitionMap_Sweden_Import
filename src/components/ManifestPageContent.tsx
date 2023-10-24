@@ -21,7 +21,6 @@ export const ManifestPageContent: FC<{
     </header>
     <main className="mt-column">
       <div className="mx-5">
-        {/* <h1 className="mb-4 text-4xl font-bold">{data.heading}</h1> */}
         <div className="grid grid-cols-6 items-end gap-10">
           <div className="acan-text-intro col-span-6 sm:col-span-4">
             <PortableText value={data.intro} />
