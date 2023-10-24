@@ -13,7 +13,9 @@ export const ManifestPageContent: FC<{
   data: SanityDocument<ManifestDocumentType>;
 }> = ({ data }) => (
   <>
-    <div className="min-h-[1px]"></div>
+    <div className="absolute min-h-[1px]">
+      {/* HACK: this is a hack to fix a bug with NextJS scroll restoration */}
+    </div>
     <header className="pointer-events-none sticky top-0 z-10">
       <Navigation scaleLogo />
     </header>
