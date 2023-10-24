@@ -80,7 +80,9 @@ export const Map: FC<MapProps> = ({
       <ReactMapGl
         mapLib={import("maplibre-gl")}
         mapStyle={mapStyle}
-        initialViewState={{ latitude: 59.3293, longitude: 18.0686, zoom: 5 }}
+        initialViewState={{
+          bounds: [10, 55, 25, 69],
+        }}
         onClick={handleClickMap}
         ref={mapRef}
         interactiveLayerIds={["cluster", "unclustered-points"]}
