@@ -51,12 +51,12 @@ export const DetailsPanel: FC<DetailsProps> = ({ properties, onClose }) => {
 
   return (
     <div className="grid grid-rows-[auto_auto_1fr] p-5" ref={panelEl}>
-      <div className="z-10 col-start-1 row-start-1 ml-6 mt-6">
+      <div className="z-10 col-start-1 row-start-1 flex justify-end">
         <CloseButton onClick={onClose} />
       </div>
 
-      {properties.images && properties.images.map && (
-        <div className="col-start-1 row-span-2 row-start-1 mb-2">
+      <div className="col-start-1 row-span-2 row-start-1 mb-2">
+        {properties.images && properties.images.map ? (
           <Carousel>
             {properties.images.map((image) => (
               <Image
@@ -69,8 +69,10 @@ export const DetailsPanel: FC<DetailsProps> = ({ properties, onClose }) => {
               />
             ))}
           </Carousel>
-        </div>
-      )}
+        ) : (
+          <div className="aspect-wide bg-acan-blue" />
+        )}
+      </div>
 
       <div className="min-w-0">
         <BuildingHeading building={properties} showYear />
