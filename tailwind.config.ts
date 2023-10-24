@@ -16,6 +16,7 @@ const config: Config = {
         disabled: "#9E9E9E",
         gray: {
           list: "#292929",
+          unknown: "#e9e9e9",
         },
       },
       fontSize: {

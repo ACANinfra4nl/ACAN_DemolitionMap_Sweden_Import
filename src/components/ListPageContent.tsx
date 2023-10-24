@@ -19,6 +19,8 @@ import { BuildingImage } from "@/components/BuildingImage";
 import { buildingToQueryParams } from "@/lib/buildingToQueryParams";
 import { BuildingHeading } from "@/components/BuildingHeading";
 import { useBuildings } from "@/app/hooks/useBuildings";
+import { StateIcon } from "./StateIcon";
+import { ListSkeleton } from "./ListSkeleton";
 
 const matchesIgnoreCase = (haystack: string | undefined, needle: string) =>
   haystack?.toLowerCase().includes(needle.toLowerCase());
@@ -249,33 +251,32 @@ export const ListPageContent = () => {
             </div>
           </div>
           <div className="col-start-1 row-start-2 px-5 pb-20">
-            {loading ? (
-              <span>Loading&hellip;</span>
-            ) : (
-              buildings && (
-                <ul className="grid auto-rows-fr grid-cols-1 items-start gap-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
-                  {rows.map((building) => (
-                    <li key={building.properties._id}>
-                      <a
-                        href={`${pathname}?${buildingToQueryParams(
-                          building.properties,
-                        )}`}
-                        onClick={(e) =>
-                          handleSelectBuilding(building.properties, e)
-                        }
-                        className="hover:acan-blue text-gray-list flex w-full flex-col gap-2 text-left focus-visible:text-acan-blue"
-                      >
-                        <BuildingImage
-                          images={building.properties.images}
-                          state={building.properties.state}
-                        />
-                        <BuildingHeading building={building.properties} list />
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              )
-            )}
+            <ul className="grid auto-rows-fr grid-cols-1 items-start gap-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+              {loading ? (
+                <ListSkeleton items={12} />
+              ) : (
+                buildings &&
+                rows.map((building) => (
+                  <li key={building.properties._id}>
+                    <a
+                      href={`${pathname}?${buildingToQueryParams(
+                        building.properties,
+                      )}`}
+                      onClick={(e) =>
+                        handleSelectBuilding(building.properties, e)
+                      }
+                      className="hover:acan-blue text-gray-list flex w-full flex-col gap-2 text-left focus-visible:text-acan-blue"
+                    >
+                      <BuildingImage
+                        images={building.properties.images}
+                        state={building.properties.state}
+                      />
+                      <BuildingHeading building={building.properties} list />
+                    </a>
+                  </li>
+                ))
+              )}
+            </ul>
           </div>
         </main>
       </div>
