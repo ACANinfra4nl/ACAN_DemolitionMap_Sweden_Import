@@ -1,8 +1,10 @@
 import { SchemaTypeDefinition } from "sanity";
+import { SettingsIcon } from "../components/SettingsIcon";
 
 export const settings: SchemaTypeDefinition = {
   name: "settings",
   type: "document",
+  icon: SettingsIcon,
   fields: [
     {
       name: "confirmationMessage",

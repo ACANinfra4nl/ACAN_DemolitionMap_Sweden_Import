@@ -13,9 +13,14 @@ import { createPreview } from "./sanity/lib/preview";
 import { groq } from "next-sanity";
 import { visionTool } from "@sanity/vision";
 import { media } from "sanity-plugin-media";
+import { SettingsIcon } from "./sanity/components/SettingsIcon";
+import { BuildingIcon } from "./sanity/components/BuildingIcon";
+import { UnreviewedBuildingIcon } from "./sanity/components/UnreviewedBuildingIcon";
+import { ReviewedBuildingIcon } from "./sanity/components/ReviewedBuildingIcon";
+import { ManifestIcon } from "./sanity/components/ManifestIcon";
 
 const singletonActions = new Set(["publish", "discardChanges", "restore"]);
-const singletonTypes = new Set(["manifest"]);
+const singletonTypes = new Set(["manifest", "settings"]);
 
 export default defineConfig({
   basePath: "/studio",
@@ -38,6 +43,7 @@ export default defineConfig({
             S.listItem()
               .title("Granskade byggnader")
               .id("reviewed")
+              .icon(ReviewedBuildingIcon)
               .child(
                 S.documentTypeList("building").filter(
                   groq`_type == "building" && reviewed == true`,
@@ -46,6 +52,7 @@ export default defineConfig({
             S.listItem()
               .title("Ogranskade byggnader")
               .id("unreviewed")
+              .icon(UnreviewedBuildingIcon)
               .child(
                 S.documentTypeList("building").filter(
                   groq`_type == "building" && reviewed != true`,
@@ -54,6 +61,7 @@ export default defineConfig({
             S.listItem()
               .title("Alla byggnader")
               .id("buildings")
+              .icon(BuildingIcon)
               .child(
                 S.documentTypeList("building").filter(
                   groq`_type == "building"`,
@@ -63,6 +71,7 @@ export default defineConfig({
             S.listItem()
               .title("Manifest")
               .id("manifest")
+              .icon(ManifestIcon)
               .child(
                 S.document()
                   .schemaType("manifest")
@@ -72,6 +81,7 @@ export default defineConfig({
             S.listItem()
               .title("Inställningar")
               .id("settings")
+              .icon(SettingsIcon)
               .child(S.document().schemaType("settings").id("settings")),
           ]),
     }),

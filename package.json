@@ -38,6 +38,7 @@
     "postcss": "8.4.29",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-html-comment": "^2.0.16",
     "react-map-gl": "^7.1.5",
     "sanity": "^3.16.2",
     "sanity-plugin-iframe-pane": "^2.5.7",
