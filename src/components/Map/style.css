@@ -41,7 +41,8 @@
   border-radius: 0;
 }
 
-.maplibregl-ctrl button .maplibregl-ctrl-icon {
+/* The double .maplibregl-ctrl-icon makes sure it overrides the default styles */
+.maplibregl-ctrl button .maplibregl-ctrl-icon.maplibregl-ctrl-icon {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -51,7 +52,9 @@
   height: auto;
   color: inherit;
 }
-.maplibregl-ctrl button.maplibregl-ctrl-zoom-in .maplibregl-ctrl-icon {
+.maplibregl-ctrl
+  button.maplibregl-ctrl-zoom-in
+  .maplibregl-ctrl-icon.maplibregl-ctrl-icon {
   background-image: none;
   font-family: SpeziaCondensed;
   font-weight: 600;
@@ -60,7 +63,9 @@
     content: "+";
   }
 }
-.maplibregl-ctrl button.maplibregl-ctrl-zoom-out .maplibregl-ctrl-icon {
+.maplibregl-ctrl
+  button.maplibregl-ctrl-zoom-out
+  .maplibregl-ctrl-icon.maplibregl-ctrl-icon {
   background-image: none;
   font-family: SpeziaCondensed;
   font-weight: 600;
