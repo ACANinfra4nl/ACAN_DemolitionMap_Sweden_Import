@@ -56,7 +56,7 @@ export const Navigation: FC<{ scaleLogo?: boolean }> = ({ scaleLogo }) => {
         </div>
         <div>
           <NavLink href="/" path={path}>
-            Manifest
+            Om kartan
           </NavLink>
         </div>
         <div>
