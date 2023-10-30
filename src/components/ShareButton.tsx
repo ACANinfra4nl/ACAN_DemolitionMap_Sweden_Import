@@ -1,13 +1,14 @@
+import classNames from "classnames";
 import { FC, PropsWithChildren, useCallback } from "react";
 
 interface ShareButtonProps {
-  disabled?: boolean;
+  state: string | boolean | undefined;
   onSuccess: (type: "share" | "clipboard") => void;
   onError: (reason: any) => void;
 }
 
 export const ShareButton: FC<PropsWithChildren<ShareButtonProps>> = ({
-  disabled,
+  state,
   children,
   onSuccess,
   onError,
@@ -29,10 +30,19 @@ export const ShareButton: FC<PropsWithChildren<ShareButtonProps>> = ({
   return (
     <button
       onClick={handleShare}
-      className="text-body underline hover:text-acan-blue focus-visible:text-acan-blue"
-      disabled={disabled}
+      className={classNames(
+        "text-body hover:text-acan-blue focus-visible:text-acan-blue",
+        state === undefined && "underline",
+      )}
+      disabled={state !== undefined}
     >
-      {children}
+      {state === "clipboard" ? (
+        <span className="text-saved">Länk kopierad</span>
+      ) : state === false ? (
+        <span className="text-demolished">Delningen misslyckades</span>
+      ) : (
+        children
+      )}
     </button>
   );
 };

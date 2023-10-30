@@ -1,12 +1,4 @@
-import {
-  FC,
-  Fragment,
-  ReactNode,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { FC, ReactNode, useCallback, useRef, useState } from "react";
 import { CloseButton } from "./CloseButton";
 import { Carousel } from "./Carousel";
 import { BuildingHeading } from "./BuildingHeading";
@@ -16,6 +8,8 @@ import { Transition } from "@headlessui/react";
 import { useClickOutside } from "@/app/hooks/useClickOutside";
 import { Image } from "./Image";
 import { Linkify } from "./Linkify";
+import { formatAddress } from "@/lib/formatAddress";
+import Link from "next/link";
 
 const Detail: FC<{ label: string; value: string | number | ReactNode }> = ({
   label,
@@ -97,38 +91,26 @@ export const DetailsPanel: FC<DetailsProps> = ({ properties, onClose }) => {
             </p>
           )}
         </div>
-        <div className="mt-8 flex gap-4">
+        <div className="mt-8 flex justify-between gap-4">
           <ShareButton
             onSuccess={handleShareSuccess}
             onError={handleShareError}
-            disabled={shareSuccessState !== undefined}
+            state={shareSuccessState}
           >
             Dela
           </ShareButton>
-          <Transition
-            show={shareSuccessState === "clipboard"}
-            enter="transition-all"
-            enterFrom="translate-y-4 opacity-0"
-            enterTo="transform-none opacity-100"
-            leave="transition-all"
-            leaveFrom="transform-none opacity-100"
-            leaveTo="translate-y-4 opacity-0"
-            className="text-body text-saved"
+          <Link
+            href={`mailto:rivningskartan@architectscan.se?subject=${encodeURIComponent(
+              `Berättelse om ${formatAddress(
+                properties.address,
+                properties.postcode,
+                properties.city,
+              )}`,
+            )}`}
+            className="text-body underline hover:text-acan-blue focus-visible:text-acan-blue"
           >
-            Länk kopierad
-          </Transition>
-          <Transition
-            show={shareSuccessState === false}
-            enter="transition-all"
-            enterFrom="translate-y-4 opacity-0"
-            enterTo="transform-none opacity-100"
-            leave="transition-all"
-            leaveFrom="transform-none opacity-100"
-            leaveTo="translate-y-4 opacity-0"
-            className="text-body text-demolished"
-          >
-            Delningen misslyckades
-          </Transition>
+            Lägg till berättelse
+          </Link>
         </div>
       </div>
     </div>
