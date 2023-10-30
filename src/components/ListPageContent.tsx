@@ -19,7 +19,6 @@ import { BuildingImage } from "@/components/BuildingImage";
 import { buildingToQueryParams } from "@/lib/buildingToQueryParams";
 import { BuildingHeading } from "@/components/BuildingHeading";
 import { useBuildings } from "@/app/hooks/useBuildings";
-import { StateIcon } from "./StateIcon";
 import { ListSkeleton } from "./ListSkeleton";
 
 const matchesIgnoreCase = (haystack: string | undefined, needle: string) =>
@@ -224,14 +223,6 @@ export const ListPageContent = () => {
               </svg>
             </div>
             <div className="col-start-3 flex items-center gap-2 text-menu-s sm:text-menu">
-              {/* <SortButton
-                    sortKey="address"
-                    sortBy={sortBy}
-                    sortDesc={sortDesc}
-                    onClick={handleSortBy("address")}
-                  >
-                    A &ndash; Ö
-                  </SortButton> */}
               <SortButton
                 sortKey="buildYear"
                 sortBy={sortBy}
@@ -265,7 +256,7 @@ export const ListPageContent = () => {
                       onClick={(e) =>
                         handleSelectBuilding(building.properties, e)
                       }
-                      className="hover:acan-blue text-gray-list flex w-full flex-col gap-2 text-left focus-visible:text-acan-blue"
+                      className="hover:acan-blue flex w-full flex-col gap-2 text-left text-gray-list focus-visible:text-acan-blue"
                     >
                       <BuildingImage
                         images={building.properties.images}
@@ -284,6 +275,7 @@ export const ListPageContent = () => {
     </>
   );
 };
+
 const SortButton: FC<
   PropsWithChildren<{
     sortKey: keyof FeatureBuilding;

@@ -86,7 +86,7 @@ interface ManifestDocumentType {
   heading: string;
   intro: import("sanity").PortableTextBlock[];
   content: import("sanity").PortableTextBlock[];
-  latestBuildings: SanityBuilding<LatLng>[];
+  // latestBuildings: SanityBuilding<LatLng>[];
 }
 
 interface MessageType {

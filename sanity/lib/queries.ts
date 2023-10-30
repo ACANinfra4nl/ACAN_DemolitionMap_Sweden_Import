@@ -2,20 +2,20 @@ import { groq } from "next-sanity";
 
 export const manifestQuery = groq`*[_type == "manifest" && _id == "manifest"] | order(_updatedAt desc)[0] {
   ...,
-  "latestBuildings": *[_type == "building" && reviewed && state == "riven"] | order(_updatedAt desc)[0...10] {
-    ...,
-    location { lat, lng },
-    images[] {
-      ...,
-      asset-> {
-        _id,
-        url,
-        metadata {
-          dimensions { width, height }
-        }
-      }
-    }
-  }
+  // "latestBuildings": *[_type == "building" && reviewed && state == "riven"] | order(_updatedAt desc)[0...10] {
+  //   ...,
+  //   location { lat, lng },
+  //   images[] {
+  //     ...,
+  //     asset-> {
+  //       _id,
+  //       url,
+  //       metadata {
+  //         dimensions { width, height }
+  //       }
+  //     }
+  //   }
+  // }
 }`;
 
 export const buildingsQuery = groq`*[_type == "building" && reviewed == true] {
