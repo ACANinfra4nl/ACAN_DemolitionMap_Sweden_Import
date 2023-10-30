@@ -38,7 +38,7 @@ export const ManifestPageContent: FC<{
         </div>
       </div>
       <div className="mx-5 mt-column grid grid-cols-6 gap-x-10">
-        <div className="acan-text-body prose col-span-4 col-start-2 max-w-none sm:col-span-3 sm:col-start-3">
+        <div className="acan-text-body prose col-span-6 max-w-none sm:col-span-3 sm:col-start-3">
           <PortableText
             value={data.content}
             components={{
