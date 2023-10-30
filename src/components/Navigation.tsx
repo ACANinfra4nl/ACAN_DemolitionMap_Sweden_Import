@@ -37,7 +37,7 @@ export const Navigation: FC<{ scaleLogo?: boolean }> = ({ scaleLogo }) => {
     <nav className="acan-text-menu grid w-full grid-cols-6 items-start justify-between gap-10 p-5">
       <div className="col-span-2">
         <Link
-          href="/"
+          href="/karta"
           className="pointer-events-auto outline-none hover:text-acan-blue focus-visible:text-acan-blue"
         >
           Rivnings&shy;kartan
