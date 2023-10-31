@@ -45,7 +45,7 @@ export const Carousel: FC<PropsWithChildren> = ({ children }) => {
     },
     [numSlides],
   );
-  console.log(currentSlide);
+
   const handlePrev: MouseEventHandler<HTMLButtonElement> = () =>
     handleGotoSlide(currentSlide - 1);
   const handleNext: MouseEventHandler<HTMLButtonElement> = () =>

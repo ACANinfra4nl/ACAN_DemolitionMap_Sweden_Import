@@ -8,6 +8,7 @@ import ReactMapGl, {
   MapRef,
 } from "react-map-gl/maplibre";
 import "maplibre-gl/dist/maplibre-gl.css";
+import { mapStyle } from "@/components/Map/style";
 
 interface MapInputProps {
   value: {
@@ -45,7 +46,7 @@ export const MapInput: FC<MapInputProps> = (props) => {
       <div style={{ aspectRatio: 3 / 2, backgroundColor: "lightgrey" }}>
         <ReactMapGl
           mapLib={import("maplibre-gl")}
-          mapStyle="https://api.maptiler.com/maps/abbe45d8-df15-4288-ab89-0a96d0eb6269/style.json?key=0VxOnlQWkxpRRW7vyr9t"
+          mapStyle={mapStyle}
           initialViewState={
             hasValue
               ? {
@@ -53,7 +54,7 @@ export const MapInput: FC<MapInputProps> = (props) => {
                   longitude: props.value.lng,
                   zoom: 15,
                 }
-              : { latitude: 59.3293, longitude: 18.0686, zoom: 5 }
+              : { bounds: [10, 55, 25, 69] }
           }
           attributionControl={false}
           onClick={props.readOnly ? undefined : handleMapClick}
@@ -69,7 +70,7 @@ export const MapInput: FC<MapInputProps> = (props) => {
           <AttributionControl position="bottom-right" compact />
         </ReactMapGl>
       </div>
-      <div className="flex gap-2 items-center">
+      <div className="flex items-center gap-2">
         <Text>
           {hasValue ? (
             <>
