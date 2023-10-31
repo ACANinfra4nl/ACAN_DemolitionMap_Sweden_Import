@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import {
   FC,
+  MouseEventHandler,
   // MouseEventHandler,
   PropsWithChildren,
   UIEventHandler,
@@ -13,75 +14,84 @@ const getScrollPercent = (el: HTMLDivElement) => {
   const scrollLeft = el.scrollLeft;
   const scrollWidth = el.scrollWidth;
   const offsetWidth = el.offsetWidth;
-  return scrollLeft / (scrollWidth - offsetWidth);
+  return scrollWidth > offsetWidth
+    ? scrollLeft / (scrollWidth - offsetWidth)
+    : 0;
 };
-const getNumSlides = (el: HTMLDivElement) => {
-  const scrollWidth = el.scrollWidth;
-  const offsetWidth = el.offsetWidth;
-  return Math.round((scrollWidth - offsetWidth) / offsetWidth);
-};
-const getCurrentSlide = (el: HTMLDivElement) => {
-  const numSlides = getNumSlides(el);
+const getCurrentSlide = (el: HTMLDivElement, numSlides: number): number => {
   const currentSlide = Math.round(numSlides * getScrollPercent(el));
   return currentSlide;
 };
 
 export const Carousel: FC<PropsWithChildren> = ({ children }) => {
   const ref = useRef<HTMLDivElement>(null);
-  // const [scrollPercent, setScrollPercent] = useState(0);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [numSlides] = useState(children instanceof Array ? children.length : 1);
 
   const handleScroll: UIEventHandler<HTMLDivElement> = (e) => {
     const el = e.currentTarget;
-    // setScrollPercent(getScrollPercent(el));
-    setCurrentSlide(getCurrentSlide(el));
+    setCurrentSlide(getCurrentSlide(el, numSlides));
   };
 
-  // const handlePrev: MouseEventHandler<HTMLButtonElement> = (e) => {
-  //   if (!ref.current) return;
-  //   ref.current.scrollBy({
-  //     left: -ref.current.offsetWidth,
-  //     behavior: "smooth",
-  //   });
-  //   setScrollPercent(getScrollPercent(ref.current));
-  // };
-  // const handleNext: MouseEventHandler<HTMLButtonElement> = (e) => {
-  //   if (!ref.current) return;
-  //   ref.current.scrollBy({
-  //     left: ref.current.offsetWidth,
-  //     behavior: "smooth",
-  //   });
-  //   setScrollPercent(getScrollPercent(ref.current));
-  // };
-  const handleGotoSlide = useCallback((n: number) => {
-    if (!ref.current) return;
-    const scrollPercent = n / getNumSlides(ref.current);
-    ref.current.scrollTo({
-      left: scrollPercent * ref.current.offsetWidth,
-      behavior: "smooth",
-    });
-    setCurrentSlide(getCurrentSlide(ref.current));
-  }, []);
+  const handleGotoSlide = useCallback(
+    (n: number) => {
+      if (!ref.current) return;
+      const scrollPercent = n / numSlides;
+      ref.current.scrollTo({
+        left: scrollPercent * ref.current.offsetWidth,
+        behavior: "smooth",
+      });
+      setCurrentSlide(getCurrentSlide(ref.current, numSlides));
+    },
+    [numSlides],
+  );
+  console.log(currentSlide);
+  const handlePrev: MouseEventHandler<HTMLButtonElement> = () =>
+    handleGotoSlide(currentSlide - 1);
+  const handleNext: MouseEventHandler<HTMLButtonElement> = () =>
+    handleGotoSlide(currentSlide + 1);
 
   const childCount = children instanceof Array ? children.length : 1;
 
   return (
     <div>
       <div className="group relative">
-        {/* <button
-          onClick={handlePrev}
-          aria-label="Previous"
-          className="absolute left-0 top-0 bottom-0 p-2 bg-white/50 transition-opacity opacity-0 group-hover:opacity-100"
-        >
-          &lsaquo;
-        </button>
-        <button
-          onClick={handleNext}
-          aria-label="Next"
-          className="absolute right-0 top-0 bottom-0 p-2 bg-white/50 transition-opacity opacity-0 group-hover:opacity-100"
-        >
-          &rsaquo;
-        </button> */}
+        {childCount > 1 && (
+          <>
+            <button
+              onClick={handlePrev}
+              aria-label="Previous"
+              className="absolute bottom-0 left-0 top-0 flex items-center fill-white opacity-0 transition-opacity group-hover:opacity-100"
+            >
+              <span className="flex h-10 w-10 items-center justify-center bg-black">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="13"
+                  viewBox="0 0 14 13"
+                >
+                  <path d="m6.2 12.5 1.4-1.4-4-3.9h9.6v-2H3.6l4-3.8L6.2 0 0 6.2l6.2 6.3Z" />
+                </svg>
+              </span>
+            </button>
+            <button
+              onClick={handleNext}
+              aria-label="Next"
+              className="absolute bottom-0 right-0 top-0 flex items-center fill-white opacity-0 transition-opacity group-hover:opacity-100"
+            >
+              <span className="flex h-10 w-10 items-center justify-center bg-black">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="13"
+                  viewBox="0 0 14 13"
+                >
+                  <path d="m7 12.5-1.4-1.4 4-3.9H0v-2h9.7l-4-3.8L7 0l6.2 6.2L7 12.5Z" />
+                </svg>
+              </span>
+            </button>
+          </>
+        )}
         <div
           ref={ref}
           className="scrollbar-hide flex w-full snap-x snap-mandatory overflow-scroll"
@@ -89,25 +99,14 @@ export const Carousel: FC<PropsWithChildren> = ({ children }) => {
         >
           {children}
         </div>
-        {childCount > 1 && (
+        {/* {childCount > 1 && (
           <Dots
             count={childCount}
             onClick={handleGotoSlide}
             currentSlide={currentSlide}
           />
-        )}
+        )} */}
       </div>
-      {/* <div
-        className="h-0.5 w-full origin-left bg-red-600"
-        style={{ transform: `scaleX(${scrollPercent})` }}
-      ></div> */}
-      {/* <div>
-        {ref.current && (
-          <>
-            {getCurrentSlide(ref.current) + 1}/{getNumSlides(ref.current) + 1}
-          </>
-        )}
-      </div> */}
     </div>
   );
 };
