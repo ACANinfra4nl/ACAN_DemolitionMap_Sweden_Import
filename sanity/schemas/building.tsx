@@ -109,8 +109,7 @@ export const building: SchemaTypeDefinition = {
     {
       name: "description",
       type: "text",
-      title: "Beskrivning",
-      description: "Arkitektur, historik, nuvarande verksamhet",
+      title: "Berättelser om byggnaden",
     },
     {
       name: "demolitionCause",

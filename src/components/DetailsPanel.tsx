@@ -4,7 +4,6 @@ import { Carousel } from "./Carousel";
 import { BuildingHeading } from "./BuildingHeading";
 import { DetailsTable } from "./DetailsTable";
 import { ShareButton } from "./ShareButton";
-import { Transition } from "@headlessui/react";
 import { useClickOutside } from "@/app/hooks/useClickOutside";
 import { Image } from "./Image";
 import { Linkify } from "./Linkify";
@@ -80,7 +79,7 @@ export const DetailsPanel: FC<DetailsProps> = ({ properties, onClose }) => {
           )}
           {properties.demolitionCause && (
             <p>
-              <span className="font-bold">Rivningsorsak:</span>{" "}
+              <span className="font-bold">Anledning till rivning:</span>{" "}
               <Linkify>{properties.demolitionCause}</Linkify>
             </p>
           )}
