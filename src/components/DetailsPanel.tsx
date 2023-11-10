@@ -72,19 +72,19 @@ export const DetailsPanel: FC<DetailsProps> = ({ properties, onClose }) => {
         <DetailsTable building={properties} />
         <div className="prose text-body font-normal">
           {properties.description && (
-            <p>
+            <p className="whitespace-pre-line">
               <span className="font-bold">Berättelser om byggnaden:</span>{" "}
               <Linkify>{properties.description}</Linkify>
             </p>
           )}
           {properties.demolitionCause && (
-            <p>
+            <p className="whitespace-pre-line">
               <span className="font-bold">Anledning till rivning:</span>{" "}
               <Linkify>{properties.demolitionCause}</Linkify>
             </p>
           )}
           {properties.sources && (
-            <p>
+            <p className="whitespace-pre-line">
               <span className="font-bold">Bildkällor:</span>{" "}
               <Linkify>{properties.sources}</Linkify>
             </p>
