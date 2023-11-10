@@ -2,54 +2,32 @@ import classNames from "classnames";
 import {
   FC,
   MouseEventHandler,
-  // MouseEventHandler,
   PropsWithChildren,
-  UIEventHandler,
   useCallback,
   useRef,
   useState,
 } from "react";
 
-const getScrollPercent = (el: HTMLDivElement) => {
-  const scrollLeft = el.scrollLeft;
-  const scrollWidth = el.scrollWidth;
-  const offsetWidth = el.offsetWidth;
-  return scrollWidth > offsetWidth
-    ? scrollLeft / (scrollWidth - offsetWidth)
-    : 0;
-};
-const getCurrentSlide = (el: HTMLDivElement, numSlides: number): number => {
-  const currentSlide = Math.round(numSlides * getScrollPercent(el));
-  return currentSlide;
-};
-
 export const Carousel: FC<PropsWithChildren> = ({ children }) => {
   const ref = useRef<HTMLDivElement>(null);
-  const [currentSlide, setCurrentSlide] = useState(0);
   const [numSlides] = useState(children instanceof Array ? children.length : 1);
-
-  const handleScroll: UIEventHandler<HTMLDivElement> = (e) => {
-    const el = e.currentTarget;
-    setCurrentSlide(getCurrentSlide(el, numSlides));
-  };
 
   const handleGotoSlide = useCallback(
     (n: number) => {
       if (!ref.current) return;
-      const scrollPercent = n / numSlides;
-      ref.current.scrollTo({
-        left: scrollPercent * ref.current.offsetWidth,
+      const scrollAmount = (n * ref.current.scrollWidth) / numSlides;
+      ref.current.scrollBy({
+        left: scrollAmount,
         behavior: "smooth",
       });
-      setCurrentSlide(getCurrentSlide(ref.current, numSlides));
     },
     [numSlides],
   );
 
   const handlePrev: MouseEventHandler<HTMLButtonElement> = () =>
-    handleGotoSlide(currentSlide - 1);
+    handleGotoSlide(-1);
   const handleNext: MouseEventHandler<HTMLButtonElement> = () =>
-    handleGotoSlide(currentSlide + 1);
+    handleGotoSlide(1);
 
   const childCount = children instanceof Array ? children.length : 1;
 
@@ -95,17 +73,9 @@ export const Carousel: FC<PropsWithChildren> = ({ children }) => {
         <div
           ref={ref}
           className="scrollbar-hide flex w-full snap-x snap-mandatory overflow-scroll"
-          onScroll={handleScroll}
         >
           {children}
         </div>
-        {/* {childCount > 1 && (
-          <Dots
-            count={childCount}
-            onClick={handleGotoSlide}
-            currentSlide={currentSlide}
-          />
-        )} */}
       </div>
     </div>
   );

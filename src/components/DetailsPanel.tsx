@@ -56,7 +56,7 @@ export const DetailsPanel: FC<DetailsProps> = ({ properties, onClose }) => {
                 key={image.asset.url}
                 image={image}
                 alt=""
-                className="aspect-video w-full snap-start object-cover"
+                className="aspect-video w-full min-w-full snap-start object-cover"
                 width={image.asset.metadata.dimensions.width}
                 height={image.asset.metadata.dimensions.height}
               />
@@ -72,19 +72,19 @@ export const DetailsPanel: FC<DetailsProps> = ({ properties, onClose }) => {
         <DetailsTable building={properties} />
         <div className="prose text-body font-normal">
           {properties.description && (
-            <p className="whitespace-pre-line">
+            <p className="whitespace-pre-line break-words">
               <span className="font-bold">Berättelser om byggnaden:</span>{" "}
               <Linkify>{properties.description}</Linkify>
             </p>
           )}
           {properties.demolitionCause && (
-            <p className="whitespace-pre-line">
+            <p className="whitespace-pre-line break-words">
               <span className="font-bold">Anledning till rivning:</span>{" "}
               <Linkify>{properties.demolitionCause}</Linkify>
             </p>
           )}
           {properties.sources && (
-            <p className="whitespace-pre-line">
+            <p className="whitespace-pre-line break-words">
               <span className="font-bold">Bildkällor:</span>{" "}
               <Linkify>{properties.sources}</Linkify>
             </p>
