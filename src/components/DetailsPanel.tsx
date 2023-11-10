@@ -56,7 +56,7 @@ export const DetailsPanel: FC<DetailsProps> = ({ properties, onClose }) => {
                 key={image.asset.url}
                 image={image}
                 alt=""
-                className="aspect-video w-full min-w-full snap-start object-cover"
+                className="aspect-video w-full min-w-full snap-start object-contain"
                 width={image.asset.metadata.dimensions.width}
                 height={image.asset.metadata.dimensions.height}
               />
