@@ -19,7 +19,7 @@ export const CloseButton: FC<CloseButtonProps> = ({ onClick }) => {
     <button
       aria-label="Stäng"
       onClick={onClick}
-      className="flex h-12 w-12 items-center justify-center text-5xl font-bold leading-none text-white"
+      className="flex h-12 w-12 items-center justify-center text-5xl font-bold leading-none text-white hover:text-acan-blue"
     >
       &times;
     </button>
