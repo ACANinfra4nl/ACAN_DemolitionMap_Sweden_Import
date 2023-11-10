@@ -41,7 +41,7 @@ export const Carousel: FC<PropsWithChildren> = ({ children }) => {
               aria-label="Previous"
               className="absolute bottom-0 left-0 top-0 flex items-center fill-white opacity-0 transition-opacity group-hover:opacity-100"
             >
-              <span className="flex h-10 w-10 items-center justify-center bg-black">
+              <span className="flex h-10 w-10 items-center justify-center bg-black hover:bg-acan-blue">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="14"
@@ -57,7 +57,7 @@ export const Carousel: FC<PropsWithChildren> = ({ children }) => {
               aria-label="Next"
               className="absolute bottom-0 right-0 top-0 flex items-center fill-white opacity-0 transition-opacity group-hover:opacity-100"
             >
-              <span className="flex h-10 w-10 items-center justify-center bg-black">
+              <span className="flex h-10 w-10 items-center justify-center bg-black hover:bg-acan-blue">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="14"
