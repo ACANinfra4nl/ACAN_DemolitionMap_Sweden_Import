@@ -1,30 +1,27 @@
-import { revalidatePath, revalidateTag } from "next/cache";
+import { parseBody } from "next-sanity/webhook";
+import { revalidateTag } from "next/cache";
+import { notFound } from "next/navigation";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: NextRequest) {
-  if (
-    process.env.NODE_ENV !== "development" &&
-    request.headers.get("authorization") !==
-      `Bearer ${process.env.REVALIDATE_TOKEN}`
-  ) {
-    console.warn(
-      "wrong auth not in development",
-      process.env.NODE_ENV,
-      request.headers.get("authorization")
+if (!process.env.SANITY_REVALIDATE_SECRET) {
+  throw new Error("Missing environment variable: SANITY_REVALIDATE_SECRET");
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    // get tag or path to revalidate from body
+    const { isValidSignature, body } = await parseBody<{ _type: string }>(
+      request,
+      process.env.SANITY_REVALIDATE_SECRET,
     );
-    return NextResponse.json({}, { status: 404 });
+    if (!isValidSignature) throw new Error("Invalid signature");
+    if (!body?._type) throw new Error("Invalid request: missing _type");
+    // revalidate tags and/or paths
+    revalidateTag(body._type);
+    // return ok
+    return NextResponse.json({});
+  } catch (e) {
+    console.error(e);
+    notFound();
   }
-
-  const path = request.nextUrl.searchParams.get("path");
-  if (path) {
-    console.log(`Revalidating path "${path}"`);
-    revalidatePath(path);
-  }
-  const tag = request.nextUrl.searchParams.get("tag");
-  if (tag) {
-    console.log(`Revalidating tag "${tag}"`);
-    revalidateTag(tag);
-  }
-
-  return NextResponse.json({});
 }

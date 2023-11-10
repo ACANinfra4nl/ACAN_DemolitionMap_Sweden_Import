@@ -6,7 +6,7 @@ import { settingsQuery } from "../../sanity/lib/queries";
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await sanityFetch<SettingsType>({
     query: settingsQuery,
-    tags: ["buildings"],
+    tags: ["settings"],
   });
 
   return {

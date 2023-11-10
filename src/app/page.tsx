@@ -9,7 +9,7 @@ import { PreviewManifestPageContent } from "@/components/PreviewManifestPageCont
 export default async function ManifestPage() {
   const data = await sanityFetch<SanityDocument<ManifestDocumentType>>({
     query: manifestQuery,
-    tags: ["buildings"],
+    tags: ["manifest"],
   });
   const isDraftMode = draftMode().isEnabled;
 
