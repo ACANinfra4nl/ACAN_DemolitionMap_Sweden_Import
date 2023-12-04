@@ -4,8 +4,6 @@ import { buildingsQuery } from "../../../../sanity/lib/queries";
 import { toFeature } from "@/lib/toFeature";
 import { sanityFetch } from "@/lib/sanityFetch";
 
-export const runtime = "edge";
-
 export async function GET(request: NextRequest) {
   // fetch all buildings
   const buildings: SanityBuilding<LatLng>[] = await sanityFetch<
