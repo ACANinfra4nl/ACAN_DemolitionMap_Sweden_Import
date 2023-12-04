@@ -65,6 +65,7 @@ export const MapPageContent: FC<SettingsType> = ({
   }, []);
   const handleSubmitFeature: FormEventHandler<HTMLFormElement> = useCallback(
     (e) => {
+      e.preventDefault();
       const formData = new FormData(e.target as HTMLFormElement);
       // save info from form
       setSavingBuilding(true);
