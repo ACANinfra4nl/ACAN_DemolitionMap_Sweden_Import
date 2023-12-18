@@ -165,6 +165,7 @@ export const NewFeatureForm = ({
               label="Berättelser om byggnaden"
               name="description"
               rows={3}
+              required
             />
           </div>
           <div>
@@ -172,6 +173,7 @@ export const NewFeatureForm = ({
               label="Bakgrund till rivning (ange gärna källa)"
               name="demolitionCause"
               rows={3}
+              required
             />
           </div>
           <div>
@@ -184,7 +186,12 @@ export const NewFeatureForm = ({
                 <Input label="Namn" name="contributor" />
               </div>
               <div className="flex-grow">
-                <Input label="E-post" name="contributor-email" type="email" />
+                <Input
+                  label="E-post"
+                  name="contributor-email"
+                  type="email"
+                  required
+                />
               </div>
             </div>
             <p className="mt-2 text-sm">
