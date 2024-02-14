@@ -54,6 +54,7 @@ const config: Config = {
         ],
       },
       screens: {
+        xs: "420px",
         xl: "1600px",
       },
       width: {

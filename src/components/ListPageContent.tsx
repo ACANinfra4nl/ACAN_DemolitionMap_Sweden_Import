@@ -54,17 +54,21 @@ const demolitionYearSorter: BuildingSorter = (desc) => (a, b) =>
     : a.properties.demolitionYear
     ? -1
     : 1;
-const addressSorter: BuildingSorter = (desc) => (a, b) =>
-  a.properties.address &&
-  b.properties.address &&
-  a.properties.address < b.properties.address
-    ? -1
-    : 1;
+// const addressSorter: BuildingSorter = (desc) => (a, b) =>
+//   (a.properties.address &&
+//   b.properties.address &&
+//   a.properties.address < b.properties.address
+//     ? -1
+//     : 1) * (desc ? -1 : 1);
+const createdAtSorter: BuildingSorter = (desc) => (a, b) =>
+  (a.properties._createdAt < b.properties._createdAt ? -1 : 1) *
+  (desc ? -1 : 1);
 
 const SORTERS = {
   buildYear: buildYearSorter,
   demolitionYear: demolitionYearSorter,
-  address: addressSorter,
+  // address: addressSorter,
+  _createdAt: createdAtSorter,
 };
 
 const SortArrow: FC<{ descending?: boolean }> = ({ descending }) => (
@@ -83,8 +87,8 @@ export const ListPageContent = () => {
   const [stateFilter, setStateFilter] = useState<string>();
   const [hasSelectedBuilding, setHasSelectedBuilding] = useState(false);
   const [selectedBuilding, setSelectedBuilding] = useState<FeatureBuilding>();
-  const [sortBy, setSortBy] = useState<keyof typeof SORTERS>("buildYear");
-  const [sortDesc, setSortDesc] = useState(false);
+  const [sortBy, setSortBy] = useState<keyof typeof SORTERS>("_createdAt");
+  const [sortDesc, setSortDesc] = useState(true);
 
   useEffect(() => {
     if (loading || !buildings) return;
@@ -148,7 +152,7 @@ export const ListPageContent = () => {
         <header className="fixed left-0 right-0 top-0 z-10">
           <Navigation />
         </header>
-        <main className="mt-header-s grid grid-cols-1 grid-rows-[auto_1fr] pt-[4.125rem] sm:mt-header sm:pt-[4.75rem] md:pt-10">
+        <main className="xs:pt-12 mt-header-s grid grid-cols-1 grid-rows-[auto_1fr] pt-20 sm:mt-header sm:pt-16 md:pt-10">
           <Transition
             show={hasSelectedBuilding}
             className="fixed bottom-0 left-0 right-0 top-0 z-20 grid grid-cols-12 grid-rows-1"
@@ -199,7 +203,7 @@ export const ListPageContent = () => {
                 onClick={setStateFilter}
               />
             </div>
-            <div className="relative col-span-2 items-center text-menu-s sm:text-menu md:col-span-1 md:col-start-2">
+            <div className="xs:col-span-2 relative col-span-3 items-center md:col-span-1 md:col-start-2">
               <input
                 aria-label="Filtrera"
                 id="filter"
@@ -222,7 +226,15 @@ export const ListPageContent = () => {
                 <path d="m10 10 5 5" />
               </svg>
             </div>
-            <div className="col-start-3 flex items-center gap-2 text-menu-s sm:text-menu">
+            <div className="xs:col-span-1 xs:col-start-3 col-span-3 flex items-center justify-end gap-2">
+              <SortButton
+                sortKey="_createdAt"
+                sortBy={sortBy}
+                sortDesc={sortDesc}
+                onClick={handleSortBy("_createdAt")}
+              >
+                Tillagd
+              </SortButton>
               <SortButton
                 sortKey="buildYear"
                 sortBy={sortBy}
