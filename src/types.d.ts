@@ -45,6 +45,7 @@ interface SanityBuilding<T extends LatLng> {
 
 interface FeatureBuilding {
   _id: string;
+  _createdAt: string;
   location: LatLng;
   category: string;
   state: string;

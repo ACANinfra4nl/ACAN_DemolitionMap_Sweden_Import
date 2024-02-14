@@ -54,17 +54,21 @@ const demolitionYearSorter: BuildingSorter = (desc) => (a, b) =>
     : a.properties.demolitionYear
     ? -1
     : 1;
-const addressSorter: BuildingSorter = (desc) => (a, b) =>
-  a.properties.address &&
-  b.properties.address &&
-  a.properties.address < b.properties.address
-    ? -1
-    : 1;
+// const addressSorter: BuildingSorter = (desc) => (a, b) =>
+//   (a.properties.address &&
+//   b.properties.address &&
+//   a.properties.address < b.properties.address
+//     ? -1
+//     : 1) * (desc ? -1 : 1);
+const createdAtSorter: BuildingSorter = (desc) => (a, b) =>
+  (a.properties._createdAt < b.properties._createdAt ? -1 : 1) *
+  (desc ? -1 : 1);
 
 const SORTERS = {
   buildYear: buildYearSorter,
   demolitionYear: demolitionYearSorter,
-  address: addressSorter,
+  // address: addressSorter,
+  _createdAt: createdAtSorter,
 };
 
 const SortArrow: FC<{ descending?: boolean }> = ({ descending }) => (
@@ -83,8 +87,8 @@ export const ListPageContent = () => {
   const [stateFilter, setStateFilter] = useState<string>();
   const [hasSelectedBuilding, setHasSelectedBuilding] = useState(false);
   const [selectedBuilding, setSelectedBuilding] = useState<FeatureBuilding>();
-  const [sortBy, setSortBy] = useState<keyof typeof SORTERS>("buildYear");
-  const [sortDesc, setSortDesc] = useState(false);
+  const [sortBy, setSortBy] = useState<keyof typeof SORTERS>("_createdAt");
+  const [sortDesc, setSortDesc] = useState(true);
 
   useEffect(() => {
     if (loading || !buildings) return;
@@ -223,6 +227,14 @@ export const ListPageContent = () => {
               </svg>
             </div>
             <div className="col-start-3 flex items-center gap-2 text-menu-s sm:text-menu">
+              <SortButton
+                sortKey="_createdAt"
+                sortBy={sortBy}
+                sortDesc={sortDesc}
+                onClick={handleSortBy("_createdAt")}
+              >
+                Inlagd
+              </SortButton>
               <SortButton
                 sortKey="buildYear"
                 sortBy={sortBy}
