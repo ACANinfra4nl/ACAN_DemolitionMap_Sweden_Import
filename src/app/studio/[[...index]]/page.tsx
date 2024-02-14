@@ -1,17 +1,11 @@
-'use client'
+import { Studio } from "./Studio";
+// Set the right `viewport`, `robots` and `referer` meta tags
+export { metadata } from "next-sanity/studio/metadata";
+export { viewport } from "next-sanity/studio/viewport";
 
-/**
- * This route is responsible for the built-in authoring environment using Sanity Studio.
- * All routes under your studio path is handled by this file using Next.js' catch-all routes:
- * https://nextjs.org/docs/routing/dynamic-routes#catch-all-routes
- *
- * You can learn more about the next-sanity package here:
- * https://github.com/sanity-io/next-sanity
- */
-
-import { NextStudio } from 'next-sanity/studio'
-import config from '../../../../sanity.config'
+// Ensures the Studio route is statically generated
+export const dynamic = "force-static";
 
 export default function StudioPage() {
-  return <NextStudio config={config} />
+  return <Studio />;
 }
