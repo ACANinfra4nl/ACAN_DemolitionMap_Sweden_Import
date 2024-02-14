@@ -154,7 +154,7 @@ export const NewFeatureForm = ({
                 label="Rivningsår"
                 name="demolitionYear"
                 type="number"
-                min={0}
+                min={process.env.NEXT_PUBLIC_MIN_DEMOLITION_YEAR || 2016}
                 max={9999}
                 disabled={!isDemolished}
               />
