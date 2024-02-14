@@ -233,7 +233,7 @@ export const ListPageContent = () => {
                 sortDesc={sortDesc}
                 onClick={handleSortBy("_createdAt")}
               >
-                Inlagd
+                Tillagd
               </SortButton>
               <SortButton
                 sortKey="buildYear"
