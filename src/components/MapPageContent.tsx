@@ -12,18 +12,20 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { MessagePanel } from "@/components/MessagePanel";
 import { Button } from "@/components/Button";
 import { buildingToQueryParams } from "@/lib/buildingToQueryParams";
-import { useBuildings } from "@/app/hooks/useBuildings";
 
-export const MapPageContent: FC<SettingsType> = ({
-  confirmationMessage,
-  errorMessage,
-}) => {
+export const MapPageContent: FC<
+  SettingsType & {
+    buildings: {
+      type: "FeatureCollection";
+      features: Feature<Point, FeatureBuilding>[];
+    };
+  }
+> = ({ confirmationMessage, errorMessage, buildings }) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const selectedId = searchParams.get("view");
   const shouldAdd = searchParams.has("add");
-  const { buildings, loading } = useBuildings();
   const [hasSelectedFeature, setHasSelectedFeature] = useState(false);
   const [selectedFeature, setSelectedFeature] =
     useState<Feature<Point, FeatureBuilding>>();
@@ -41,8 +43,6 @@ export const MapPageContent: FC<SettingsType> = ({
   }
 
   useEffect(() => {
-    if (loading || !buildings) return;
-
     if (selectedId) {
       setSelectedFeature(
         buildings.features.find((f) => f.properties._id === selectedId),
@@ -51,7 +51,7 @@ export const MapPageContent: FC<SettingsType> = ({
     } else {
       setHasSelectedFeature(false);
     }
-  }, [loading, buildings?.features, selectedId]);
+  }, [selectedId]);
 
   const handleAddMarker = useCallback((latLng: LatLng) => {
     // show popup with form
