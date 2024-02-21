@@ -18,8 +18,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { BuildingImage } from "@/components/BuildingImage";
 import { buildingToQueryParams } from "@/lib/buildingToQueryParams";
 import { BuildingHeading } from "@/components/BuildingHeading";
-import { useBuildings } from "@/app/hooks/useBuildings";
-import { ListSkeleton } from "./ListSkeleton";
+import { Feature, Point } from "geojson";
 
 const matchesIgnoreCase = (haystack: string | undefined, needle: string) =>
   haystack?.toLowerCase().includes(needle.toLowerCase());
@@ -77,12 +76,16 @@ const SortArrow: FC<{ descending?: boolean }> = ({ descending }) => (
   </span>
 );
 
-export const ListPageContent = () => {
+export const ListPageContent: FC<{
+  buildings: {
+    type: "FeatureCollection";
+    features: Feature<Point, FeatureBuilding>[];
+  };
+}> = ({ buildings }) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const selectedId = searchParams.get("view");
-  const { buildings, loading } = useBuildings();
   const [filter, setFilter] = useState("");
   const [stateFilter, setStateFilter] = useState<string>();
   const [hasSelectedBuilding, setHasSelectedBuilding] = useState(false);
@@ -91,8 +94,6 @@ export const ListPageContent = () => {
   const [sortDesc, setSortDesc] = useState(true);
 
   useEffect(() => {
-    if (loading || !buildings) return;
-
     if (selectedId) {
       setSelectedBuilding(
         buildings.features.find((f) => f.properties._id === selectedId)
@@ -102,7 +103,7 @@ export const ListPageContent = () => {
     } else {
       setHasSelectedBuilding(false);
     }
-  }, [loading, buildings?.features, selectedId]);
+  }, [selectedId]);
 
   const handleFilterChange: ChangeEventHandler<HTMLInputElement> = useCallback(
     (e) => {
@@ -152,7 +153,7 @@ export const ListPageContent = () => {
         <header className="fixed left-0 right-0 top-0 z-10">
           <Navigation />
         </header>
-        <main className="xs:pt-12 mt-header-s grid grid-cols-1 grid-rows-[auto_1fr] pt-20 sm:mt-header sm:pt-16 md:pt-10">
+        <main className="mt-header-s grid grid-cols-1 grid-rows-[auto_1fr] pt-20 xs:pt-12 sm:mt-header sm:pt-16 md:pt-10">
           <Transition
             show={hasSelectedBuilding}
             className="fixed bottom-0 left-0 right-0 top-0 z-20 grid grid-cols-12 grid-rows-1"
@@ -203,7 +204,7 @@ export const ListPageContent = () => {
                 onClick={setStateFilter}
               />
             </div>
-            <div className="xs:col-span-2 relative col-span-3 items-center md:col-span-1 md:col-start-2">
+            <div className="relative col-span-3 items-center xs:col-span-2 md:col-span-1 md:col-start-2">
               <input
                 aria-label="Filtrera"
                 id="filter"
@@ -226,7 +227,7 @@ export const ListPageContent = () => {
                 <path d="m10 10 5 5" />
               </svg>
             </div>
-            <div className="xs:col-span-1 xs:col-start-3 col-span-3 flex items-center justify-end gap-2">
+            <div className="col-span-3 flex items-center justify-end gap-2 xs:col-span-1 xs:col-start-3">
               <SortButton
                 sortKey="_createdAt"
                 sortBy={sortBy}
@@ -255,31 +256,26 @@ export const ListPageContent = () => {
           </div>
           <div className="col-start-1 row-start-2 px-5 pb-20">
             <ul className="grid auto-rows-fr grid-cols-1 items-start gap-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
-              {loading ? (
-                <ListSkeleton items={12} />
-              ) : (
-                buildings &&
-                rows.map((building) => (
-                  <li key={building.properties._id}>
-                    <a
-                      href={`${pathname}?${buildingToQueryParams(
-                        building.properties,
-                      )}`}
-                      onClick={(e) =>
-                        handleSelectBuilding(building.properties, e)
-                      }
-                      className="hover:acan-blue flex w-full flex-col gap-2 text-left text-gray-list focus-visible:text-acan-blue"
-                    >
-                      <BuildingImage
-                        images={building.properties.images}
-                        state={building.properties.state}
-                        sizes="(min-width: 1600px) 16vw, (min-width: 1024px) 25vw, (min-width: 768px) 33vw, (min-width: 640px) 49vw, 99vw"
-                      />
-                      <BuildingHeading building={building.properties} list />
-                    </a>
-                  </li>
-                ))
-              )}
+              {rows.map((building) => (
+                <li key={building.properties._id}>
+                  <a
+                    href={`${pathname}?${buildingToQueryParams(
+                      building.properties,
+                    )}`}
+                    onClick={(e) =>
+                      handleSelectBuilding(building.properties, e)
+                    }
+                    className="hover:acan-blue flex w-full flex-col gap-2 text-left text-gray-list focus-visible:text-acan-blue"
+                  >
+                    <BuildingImage
+                      images={building.properties.images}
+                      state={building.properties.state}
+                      sizes="(min-width: 1600px) 16vw, (min-width: 1024px) 25vw, (min-width: 768px) 33vw, (min-width: 640px) 49vw, 99vw"
+                    />
+                    <BuildingHeading building={building.properties} list />
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
         </main>
