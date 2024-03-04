@@ -1,6 +1,7 @@
 import { client } from "@/lib/sanityClient";
 import { NextRequest, NextResponse } from "next/server";
 import { toFeature } from "@/lib/toFeature";
+import { nanoid } from "nanoid";
 
 const uploadAssets = async (images: File[]) => {
   const imageAssets = [];
@@ -9,10 +10,10 @@ const uploadAssets = async (images: File[]) => {
     const imageAsset = await client.assets.upload("image", image);
     imageAssets.push({
       _type: "image",
+      _key: nanoid(),
       asset: {
         _type: "reference",
         _ref: imageAsset._id,
-        // url: imageAsset.url,
       },
     });
   }
