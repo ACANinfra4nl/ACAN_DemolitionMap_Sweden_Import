@@ -1,0 +1,21 @@
+{
+  "nav": {
+    "title": "<p>Rivnings&shy;kartan</p>",
+    "map": "Karta",
+    "list": "Lista",
+    "about": "Om kartan",
+    "addOne": "Lägg till",
+    "addTwo": "byggnad"
+  },
+  "filter": {
+    "demolished": "Riven",
+    "threatened": "Hotad",
+    "saved": "Räddad",
+    "search": "Sök"
+  },
+  "sort": {
+    "added": "Tillagd",
+    "buildYear": "Byggår",
+    "demolitionYear": "Rivningsår"
+  }
+}

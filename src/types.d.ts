@@ -103,3 +103,25 @@ interface SettingsType {
     image: SanityImageType;
   };
 }
+
+interface Dictionary {
+  nav: {
+    title: string;
+    map: string;
+    list: string;
+    about: string;
+    addOne: string;
+    addTwo: string;
+  };
+  filter: {
+    demolished: string;
+    threatened: string;
+    saved: string;
+    search: string;
+  };
+  sort: {
+    added: string;
+    buildYear: string;
+    demolitionYear: string;
+  };
+}
