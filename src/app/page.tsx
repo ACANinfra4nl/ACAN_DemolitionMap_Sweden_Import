@@ -18,7 +18,11 @@ export default async function ManifestPage() {
   if (isDraftMode && readToken) {
     return (
       <PreviewProvider token={readToken}>
-        <PreviewManifestPageContent data={data} query={manifestQuery} />
+        <PreviewManifestPageContent
+          data={data}
+          query={manifestQuery}
+          dict={dict}
+        />
       </PreviewProvider>
     );
   }
