@@ -1,11 +1,13 @@
 import { Navigation } from "@/components/Navigation";
+import { getDictionary } from "@/lib/dictionaries";
 import Link from "next/link";
 
-export default function NotFound() {
+export default async function NotFound() {
+  const dict = await getDictionary();
   return (
     <>
       <header className="pointer-events-none">
-        <Navigation />
+        <Navigation dict={dict} />
       </header>
       <main className="mx-5">
         <div className="mt-column grid grid-cols-6 gap-10">
