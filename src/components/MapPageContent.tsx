@@ -19,8 +19,9 @@ export const MapPageContent: FC<
       type: "FeatureCollection";
       features: Feature<Point, FeatureBuilding>[];
     };
+    dict: Dictionary;
   }
-> = ({ confirmationMessage, errorMessage, buildings }) => {
+> = ({ confirmationMessage, errorMessage, buildings, dict }) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -119,13 +120,28 @@ export const MapPageContent: FC<
   return (
     <>
       <header className="col-span-12 col-start-1 row-start-1">
-        <Navigation />
+        <Navigation dict={dict} />
       </header>
       <main className="col-span-12 col-start-1 row-start-2 grid w-full grid-cols-1 grid-rows-[auto_1fr]">
         <div className="col-start-1 row-start-1 mx-5 flex gap-2 pb-2">
-          <FilterButton state="riven" onClick={setFilter} filter={filter} />
-          <FilterButton state="hotad" onClick={setFilter} filter={filter} />
-          <FilterButton state="räddad" onClick={setFilter} filter={filter} />
+          <FilterButton
+            state="riven"
+            onClick={setFilter}
+            filter={filter}
+            label={dict.filter.demolished}
+          />
+          <FilterButton
+            state="hotad"
+            onClick={setFilter}
+            filter={filter}
+            label={dict.filter.threatened}
+          />
+          <FilterButton
+            state="räddad"
+            onClick={setFilter}
+            filter={filter}
+            label={dict.filter.saved}
+          />
         </div>
         <div className="relative col-start-1 row-start-2 mx-5 mb-5">
           <div className="absolute bottom-12 left-5 z-10 sm:bottom-[40px]">
@@ -134,7 +150,8 @@ export const MapPageContent: FC<
                 "Välj plats på kartan"
               ) : (
                 <>
-                  Lägg till<span className="hidden sm:inline"> byggnad</span>
+                  {dict.nav.addOne}
+                  <span className="hidden sm:inline"> {dict.nav.addTwo}</span>
                 </>
               )}
             </Button>

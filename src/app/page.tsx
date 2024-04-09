@@ -5,6 +5,7 @@ import { manifestQuery } from "../../sanity/lib/queries";
 import { readToken, sanityFetch } from "@/lib/sanityFetch";
 import { ManifestPageContent } from "@/components/ManifestPageContent";
 import { PreviewManifestPageContent } from "@/components/PreviewManifestPageContent";
+import { getDictionary } from "@/lib/dictionaries";
 
 export default async function ManifestPage() {
   const data = await sanityFetch<SanityDocument<ManifestDocumentType>>({
@@ -12,6 +13,7 @@ export default async function ManifestPage() {
     tags: ["manifest"],
   });
   const isDraftMode = draftMode().isEnabled;
+  const dict = await getDictionary();
 
   if (isDraftMode && readToken) {
     return (
@@ -21,5 +23,5 @@ export default async function ManifestPage() {
     );
   }
 
-  return <ManifestPageContent data={data} />;
+  return <ManifestPageContent data={data} dict={dict} />;
 }

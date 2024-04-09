@@ -3,6 +3,7 @@ import { sanityFetch } from "@/lib/sanityFetch";
 import { buildingsQuery, settingsQuery } from "../../../sanity/lib/queries";
 import { Suspense } from "react";
 import { toFeature } from "@/lib/toFeature";
+import { getDictionary } from "@/lib/dictionaries";
 
 export const revalidate = 3600;
 
@@ -17,6 +18,8 @@ export default async function MapPage() {
     tags: ["building"],
   });
 
+  const dict = await getDictionary();
+
   // transform to features
   const features = buildings.map(toFeature);
   return (
@@ -25,6 +28,7 @@ export default async function MapPage() {
         <MapPageContent
           {...newBuildingTexts}
           buildings={{ type: "FeatureCollection", features }}
+          dict={dict}
         />
       </Suspense>
     </div>

@@ -10,7 +10,7 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 
   return {
-    title: "Rivningskartan",
+    title: "Rivningskartan", //this might need to be set in settings in sanity
     description: settings.seo.description,
     openGraph: {
       images: [settings.seo.image.asset.url],

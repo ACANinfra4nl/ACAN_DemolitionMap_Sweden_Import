@@ -3,6 +3,7 @@ import { sanityFetch } from "@/lib/sanityFetch";
 import { Suspense } from "react";
 import { buildingsQuery } from "../../../sanity/lib/queries";
 import { toFeature } from "@/lib/toFeature";
+import { getDictionary } from "@/lib/dictionaries";
 
 export const revalidate = 3600;
 
@@ -14,9 +15,14 @@ export default async function ListPage() {
 
   // transform to features
   const features = buildings.map(toFeature);
+
+  const dict = await getDictionary();
   return (
     <Suspense>
-      <ListPageContent buildings={{ type: "FeatureCollection", features }} />
+      <ListPageContent
+        buildings={{ type: "FeatureCollection", features }}
+        dict={dict}
+      />
     </Suspense>
   );
 }

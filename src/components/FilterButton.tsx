@@ -7,7 +7,8 @@ export const FilterButton: FC<{
   state: "riven" | "hotad" | "räddad";
   filter?: string;
   onClick: (state?: string) => void;
-}> = ({ state, filter, onClick }) => {
+  label: string;
+}> = ({ state, filter, onClick, label }) => {
   const handleClick = useCallback(
     () => onClick(filter === state ? undefined : state),
     [state, filter],
@@ -21,7 +22,7 @@ export const FilterButton: FC<{
       onClick={handleClick}
     >
       <StateIcon state={state} />
-      {state}
+      {label}
     </button>
   );
 };
