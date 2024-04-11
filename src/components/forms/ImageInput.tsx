@@ -21,7 +21,7 @@ const filterFileList = (files: FileList, img: ImageType): FileList => {
   return dataTransfer.files;
 };
 
-export const ImageInput: FC = () => {
+export const ImageInput: FC<{ text: string }> = ({ text }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const labelRef = useRef<HTMLLabelElement>(null);
   const [images, setImages] = useState<ImageType[]>([]);
@@ -117,9 +117,7 @@ export const ImageInput: FC = () => {
           </figure>
         ))
       ) : (
-        <span className="acan-text-body">
-          Dra och släpp dina bilder här för att ladda upp
-        </span>
+        <span className="acan-text-body first-letter:uppercase">{text}</span>
       )}
     </label>
   );

@@ -12,7 +12,7 @@ export default async function NotFound() {
       <main className="mx-5">
         <div className="mt-column grid grid-cols-6 gap-10">
           <div className="acan-text-intro col-span-6 sm:col-span-4">
-            <h1>Sidan finns inte.</h1>
+            <h1>{dict.notFound}.</h1>
           </div>
         </div>
       </main>

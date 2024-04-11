@@ -5,6 +5,7 @@ interface ShareButtonProps {
   state: string | boolean | undefined;
   onSuccess: (type: "share" | "clipboard") => void;
   onError: (reason: any) => void;
+  content: DetailsPanel;
 }
 
 export const ShareButton: FC<PropsWithChildren<ShareButtonProps>> = ({
@@ -12,6 +13,7 @@ export const ShareButton: FC<PropsWithChildren<ShareButtonProps>> = ({
   children,
   onSuccess,
   onError,
+  content,
 }) => {
   const handleShare = useCallback(() => {
     if (typeof navigator.share === "function") {
@@ -31,15 +33,19 @@ export const ShareButton: FC<PropsWithChildren<ShareButtonProps>> = ({
     <button
       onClick={handleShare}
       className={classNames(
-        "text-body hover:text-acan-blue focus-visible:text-acan-blue",
+        "text-body first-letter:uppercase hover:text-acan-blue focus-visible:text-acan-blue",
         state === undefined && "underline",
       )}
       disabled={state !== undefined}
     >
       {state === "clipboard" ? (
-        <span className="text-saved">Länk kopierad</span>
+        <span className="text-saved first-letter:uppercase">
+          {content.linkCopied}
+        </span>
       ) : state === false ? (
-        <span className="text-demolished">Delningen misslyckades</span>
+        <span className="text-demolished first-letter:uppercase">
+          {content.shareFailed}
+        </span>
       ) : (
         children
       )}

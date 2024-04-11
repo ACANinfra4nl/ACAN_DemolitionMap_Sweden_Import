@@ -128,19 +128,19 @@ export const MapPageContent: FC<
             state="riven"
             onClick={setFilter}
             filter={filter}
-            label={dict.filter.demolished}
+            label={dict.states.demolished}
           />
           <FilterButton
             state="hotad"
             onClick={setFilter}
             filter={filter}
-            label={dict.filter.threatened}
+            label={dict.states.threatened}
           />
           <FilterButton
             state="räddad"
             onClick={setFilter}
             filter={filter}
-            label={dict.filter.saved}
+            label={dict.states.saved}
           />
         </div>
         <div className="relative col-start-1 row-start-2 mx-5 mb-5">
@@ -180,6 +180,7 @@ export const MapPageContent: FC<
           <DetailsPanel
             properties={selectedFeature.properties}
             onClose={clearSelectedFeature}
+            content={dict}
           />
         )}
       </Transition>
@@ -199,6 +200,7 @@ export const MapPageContent: FC<
             isSaving={savingBuilding}
             onCancel={handleCancelFeature}
             onSubmit={handleSubmitFeature}
+            dict={dict}
           />
         )}
         {addedBuilding === true && (

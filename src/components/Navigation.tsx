@@ -43,9 +43,7 @@ export const Navigation: FC<{ scaleLogo?: boolean; dict: Dictionary }> = ({
           href="/karta"
           className="pointer-events-auto outline-none hover:text-acan-blue focus-visible:text-acan-blue"
           dangerouslySetInnerHTML={{ __html: dict.nav.title }}
-        >
-          {/*     Rivnings&shy;kartan */}
-        </Link>
+        ></Link>
       </div>
       <div className="col-span-2 flex flex-col">
         <div>

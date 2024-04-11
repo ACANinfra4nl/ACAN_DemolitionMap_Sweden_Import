@@ -23,9 +23,14 @@ const Detail: FC<{ label: string; value: string | number | ReactNode }> = ({
 interface DetailsProps {
   properties: FeatureBuilding;
   onClose: () => void;
+  content: Dictionary;
 }
 
-export const DetailsPanel: FC<DetailsProps> = ({ properties, onClose }) => {
+export const DetailsPanel: FC<DetailsProps> = ({
+  properties,
+  onClose,
+  content,
+}) => {
   const panelEl = useRef<HTMLDivElement>(null);
   const [shareSuccessState, setShareSuccessState] = useState<
     string | false | undefined
@@ -69,34 +74,39 @@ export const DetailsPanel: FC<DetailsProps> = ({ properties, onClose }) => {
 
       <div className="min-w-0">
         <BuildingHeading building={properties} showYear />
-        <DetailsTable building={properties} />
+        <DetailsTable building={properties} content={content.building} />
         <div className="prose text-body font-normal">
           {properties.description && (
-            <p className="whitespace-pre-line break-words">
-              <span className="font-bold">Berättelser om byggnaden:</span>{" "}
+            <p className="whitespace-pre-line break-words first-letter:uppercase">
+              <span className="font-bold">
+                {content.detailsPanel.description}:
+              </span>{" "}
               <Linkify>{properties.description}</Linkify>
             </p>
           )}
           {properties.demolitionCause && (
-            <p className="whitespace-pre-line break-words">
-              <span className="font-bold">Anledning till rivning:</span>{" "}
+            <p className="whitespace-pre-line break-words first-letter:uppercase">
+              <span className="font-bold">
+                {content.detailsPanel.demolitionCause}:
+              </span>{" "}
               <Linkify>{properties.demolitionCause}</Linkify>
             </p>
           )}
           {properties.sources && (
-            <p className="whitespace-pre-line break-words">
-              <span className="font-bold">Bildkällor:</span>{" "}
+            <p className="whitespace-pre-line break-words first-letter:uppercase">
+              <span className="font-bold">{content.detailsPanel.sources}:</span>{" "}
               <Linkify>{properties.sources}</Linkify>
             </p>
           )}
         </div>
-        <div className="mt-8 flex justify-between gap-4">
+        <div className="mt-8 flex justify-between gap-4 first-letter:uppercase">
           <ShareButton
             onSuccess={handleShareSuccess}
             onError={handleShareError}
             state={shareSuccessState}
+            content={content.detailsPanel}
           >
-            Dela
+            {content.detailsPanel.share}
           </ShareButton>
           <Link
             href={`mailto:rivningskartan@architectscan.se?subject=${encodeURIComponent(
@@ -106,9 +116,9 @@ export const DetailsPanel: FC<DetailsProps> = ({ properties, onClose }) => {
                 properties.city,
               )}`,
             )}`}
-            className="text-body underline hover:text-acan-blue focus-visible:text-acan-blue"
+            className="text-body underline first-letter:uppercase hover:text-acan-blue focus-visible:text-acan-blue"
           >
-            Lägg till berättelse
+            {content.detailsPanel.add}
           </Link>
         </div>
       </div>

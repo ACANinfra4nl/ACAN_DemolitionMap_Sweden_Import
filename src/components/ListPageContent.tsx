@@ -172,6 +172,7 @@ export const ListPageContent: FC<{
                 <DetailsPanel
                   properties={selectedBuilding}
                   onClose={handleClearSelection}
+                  content={dict}
                 />
               )}
             </Transition.Child>
@@ -193,19 +194,19 @@ export const ListPageContent: FC<{
                 state="riven"
                 filter={stateFilter}
                 onClick={setStateFilter}
-                label={dict.filter.demolished}
+                label={dict.states.demolished}
               />
               <FilterButton
                 state="hotad"
                 filter={stateFilter}
                 onClick={setStateFilter}
-                label={dict.filter.threatened}
+                label={dict.states.threatened}
               />
               <FilterButton
                 state="räddad"
                 filter={stateFilter}
                 onClick={setStateFilter}
-                label={dict.filter.saved}
+                label={dict.states.saved}
               />
             </div>
             <div className="relative col-span-3 items-center xs:col-span-2 md:col-span-1 md:col-start-2">
@@ -216,7 +217,7 @@ export const ListPageContent: FC<{
                 name="filter"
                 className="peer w-full border-b border-current bg-transparent pl-6 uppercase outline-none placeholder:uppercase placeholder:text-current focus:border-b-acan-blue"
                 onChange={handleFilterChange}
-                placeholder={dict.filter.search}
+                placeholder={dict.search}
               />
               <svg
                 xmlns="http://www.w3.org/2000/svg"
