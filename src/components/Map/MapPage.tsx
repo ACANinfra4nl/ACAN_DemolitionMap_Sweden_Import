@@ -5,9 +5,7 @@ import { Suspense } from "react";
 import { toFeature } from "@/lib/toFeature";
 import { getDictionary } from "@/lib/dictionaries";
 
-export const revalidate = 3600;
-
-export default async function MapPage() {
+export const MapPage = async () => {
   const newBuildingTexts = await sanityFetch<SettingsType>({
     query: settingsQuery,
     tags: ["settings"],
@@ -33,4 +31,4 @@ export default async function MapPage() {
       </Suspense>
     </div>
   );
-}
+};

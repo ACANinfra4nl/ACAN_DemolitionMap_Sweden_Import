@@ -40,19 +40,19 @@ export const Navigation: FC<{ scaleLogo?: boolean; dict: Dictionary }> = ({
     <nav className="acan-text-menu grid w-full grid-cols-6 items-start justify-between gap-10 p-5">
       <div className="col-span-2">
         <Link
-          href="/karta"
+          href={`/${dict.nav.map}`}
           className="pointer-events-auto outline-none hover:text-acan-blue focus-visible:text-acan-blue"
           dangerouslySetInnerHTML={{ __html: dict.nav.title }}
         ></Link>
       </div>
       <div className="col-span-2 flex flex-col">
         <div>
-          <NavLink href="/karta" path={path}>
+          <NavLink href={`/${dict.nav.map}`} path={path}>
             {dict.nav.map}
           </NavLink>
         </div>
         <div>
-          <NavLink href="/lista" path={path}>
+          <NavLink href={`/${dict.nav.list}`} path={path}>
             {dict.nav.list}
           </NavLink>
         </div>
@@ -62,7 +62,7 @@ export const Navigation: FC<{ scaleLogo?: boolean; dict: Dictionary }> = ({
           </NavLink>
         </div>
         <div>
-          <NavLink href="/karta?add" path={path} inverted>
+          <NavLink href={`/${dict.nav.map}?add`} path={path} inverted>
             {dict.nav.addOne}
             <span className="hidden sm:inline"> {dict.nav.addTwo}</span>
           </NavLink>

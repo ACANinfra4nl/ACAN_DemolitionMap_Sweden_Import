@@ -1,13 +1,11 @@
 import { ListPageContent } from "@/components/ListPageContent";
 import { sanityFetch } from "@/lib/sanityFetch";
 import { Suspense } from "react";
-import { buildingsQuery } from "../../../sanity/lib/queries";
+import { buildingsQuery } from "../../sanity/lib/queries";
 import { toFeature } from "@/lib/toFeature";
 import { getDictionary } from "@/lib/dictionaries";
 
-export const revalidate = 3600;
-
-export default async function ListPage() {
+export const ListPage = async () => {
   const buildings = await sanityFetch<FeatureBuilding[]>({
     query: buildingsQuery,
     tags: ["building"],
@@ -25,4 +23,4 @@ export default async function ListPage() {
       />
     </Suspense>
   );
-}
+};

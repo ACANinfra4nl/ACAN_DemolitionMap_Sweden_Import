@@ -7,7 +7,6 @@ import { AcanLogoText } from "./AcanLogoText";
 import { IntroText } from "./IntroText";
 import { Navigation } from "./Navigation";
 import Link from "next/link";
-import { LatestSection } from "./LatestSection";
 
 export const ManifestPageContent: FC<{
   data: SanityDocument<ManifestDocumentType>;
