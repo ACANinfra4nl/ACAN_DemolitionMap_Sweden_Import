@@ -1,6 +1,6 @@
 import { type TitledListValue } from "sanity";
 
-export const categories: TitledListValue[] = [
+export const categories: TitledListValue<string>[] = [
   { title: "residence", value: "bostad" },
   { title: "office", value: "kontor" },
   { title: "commercial", value: "kommersiell" },
