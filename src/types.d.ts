@@ -125,6 +125,10 @@ interface Dictionary {
   detailsPanel: DetailsPanel;
   notFound: string;
   building: Building;
+  slugs: {
+    map: string;
+    list: string;
+  };
 }
 
 interface Categories {

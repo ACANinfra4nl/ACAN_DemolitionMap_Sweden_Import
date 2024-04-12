@@ -74,5 +74,9 @@
     "demolitionYear": "rivningsår",
     "category": "kategori"
   },
-  "notFound": "sidan finns inte"
+  "notFound": "sidan finns inte",
+  "slugs": {
+    "map": "karta",
+    "list": "lista"
+  }
 }
