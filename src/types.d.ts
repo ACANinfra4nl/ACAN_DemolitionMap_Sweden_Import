@@ -120,7 +120,7 @@ interface Dictionary {
     demolitionYear: string;
   };
   categories: Category;
-  states: State;
+  states: States;
   newFeatureForm: NewFeatureForm;
   detailsPanel: DetailsPanel;
   notFound: string;

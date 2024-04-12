@@ -172,7 +172,7 @@ export const ListPageContent: FC<{
                 <DetailsPanel
                   properties={selectedBuilding}
                   onClose={handleClearSelection}
-                  content={dict}
+                  dict={dict}
                 />
               )}
             </Transition.Child>
@@ -191,22 +191,22 @@ export const ListPageContent: FC<{
           <div className="acan-text-menu fixed top-header-s z-10 grid w-full grid-cols-[auto_1fr_auto] gap-x-10 gap-y-3 px-5 sm:top-header">
             <div className="col-span-3 flex gap-2 md:col-span-1">
               <FilterButton
-                state="riven"
+                state={dict.states.demolished}
                 filter={stateFilter}
                 onClick={setStateFilter}
-                label={dict.states.demolished}
+                dictStates={dict.states}
               />
               <FilterButton
-                state="hotad"
+                state={dict.states.threatened}
                 filter={stateFilter}
                 onClick={setStateFilter}
-                label={dict.states.threatened}
+                dictStates={dict.states}
               />
               <FilterButton
-                state="räddad"
+                state={dict.states.saved}
                 filter={stateFilter}
                 onClick={setStateFilter}
-                label={dict.states.saved}
+                dictStates={dict.states}
               />
             </div>
             <div className="relative col-span-3 items-center xs:col-span-2 md:col-span-1 md:col-start-2">
@@ -277,7 +277,11 @@ export const ListPageContent: FC<{
                       state={building.properties.state}
                       sizes="(min-width: 1600px) 16vw, (min-width: 1024px) 25vw, (min-width: 768px) 33vw, (min-width: 640px) 49vw, 99vw"
                     />
-                    <BuildingHeading building={building.properties} list />
+                    <BuildingHeading
+                      building={building.properties}
+                      list
+                      dictStates={dict.states}
+                    />
                   </a>
                 </li>
               ))}

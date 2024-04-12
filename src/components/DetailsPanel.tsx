@@ -23,13 +23,13 @@ const Detail: FC<{ label: string; value: string | number | ReactNode }> = ({
 interface DetailsProps {
   properties: FeatureBuilding;
   onClose: () => void;
-  content: Dictionary;
+  dict: Dictionary;
 }
 
 export const DetailsPanel: FC<DetailsProps> = ({
   properties,
   onClose,
-  content,
+  dict,
 }) => {
   const panelEl = useRef<HTMLDivElement>(null);
   const [shareSuccessState, setShareSuccessState] = useState<
@@ -73,13 +73,17 @@ export const DetailsPanel: FC<DetailsProps> = ({
       </div>
 
       <div className="min-w-0">
-        <BuildingHeading building={properties} showYear />
-        <DetailsTable building={properties} content={content.building} />
+        <BuildingHeading
+          building={properties}
+          showYear
+          dictStates={dict.states}
+        />
+        <DetailsTable building={properties} content={dict.building} />
         <div className="prose text-body font-normal">
           {properties.description && (
             <p className="whitespace-pre-line break-words first-letter:uppercase">
               <span className="font-bold">
-                {content.detailsPanel.description}:
+                {dict.detailsPanel.description}:
               </span>{" "}
               <Linkify>{properties.description}</Linkify>
             </p>
@@ -87,14 +91,14 @@ export const DetailsPanel: FC<DetailsProps> = ({
           {properties.demolitionCause && (
             <p className="whitespace-pre-line break-words first-letter:uppercase">
               <span className="font-bold">
-                {content.detailsPanel.demolitionCause}:
+                {dict.detailsPanel.demolitionCause}:
               </span>{" "}
               <Linkify>{properties.demolitionCause}</Linkify>
             </p>
           )}
           {properties.sources && (
             <p className="whitespace-pre-line break-words first-letter:uppercase">
-              <span className="font-bold">{content.detailsPanel.sources}:</span>{" "}
+              <span className="font-bold">{dict.detailsPanel.sources}:</span>{" "}
               <Linkify>{properties.sources}</Linkify>
             </p>
           )}
@@ -104,9 +108,9 @@ export const DetailsPanel: FC<DetailsProps> = ({
             onSuccess={handleShareSuccess}
             onError={handleShareError}
             state={shareSuccessState}
-            content={content.detailsPanel}
+            content={dict.detailsPanel}
           >
-            {content.detailsPanel.share}
+            {dict.detailsPanel.share}
           </ShareButton>
           <Link
             href={`mailto:rivningskartan@architectscan.se?subject=${encodeURIComponent(
@@ -118,7 +122,7 @@ export const DetailsPanel: FC<DetailsProps> = ({
             )}`}
             className="text-body underline first-letter:uppercase hover:text-acan-blue focus-visible:text-acan-blue"
           >
-            {content.detailsPanel.add}
+            {dict.detailsPanel.add}
           </Link>
         </div>
       </div>
