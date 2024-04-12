@@ -50,7 +50,7 @@ export const DetailsPanel: FC<DetailsProps> = ({
   return (
     <div className="grid grid-rows-[auto_auto_1fr] p-5" ref={panelEl}>
       <div className="z-10 col-start-1 row-start-1 flex justify-end">
-        <CloseButton onClick={onClose} />
+        <CloseButton onClick={onClose} close={dict.newFeatureForm.close} />
       </div>
 
       <div className="col-start-1 row-span-2 row-start-1 mb-2">

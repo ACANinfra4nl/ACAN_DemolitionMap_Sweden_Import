@@ -176,6 +176,7 @@ interface NewFeatureForm {
   accept: string;
   cancel: string;
   save: string;
+  close: string;
 }
 
 interface Building {
