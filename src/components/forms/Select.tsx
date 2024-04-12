@@ -16,7 +16,7 @@ export const Select: FC<
   > & {
     name: string;
     label: string;
-    options: TitledListValue[];
+    options: TitledListValue<string>[];
     formList: Categories | States;
   }
 > = ({ label, onChange, autoFocus, options, formList, ...props }) => {
@@ -43,7 +43,11 @@ export const Select: FC<
         <option></option>
 
         {options.map((opt, i) => (
-          <option className="first-letter:uppercase" key={opt.title}>
+          <option
+            className="first-letter:uppercase"
+            key={opt.title}
+            value={opt.value ?? ""}
+          >
             {formList[opt.title as keyof typeof formList]}
           </option>
         ))}

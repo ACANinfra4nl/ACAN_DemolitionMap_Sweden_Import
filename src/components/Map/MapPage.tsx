@@ -19,7 +19,7 @@ export const MapPage = async () => {
   const dict = await getDictionary();
 
   // transform to features
-  const features = buildings.map(toFeature);
+  const features = buildings.map((b) => toFeature(b, dict));
   return (
     <div className="grid h-screen grid-cols-12 grid-rows-[auto_1fr]">
       <Suspense>

@@ -10,11 +10,10 @@ export const ListPage = async () => {
     query: buildingsQuery,
     tags: ["building"],
   });
-
-  // transform to features
-  const features = buildings.map(toFeature);
-
   const dict = await getDictionary();
+  // transform to features
+  const features = buildings.map((b) => toFeature(b, dict));
+
   return (
     <Suspense>
       <ListPageContent
