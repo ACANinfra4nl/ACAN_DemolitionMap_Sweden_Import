@@ -7,21 +7,21 @@ import { emailValidator } from "../lib/validation";
 export const building: SchemaTypeDefinition = {
   name: "building",
   type: "document",
-  title: "Byggnad",
-  description: "Rivning rapporterad av användare",
+  title: "Building",
+  description: "Demolition reported by user",
   fields: [
     {
       name: "reviewed",
       type: "boolean",
-      title: "Granskad",
+      title: "Reviewed",
       description:
-        "Granskade byggnader visas på kartan och i listan på hemsidan.",
+        "The reviewed buildings are displayed on the map and in the list on the website.",
       initialValue: false,
     },
     {
       name: "location",
       type: "geopoint",
-      title: "Plats",
+      title: "Location",
       validation: (Rule) => Rule.required(),
       components: {
         input: MapInput,
@@ -30,7 +30,7 @@ export const building: SchemaTypeDefinition = {
     {
       name: "category",
       type: "string",
-      title: "Kategori",
+      title: "Category",
       options: {
         list: categories,
       },
@@ -39,38 +39,38 @@ export const building: SchemaTypeDefinition = {
     {
       name: "state",
       type: "string",
-      title: "Status",
+      title: "State",
       options: {
         list: states,
         layout: "radio",
       },
       validation: (Rule) => Rule.required(),
     },
-    { name: "name", type: "string", title: "Byggnadens namn" },
+    { name: "name", type: "string", title: "The name of the building" },
     {
       name: "address",
       type: "string",
-      title: "Adress",
+      title: "Address",
     },
     {
       name: "postcode",
       type: "string",
-      title: "Postnummer",
+      title: "Postcode",
     },
     {
       name: "city",
       type: "string",
-      title: "Postort",
+      title: "City",
     },
     {
       name: "blockName",
       type: "string",
-      title: "Kvartersnamn",
+      title: "Block name",
     },
     {
       name: "propertyDesignation",
       type: "string",
-      title: "Fastighetsbeteckning",
+      title: "Property designation",
     },
     {
       name: "size",
@@ -81,8 +81,8 @@ export const building: SchemaTypeDefinition = {
     {
       name: "boundCO2",
       type: "number",
-      title: "Inbunden CO₂",
-      description: "Inbunden CO₂ i ton", // TODO: what unit to use for this field? kg, ton kton?
+      title: "Bound CO₂",
+      description: "Bound CO₂ in tons", // TODO: what unit to use for this field? kg, ton kton?
     },
     { name: "architect", type: "string", title: "Arkitekt" },
     { name: "propertyOwner", type: "string", title: "Fastighetsägare" },

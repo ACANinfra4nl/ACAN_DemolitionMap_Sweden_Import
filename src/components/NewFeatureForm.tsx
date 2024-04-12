@@ -65,7 +65,7 @@ export const NewFeatureForm = ({
   // );
   return (
     <div ref={panelEl}>
-      <CloseButton onClick={onCancel} />
+      <CloseButton onClick={onCancel} close={dict.newFeatureForm.close} />
       <form onSubmit={onSubmit} autoComplete="off">
         <fieldset
           disabled={isSaving}
@@ -229,8 +229,7 @@ export const NewFeatureForm = ({
           </div>
           <div className="hidden" aria-hidden>
             <label className="first-letter:uppercase" htmlFor="accept">
-              ange din e-post-adress om du vill få en notis när ditt bidrag
-              granskats.
+              {dict.newFeatureForm.accept}
             </label>
             <input type="checkbox" name="accept" id="accept" />
           </div>

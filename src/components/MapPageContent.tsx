@@ -125,22 +125,22 @@ export const MapPageContent: FC<
       <main className="col-span-12 col-start-1 row-start-2 grid w-full grid-cols-1 grid-rows-[auto_1fr]">
         <div className="col-start-1 row-start-1 mx-5 flex gap-2 pb-2">
           <FilterButton
-            state="riven"
+            state={dict.states.demolished}
             onClick={setFilter}
             filter={filter}
-            label={dict.states.demolished}
+            dictStates={dict.states}
           />
           <FilterButton
-            state="hotad"
+            state={dict.states.threatened}
             onClick={setFilter}
             filter={filter}
-            label={dict.states.threatened}
+            dictStates={dict.states}
           />
           <FilterButton
-            state="räddad"
+            state={dict.states.saved}
             onClick={setFilter}
             filter={filter}
-            label={dict.states.saved}
+            dictStates={dict.states}
           />
         </div>
         <div className="relative col-start-1 row-start-2 mx-5 mb-5">
@@ -180,7 +180,7 @@ export const MapPageContent: FC<
           <DetailsPanel
             properties={selectedFeature.properties}
             onClose={clearSelectedFeature}
-            content={dict}
+            dict={dict}
           />
         )}
       </Transition>
