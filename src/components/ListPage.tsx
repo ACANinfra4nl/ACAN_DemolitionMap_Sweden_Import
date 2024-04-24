@@ -11,6 +11,7 @@ export const ListPage = async () => {
     tags: ["building"],
   });
   const dict = await getDictionary();
+
   // transform to features
   const features = buildings.map((b) => toFeature(b, dict));
 
