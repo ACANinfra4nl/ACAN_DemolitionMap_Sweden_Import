@@ -17,7 +17,7 @@ export const StateIcon: FC<{ state: string; dictStates: States }> = ({
         ? "bg-saved"
         : "bg-gray-unknown",
     )}
-    aria-label={capitalize(state)}
-    title={capitalize(state)}
+    aria-label={state}
+    title={state}
   ></div>
 );

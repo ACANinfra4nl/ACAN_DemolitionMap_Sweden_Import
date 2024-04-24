@@ -65,7 +65,7 @@ export const NewFeatureForm = ({
   // );
   return (
     <div ref={panelEl}>
-      <CloseButton onClick={onCancel} close={dict.newFeatureForm.close} />
+      <CloseButton onClick={onCancel} close={dict.ariaLabels.close} />
       <form onSubmit={onSubmit} autoComplete="off">
         <fieldset
           disabled={isSaving}
@@ -77,7 +77,10 @@ export const NewFeatureForm = ({
           <input type="hidden" name="lat" value={latLng.lat} />
           <input type="hidden" name="lng" value={latLng.lng} />
           <div>
-            <ImageInput text={dict.newFeatureForm.imageInput} />
+            <ImageInput
+              text={dict.newFeatureForm.imageInput}
+              ariaLabels={dict.ariaLabels}
+            />
           </div>
 
           <div>

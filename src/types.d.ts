@@ -130,6 +130,14 @@ interface Dictionary {
     map: string;
     list: string;
   };
+  ariaLabels: {
+    close: string;
+    filter: string;
+    previous: string;
+    next: string;
+    image: string;
+    remove: string;
+  };
 }
 
 interface Categories {
@@ -181,7 +189,6 @@ interface NewFeatureForm {
   accept: string;
   cancel: string;
   save: string;
-  close: string;
 }
 
 interface Building {

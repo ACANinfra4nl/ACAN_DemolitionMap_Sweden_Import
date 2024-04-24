@@ -211,7 +211,7 @@ export const ListPageContent: FC<{
             </div>
             <div className="relative col-span-3 items-center xs:col-span-2 md:col-span-1 md:col-start-2">
               <input
-                aria-label="Filtrera"
+                aria-label={dict.ariaLabels.filter}
                 id="filter"
                 type="text"
                 name="filter"
