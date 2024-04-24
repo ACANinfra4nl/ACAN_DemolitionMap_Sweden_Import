@@ -96,6 +96,7 @@ interface MessageType {
 }
 
 interface SettingsType {
+  siteTitle: string;
   confirmationMessage: MessageType;
   errorMessage: MessageType;
   seo: {

@@ -55,7 +55,7 @@ export const building: SchemaTypeDefinition = {
     {
       name: "postcode",
       type: "string",
-      title: "Postcode",
+      title: "Postal code",
     },
     {
       name: "city",
@@ -75,8 +75,8 @@ export const building: SchemaTypeDefinition = {
     {
       name: "size",
       type: "number",
-      title: "Storlek",
-      description: "Storlek i m²",
+      title: "Size",
+      description: "Size in m²",
     },
     {
       name: "boundCO2",
@@ -84,60 +84,60 @@ export const building: SchemaTypeDefinition = {
       title: "Bound CO₂",
       description: "Bound CO₂ in tons", // TODO: what unit to use for this field? kg, ton kton?
     },
-    { name: "architect", type: "string", title: "Arkitekt" },
-    { name: "propertyOwner", type: "string", title: "Fastighetsägare" },
+    { name: "architect", type: "string", title: "Architect" },
+    { name: "propertyOwner", type: "string", title: "Property owner" },
     {
       name: "buildYear",
       type: "number",
-      title: "Byggår",
+      title: "Build year",
       validation: (Rule) =>
         Rule.required().min(0).max(new Date().getFullYear()),
     },
     {
       name: "demolitionYear",
       type: "number",
-      title: "Rivningsår",
+      title: "Demolition year",
       validation: (Rule) =>
         Rule.min(0)
           .max(9999)
           .custom<number | undefined>((value, context) =>
             context.document?.state === "riven" && !value
-              ? "Vänligen fyll i rivningsår"
+              ? "Demolition year is required for demolished buildings"
               : true,
           ),
     },
     {
       name: "description",
       type: "text",
-      title: "Berättelser om byggnaden",
+      title: "Stories about the building",
     },
     {
       name: "demolitionCause",
       type: "text",
-      title: "Anledning till rivning",
+      title: "Demolition cause",
     },
     {
       name: "images",
       type: "array",
-      title: "Bilder",
+      title: "Images",
       of: [{ type: "image" }],
     },
     {
       name: "sources",
       type: "text",
-      title: "BildKällor",
+      title: "Image sources",
       rows: 4,
     },
     {
       name: "contributor",
       type: "object",
-      title: "Avsändare",
+      title: "Contributor",
       fields: [
-        { name: "name", type: "string", title: "Namn" },
+        { name: "name", type: "string", title: "Name" },
         {
           name: "email",
           type: "string",
-          title: "E-post",
+          title: "Email",
           validation: (Rule) => Rule.custom(emailValidator),
         },
       ],
@@ -158,7 +158,7 @@ export const building: SchemaTypeDefinition = {
         selection;
       return {
         title: blockName ? blockName : `${address}, ${postcode} ${city}`,
-        subtitle: category,
+        subtitle: categories.find((c) => c.value === category)?.title,
         media: (
           <span
             style={{

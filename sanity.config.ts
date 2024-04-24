@@ -41,7 +41,7 @@ export default defineConfig({
           .title("Innehåll")
           .items([
             S.listItem()
-              .title("Granskade byggnader")
+              .title("Reviewed buildings")
               .id("reviewed")
               .icon(ReviewedBuildingIcon)
               .child(
@@ -50,7 +50,7 @@ export default defineConfig({
                 ),
               ),
             S.listItem()
-              .title("Ogranskade byggnader")
+              .title("Unreviewed buildings")
               .id("unreviewed")
               .icon(UnreviewedBuildingIcon)
               .child(
@@ -59,7 +59,7 @@ export default defineConfig({
                 ),
               ),
             S.listItem()
-              .title("Alla byggnader")
+              .title("All buildings")
               .id("buildings")
               .icon(BuildingIcon)
               .child(
@@ -79,7 +79,7 @@ export default defineConfig({
                   .views(createPreview(S)),
               ),
             S.listItem()
-              .title("Inställningar")
+              .title("Settings")
               .id("settings")
               .icon(SettingsIcon)
               .child(S.document().schemaType("settings").id("settings")),

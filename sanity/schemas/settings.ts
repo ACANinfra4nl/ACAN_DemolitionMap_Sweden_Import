@@ -6,21 +6,22 @@ export const settings: SchemaTypeDefinition = {
   type: "document",
   icon: SettingsIcon,
   fields: [
+    { name: "siteTitle", type: "string", title: "Site title" },
     {
       name: "confirmationMessage",
       type: "object",
-      title: "Bekräftelse",
+      title: "Confirmation message",
       fields: [
         {
           name: "heading",
           type: "string",
-          title: "Rubrik",
+          title: "Heading",
           validation: (Rule) => Rule.required(),
         },
         {
           name: "body",
           type: "array",
-          title: "Brödtext",
+          title: "Body",
           of: [{ type: "block" }],
           validation: (Rule) => Rule.required(),
         },
@@ -29,18 +30,18 @@ export const settings: SchemaTypeDefinition = {
     {
       name: "errorMessage",
       type: "object",
-      title: "Felmeddelande",
+      title: "Error message",
       fields: [
         {
           name: "heading",
           type: "string",
-          title: "Rubrik",
+          title: "Heading",
           validation: (Rule) => Rule.required(),
         },
         {
           name: "body",
           type: "array",
-          title: "Brödtext",
+          title: "Body",
           of: [{ type: "block" }],
           validation: (Rule) => Rule.required(),
         },
@@ -54,15 +55,16 @@ export const settings: SchemaTypeDefinition = {
         {
           name: "description",
           type: "text",
-          title: "Beskrivning",
-          description: "Beskrivning av sajten för sökmotorer, sökresultat osv.",
+          title: "Description",
+          description:
+            "Description of the site for search engines, search results, etc",
           validation: (Rule) => Rule.required(),
         },
         {
           name: "image",
           type: "image",
-          title: "Bild",
-          description: "Bild som används när sajten delas",
+          title: "Image",
+          description: "Image used when the site is shared",
           validation: (Rule) => Rule.required(),
         },
       ],
@@ -71,7 +73,7 @@ export const settings: SchemaTypeDefinition = {
   preview: {
     prepare() {
       return {
-        title: "Inställningar",
+        title: "Settings",
       };
     },
   },
