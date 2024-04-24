@@ -1,3 +1,6 @@
+import { categories } from "./categories";
+import { states } from "./states";
+
 export const translateState = <
   T extends {
     location: { _type?: string; lat: number; lng: number };
@@ -8,17 +11,16 @@ export const translateState = <
   properties: T,
   dict: Dictionary,
 ) => {
-  const translateValue = <
-    K extends keyof typeof dict.states | keyof typeof dict.categories,
-  >(
-    key: string,
-    dictionary: typeof dict.states | typeof dict.categories,
-  ) => dictionary[key as K];
-
   properties.state =
-    translateValue(properties.state, dict.states) || properties.state;
+    dict.states[
+      states.find((c) => c.value === properties.state)
+        ?.title as keyof typeof dict.states
+    ];
   properties.category =
-    translateValue(properties.category, dict.categories) || properties.category;
+    dict.categories[
+      categories.find((c) => c.value === properties.category)
+        ?.title as keyof typeof dict.categories
+    ];
 
   return properties;
 };
