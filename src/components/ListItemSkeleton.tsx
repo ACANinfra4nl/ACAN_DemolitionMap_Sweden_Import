@@ -11,7 +11,7 @@ export const ListItemSkeleton: FC = () => (
           <div className="h-3 w-full bg-gray-unknown"></div>
           <div className="h-3 w-full bg-gray-unknown"></div>
         </div>
-        {/* workaround for now */}
+        {/* workaround to enable build */}
         {/*        <StateIcon state="unknown" /> */}
       </div>
     </div>
