@@ -147,7 +147,7 @@ export const MapPageContent: FC<
           <div className="absolute bottom-12 left-5 z-10 sm:bottom-[40px]">
             <Button onClick={handleClickAddBuilding}>
               {isAdding ? (
-                "Välj plats på kartan"
+                dict.newFeatureForm.addLocation
               ) : (
                 <>
                   {dict.nav.addOne}

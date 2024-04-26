@@ -27,6 +27,7 @@
     "saved": "räddad"
   },
   "newFeatureForm": {
+    "addLocation": "Välj plats på kartan",
     "addBuilding": "lägg till byggnad",
     "imageInput": "dra och släpp dina bilder här för att ladda upp",
     "category": "kategori",

@@ -27,6 +27,7 @@
     "saved": "pelastettu"
   },
   "newFeatureForm": {
+    "addLocation": "Valitse paikka kartalta",
     "addBuilding": "lisää rakennus",
     "imageInput": "raahaa ja pudota kuvasi tähän",
     "category": "kategoria",

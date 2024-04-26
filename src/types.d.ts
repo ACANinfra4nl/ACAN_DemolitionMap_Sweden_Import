@@ -166,6 +166,7 @@ interface DetailsPanel {
 }
 
 interface NewFeatureForm {
+  addLocation: string;
   addBuilding: string;
   imageInput: string;
   category: string;

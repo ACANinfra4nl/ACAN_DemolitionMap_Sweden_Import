@@ -27,6 +27,7 @@
     "saved": "reddet"
   },
   "newFeatureForm": {
+    "addLocation": "Velg sted på kartet",
     "addBuilding": "legg til bygning",
     "imageInput": "dra og slipp bildene dine her for opplasting",
     "category": "kategori",
