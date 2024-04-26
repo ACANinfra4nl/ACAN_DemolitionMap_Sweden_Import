@@ -1,89 +1,89 @@
 {
   "nav": {
-    "title": "<p>rivnings&shy;kartan</p>",
-    "map": "karta",
-    "list": "lista",
-    "about": "om kartan",
-    "addOne": "lägg till",
-    "addTwo": "byggnad"
+    "title": "<p>rivings&shy;kart</p>",
+    "map": "kart",
+    "list": "liste",
+    "about": "om kartet",
+    "addOne": "legg til",
+    "addTwo": "bygning"
   },
-  "search": "sök",
+  "search": "søk",
   "sort": {
-    "added": "tillagd",
-    "buildYear": "byggår",
-    "demolitionYear": "rivningsår"
+    "added": "lagt til",
+    "buildYear": "byggeår",
+    "demolitionYear": "rivingsår"
   },
   "categories": {
-    "residence": "bostad",
+    "residence": "bolig",
     "office": "kontor",
-    "commercial": "kommersiell",
-    "communityProperty": "samhällsfastighet",
+    "commercial": "næring",
+    "communityProperty": "offentlig",
     "industry": "industri",
-    "other": "övrigt"
+    "other": "øvrige"
   },
   "states": {
-    "demolished": "riven",
-    "threatened": "hotad",
-    "saved": "räddad"
+    "demolished": "revet",
+    "threatened": "truet",
+    "saved": "reddet"
   },
   "newFeatureForm": {
-    "addBuilding": "lägg till byggnad",
-    "imageInput": "dra och släpp dina bilder här för att ladda upp",
+    "addBuilding": "legg til bygning",
+    "imageInput": "dra og slipp bildene dine her for opplasting",
     "category": "kategori",
     "state": "status",
-    "buildingName": "byggnadens namn",
-    "address": "adress",
-    "blockName": "kvartersnamn",
-    "propertyDesignation": "fastighetsbeteckning",
-    "size": "storlek",
+    "buildingName": "bygningsnavn",
+    "address": "adresse",
+    "blockName": "bydel",
+    "propertyDesignation": "gårdsnummer / bruksnummer",
+    "size": "størrelse",
     "architect": "arkitekt",
-    "propertyOwner": "fastighetsägare",
-    "buildYear": "byggår",
-    "demolitionYear": "rivningsår",
-    "description": "berättelser om byggnaden",
-    "demolitionCause": "bakgrund till rivning (ange gärna källa)",
-    "sources": "bildkällor",
-    "sender": "avsändare",
-    "contributor": "namn",
+    "propertyOwner": "grunneier",
+    "buildYear": "byggeår",
+    "demolitionYear": "rivingsår",
+    "description": "bygningsbeskrivelse",
+    "demolitionCause": "bakgrunn for riving (oppgi gjerne kilde)",
+    "sources": "bildekilde",
+    "sender": "avsender",
+    "contributor": "navn",
     "email": "e-post",
-    "addEmail": "ange din e-post-adress om du vill få en notis när ditt bidrag granskats.",
-    "accept": "jag accepterar villkoren",
+    "addEmail": "oppgi e-postadressen din hvis du vil motta en melding når bidraget ditt er gjennomgått",
+    "accept": "jeg aksepterer vilkårene",
     "cancel": "avbryt",
-    "save": "spara"
+    "save": "lagre"
   },
   "detailsPanel": {
-    "description": "berättelser om byggnaden",
-    "demolitionCause": "anledning till rivning",
-    "sources": "bildkällor",
-    "share": "dela",
-    "linkCopied": "länk kopierad",
-    "shareFailed": "delningen misslyckades",
-    "add": "lägg till berättelse"
+    "description": "bygningsbeskrivelse",
+    "demolitionCause": "bakgrunn for riving",
+    "sources": "bildekilde",
+    "share": "del",
+    "linkCopied": "lenke kopiert",
+    "shareFailed": "delingen mislyktes",
+    "add": "legg til beskrivelse"
   },
   "building": {
     "architect": "arkitekt",
-    "size": "storlek",
-    "blockName": "kvarter",
-    "propertyOwner": "fastighetsägare",
+    "size": "størrelse",
+    "blockName": "bydel",
+    "propertyOwner": "grunneier",
     "boundCO2": {
-      "label": "Inbunden CO²",
-      "unit": "ton"
+      "label": "innbundet CO²",
+      "unit": "tonn"
     },
-    "buildYear": "byggår",
-    "demolitionYear": "rivningsår",
+    "buildYear": "byggeår",
+    "demolitionYear": "rivingsår",
     "category": "kategori"
   },
-  "notFound": "sidan finns inte",
+  "notFound": "siden finnes ikke",
   "slugs": {
-    "map": "karta",
-    "list": "lista"
+    "map": "kart",
+    "list": "liste"
   },
   "ariaLabels": {
-    "close": "stäng",
-    "filter": "filtrera",
-    "previous": "föregående",
-    "next": "nästa",
-    "image": "bild",
+    "close": "lukk",
+    "filter": "filtrer",
+    "previous": "forrige",
+    "next": "neste",
+    "image": "bilde",
     "remove": "ta bort"
   }
 }
