@@ -5,18 +5,18 @@ export const manifest: SchemaTypeDefinition = {
   name: "manifest",
   type: "document",
   title: "Manifest",
-  description: "Innehåll för manifestsidan",
+  description: "Content for manifest page",
   fields: [
     {
       name: "heading",
       type: "string",
-      title: "Rubrik",
+      title: "Heading",
       validation: (Rule) => Rule.required(),
     },
     {
       name: "intro",
       type: "array",
-      title: "Ingress",
+      title: "Intro",
       of: [
         {
           type: "block",
@@ -32,7 +32,7 @@ export const manifest: SchemaTypeDefinition = {
     {
       name: "content",
       type: "array",
-      title: "Innehåll",
+      title: "Content",
       of: [
         {
           type: "block",
@@ -42,7 +42,7 @@ export const manifest: SchemaTypeDefinition = {
             { title: "H3", value: "h3" },
             { title: "Quote", value: "blockquote" },
             {
-              title: "Ingress",
+              title: "Intro",
               value: "intro",
               component: ({ children }) => (
                 <p className="max-w-[24em] text-xl font-bold">{children}</p>

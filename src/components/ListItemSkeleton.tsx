@@ -4,14 +4,15 @@ import { StateIcon } from "./StateIcon";
 export const ListItemSkeleton: FC = () => (
   <li>
     <div className="flex w-full flex-col gap-2">
-      <div className="bg-gray-unknown aspect-square" />
+      <div className="aspect-square bg-gray-unknown" />
       <div className="flex gap-2">
         <div className="flex flex-grow flex-col gap-1">
-          <div className="bg-gray-unknown h-3 w-full"></div>
-          <div className="bg-gray-unknown h-3 w-full"></div>
-          <div className="bg-gray-unknown h-3 w-full"></div>
+          <div className="h-3 w-full bg-gray-unknown"></div>
+          <div className="h-3 w-full bg-gray-unknown"></div>
+          <div className="h-3 w-full bg-gray-unknown"></div>
         </div>
-        <StateIcon state="unknown" />
+        {/* workaround to enable build */}
+        {/*        <StateIcon state="unknown" /> */}
       </div>
     </div>
   </li>

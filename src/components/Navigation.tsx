@@ -31,37 +31,40 @@ const NavLink: FC<{
   </Link>
 );
 
-export const Navigation: FC<{ scaleLogo?: boolean }> = ({ scaleLogo }) => {
+export const Navigation: FC<{ scaleLogo?: boolean; dict: Dictionary }> = ({
+  scaleLogo,
+  dict,
+}) => {
   const path = usePathname();
   return (
     <nav className="acan-text-menu grid w-full grid-cols-6 items-start justify-between gap-10 p-5">
       <div className="col-span-2">
         <Link
-          href="/karta"
+          href={`/${dict.nav.map}`}
           className="pointer-events-auto outline-none hover:text-acan-blue focus-visible:text-acan-blue"
-        >
-          Rivnings&shy;kartan
-        </Link>
+          dangerouslySetInnerHTML={{ __html: dict.nav.title }}
+        ></Link>
       </div>
       <div className="col-span-2 flex flex-col">
         <div>
-          <NavLink href="/karta" path={path}>
-            Karta
+          <NavLink href={`/${dict.nav.map}`} path={path}>
+            {dict.nav.map}
           </NavLink>
         </div>
         <div>
-          <NavLink href="/lista" path={path}>
-            Lista
+          <NavLink href={`/${dict.nav.list}`} path={path}>
+            {dict.nav.list}
           </NavLink>
         </div>
         <div>
           <NavLink href="/" path={path}>
-            Om kartan
+            {dict.nav.about}
           </NavLink>
         </div>
         <div>
-          <NavLink href="/karta?add" path={path} inverted>
-            Lägg till<span className="hidden sm:inline"> byggnad</span>
+          <NavLink href={`/${dict.nav.map}?add`} path={path} inverted>
+            {dict.nav.addOne}
+            <span className="hidden sm:inline"> {dict.nav.addTwo}</span>
           </NavLink>
         </div>
       </div>

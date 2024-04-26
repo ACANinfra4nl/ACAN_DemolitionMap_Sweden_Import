@@ -21,7 +21,7 @@ export const TextArea: FC<
       <label
         htmlFor={props.name}
         className={classNames(
-          "absolute left-4 top-4 origin-top-left -translate-y-2 scale-50 text-body transition-transform peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-2 peer-focus:scale-50",
+          "absolute left-4 top-4 origin-top-left -translate-y-2 scale-50 text-body transition-transform first-letter:uppercase peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-2 peer-focus:scale-50",
           interacted && "peer-invalid:text-demolished",
         )}
       >

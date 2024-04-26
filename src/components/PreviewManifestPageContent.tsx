@@ -9,9 +9,10 @@ import { ManifestPageContent } from "./ManifestPageContent";
 export const PreviewManifestPageContent: FC<{
   data: SanityDocument<ManifestDocumentType>;
   query: string;
-}> = ({ data, query }) => {
+  dict: Dictionary;
+}> = ({ data, query, dict }) => {
   const params = useParams();
   const [liveData] = useLiveQuery(data, query);
 
-  return <ManifestPageContent data={liveData} />;
+  return <ManifestPageContent data={liveData} dict={dict} />;
 };
