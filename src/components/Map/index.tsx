@@ -6,6 +6,7 @@ import ReactMapGl, {
   MapRef,
   Marker,
   NavigationControl,
+  LngLatBoundsLike,
 } from "react-map-gl/maplibre";
 import type { Feature, Point } from "geojson";
 import classNames from "classnames";
@@ -42,9 +43,16 @@ export const Map: FC<MapProps> = ({
   const mapRef = useRef<MapRef>(null);
   const [cursor, setCursor] = useState("grab");
 
+  let bounds: LngLatBoundsLike | undefined;
+
+  process.env.LANGUGAGE === "fi"
+    ? (bounds = [14, 57, 35, 71])
+    : (bounds = [10, 55, 25, 69]);
+
   const handleClickMap: (e: MapLayerMouseEvent) => void = useCallback(
     (e) => {
       e.preventDefault();
+      console.log("bounds", e);
       if (isAdding) {
         const coords = { lat: e.lngLat.lat, lng: e.lngLat.lng };
         onAddMarker(coords);
@@ -81,7 +89,7 @@ export const Map: FC<MapProps> = ({
         mapLib={import("maplibre-gl")}
         mapStyle={mapStyle}
         initialViewState={{
-          bounds: [10, 55, 25, 69],
+          bounds: bounds,
         }}
         onClick={handleClickMap}
         ref={mapRef}
