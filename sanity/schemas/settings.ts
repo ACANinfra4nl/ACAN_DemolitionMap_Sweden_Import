@@ -6,7 +6,12 @@ export const settings: SchemaTypeDefinition = {
   type: "document",
   icon: SettingsIcon,
   fields: [
-    { name: "siteTitle", type: "string", title: "Site title" },
+    {
+      name: "siteTitle",
+      type: "string",
+      title: "Site title",
+      validation: (Rule) => Rule.required(),
+    },
     {
       name: "confirmationMessage",
       type: "object",
