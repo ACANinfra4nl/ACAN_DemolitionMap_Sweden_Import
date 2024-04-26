@@ -38,7 +38,7 @@ export default defineConfig({
     deskTool({
       structure: (S) =>
         S.list()
-          .title("Innehåll")
+          .title("Content")
           .items([
             S.listItem()
               .title("Reviewed buildings")
