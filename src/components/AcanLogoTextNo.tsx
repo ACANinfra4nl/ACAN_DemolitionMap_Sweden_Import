@@ -2,7 +2,7 @@ import Link from "next/link";
 import { FC } from "react";
 
 export const AcanLogoTextNo: FC = () => (
-  <Link href="https://www.architectscan.se/" rel="noopener noreferrer">
+  <Link href="https://acannorge.no/" rel="noopener noreferrer">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       version="1.1"
