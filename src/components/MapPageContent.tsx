@@ -84,10 +84,18 @@ export const MapPageContent: FC<
         .catch(() => {
           setAddedBuilding(false);
         })
-        .finally(() => setSavingBuilding(false));
+        .finally(() => {
+          setSavingBuilding(false);
+        });
     },
     [],
   );
+
+  useEffect(() => {
+    // force wait cursor on the entire document
+    document.body.classList.toggle("waiting", savingBuilding);
+  }, [savingBuilding]);
+
   const handleClickFeature: (id: string) => void = useCallback(
     (id) => {
       const feature = buildings?.features.find((f) => f.properties._id === id);
