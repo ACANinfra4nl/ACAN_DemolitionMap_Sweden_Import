@@ -47,7 +47,7 @@ export const Input: FC<
       <label
         htmlFor={props.name}
         className={classNames(
-          "absolute left-0 top-0 origin-top-left -translate-y-2 scale-50 text-body transition-transform peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-2 peer-focus:scale-50 peer-disabled:opacity-25",
+          "absolute left-0 top-0 origin-top-left -translate-y-2 scale-50 text-body transition-transform first-letter:uppercase peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-2 peer-focus:scale-50 peer-disabled:opacity-25",
           interacted && "peer-invalid:text-demolished",
         )}
       >
