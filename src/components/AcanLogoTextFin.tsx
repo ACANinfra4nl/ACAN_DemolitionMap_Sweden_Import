@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 export const AcanLogoTextFin = () => (
-  <Link href="https://www.architectscan.se/" rel="noopener noreferrer">
+  <Link href="https://www.acan.fi/" rel="noopener noreferrer">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       version="1.1"
