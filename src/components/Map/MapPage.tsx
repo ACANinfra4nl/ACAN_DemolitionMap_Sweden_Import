@@ -3,10 +3,9 @@ import { sanityFetch } from "@/lib/sanityFetch";
 import { buildingsQuery, settingsQuery } from "../../../sanity/lib/queries";
 import { Suspense } from "react";
 import { toFeature } from "@/lib/toFeature";
+import { getDictionary } from "@/lib/dictionaries";
 
-export const revalidate = 3600;
-
-export default async function MapPage() {
+export const MapPage = async () => {
   const newBuildingTexts = await sanityFetch<SettingsType>({
     query: settingsQuery,
     tags: ["settings"],
@@ -17,16 +16,19 @@ export default async function MapPage() {
     tags: ["building"],
   });
 
+  const dict = await getDictionary();
+
   // transform to features
-  const features = buildings.map(toFeature);
+  const features = buildings.map((b) => toFeature(b, dict));
   return (
     <div className="grid h-screen grid-cols-12 grid-rows-[auto_1fr]">
       <Suspense>
         <MapPageContent
           {...newBuildingTexts}
           buildings={{ type: "FeatureCollection", features }}
+          dict={dict}
         />
       </Suspense>
     </div>
   );
-}
+};

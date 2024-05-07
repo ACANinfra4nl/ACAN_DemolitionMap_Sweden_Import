@@ -10,7 +10,7 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 
   return {
-    title: "Rivningskartan",
+    title: settings.siteTitle,
     description: settings.seo.description,
     openGraph: {
       images: [settings.seo.image.asset.url],
