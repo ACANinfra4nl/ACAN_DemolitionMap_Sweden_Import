@@ -21,7 +21,9 @@ const filterFileList = (files: FileList, img: ImageType): FileList => {
   return dataTransfer.files;
 };
 
-export const ImageInput: FC = () => {
+export const ImageInput: FC<
+  Pick<Dictionary, "ariaLabels"> & { text: string }
+> = ({ text, ariaLabels }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const labelRef = useRef<HTMLLabelElement>(null);
   const [images, setImages] = useState<ImageType[]>([]);
@@ -108,7 +110,7 @@ export const ImageInput: FC = () => {
                   handleRemoveImage(img);
                   e.preventDefault();
                 }}
-                aria-label={`Ta bort ${img.name}`}
+                aria-label={`${ariaLabels.remove} ${img.name}`}
                 className="p-2 text-body leading-none hover:text-acan-blue focus-visible:text-acan-blue"
               >
                 &times;
@@ -117,9 +119,7 @@ export const ImageInput: FC = () => {
           </figure>
         ))
       ) : (
-        <span className="acan-text-body">
-          Dra och släpp dina bilder här för att ladda upp
-        </span>
+        <span className="acan-text-body first-letter:uppercase">{text}</span>
       )}
     </label>
   );

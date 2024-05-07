@@ -23,9 +23,14 @@ const Detail: FC<{ label: string; value: string | number | ReactNode }> = ({
 interface DetailsProps {
   properties: FeatureBuilding;
   onClose: () => void;
+  dict: Dictionary;
 }
 
-export const DetailsPanel: FC<DetailsProps> = ({ properties, onClose }) => {
+export const DetailsPanel: FC<DetailsProps> = ({
+  properties,
+  onClose,
+  dict,
+}) => {
   const panelEl = useRef<HTMLDivElement>(null);
   const [shareSuccessState, setShareSuccessState] = useState<
     string | false | undefined
@@ -45,12 +50,12 @@ export const DetailsPanel: FC<DetailsProps> = ({ properties, onClose }) => {
   return (
     <div className="grid grid-rows-[auto_auto_1fr] p-5" ref={panelEl}>
       <div className="z-10 col-start-1 row-start-1 flex justify-end">
-        <CloseButton onClick={onClose} />
+        <CloseButton onClick={onClose} close={dict.ariaLabels.close} />
       </div>
 
       <div className="col-start-1 row-span-2 row-start-1 mb-2">
         {properties.images && properties.images.map ? (
-          <Carousel>
+          <Carousel ariaLabels={dict.ariaLabels}>
             {properties.images.map((image) => (
               <Image
                 key={image.asset.url}
@@ -68,35 +73,44 @@ export const DetailsPanel: FC<DetailsProps> = ({ properties, onClose }) => {
       </div>
 
       <div className="min-w-0">
-        <BuildingHeading building={properties} showYear />
-        <DetailsTable building={properties} />
+        <BuildingHeading
+          building={properties}
+          showYear
+          dictStates={dict.states}
+        />
+        <DetailsTable building={properties} content={dict.building} />
         <div className="prose text-body font-normal">
           {properties.description && (
-            <p className="whitespace-pre-line break-words">
-              <span className="font-bold">Berättelser om byggnaden:</span>{" "}
+            <p className="whitespace-pre-line break-words first-letter:uppercase">
+              <span className="font-bold">
+                {dict.detailsPanel.description}:
+              </span>{" "}
               <Linkify>{properties.description}</Linkify>
             </p>
           )}
           {properties.demolitionCause && (
-            <p className="whitespace-pre-line break-words">
-              <span className="font-bold">Anledning till rivning:</span>{" "}
+            <p className="whitespace-pre-line break-words first-letter:uppercase">
+              <span className="font-bold">
+                {dict.detailsPanel.demolitionCause}:
+              </span>{" "}
               <Linkify>{properties.demolitionCause}</Linkify>
             </p>
           )}
           {properties.sources && (
-            <p className="whitespace-pre-line break-words">
-              <span className="font-bold">Bildkällor:</span>{" "}
+            <p className="whitespace-pre-line break-words first-letter:uppercase">
+              <span className="font-bold">{dict.detailsPanel.sources}:</span>{" "}
               <Linkify>{properties.sources}</Linkify>
             </p>
           )}
         </div>
-        <div className="mt-8 flex justify-between gap-4">
+        <div className="mt-8 flex justify-between gap-4 first-letter:uppercase">
           <ShareButton
             onSuccess={handleShareSuccess}
             onError={handleShareError}
             state={shareSuccessState}
+            content={dict.detailsPanel}
           >
-            Dela
+            {dict.detailsPanel.share}
           </ShareButton>
           <Link
             href={`mailto:rivningskartan@architectscan.se?subject=${encodeURIComponent(
@@ -106,9 +120,9 @@ export const DetailsPanel: FC<DetailsProps> = ({ properties, onClose }) => {
                 properties.city,
               )}`,
             )}`}
-            className="text-body underline hover:text-acan-blue focus-visible:text-acan-blue"
+            className="text-body underline first-letter:uppercase hover:text-acan-blue focus-visible:text-acan-blue"
           >
-            Lägg till berättelse
+            {dict.detailsPanel.add}
           </Link>
         </div>
       </div>

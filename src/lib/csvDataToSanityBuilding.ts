@@ -4,9 +4,10 @@ import { states } from "./states";
 
 const clean = (str: string) => (str ? str.toLowerCase().trim() : "");
 const parseCategory = (str: string) =>
-  categories.find((cat) => cat === clean(str)) ?? "övrig";
+  categories.find((cat) => cat.value === clean(str))?.value ?? "övrig";
+
 const parseState = (str: string) =>
-  states.find((state) => state === clean(str)) ?? "";
+  states.find((state) => state.value === clean(str))?.value ?? "";
 
 const fieldMapping2: Record<string, keyof CsvRow> = {
   category: "KATEGORI",

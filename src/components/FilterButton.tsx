@@ -4,10 +4,11 @@ import classNames from "classnames";
 import { FC, useCallback } from "react";
 
 export const FilterButton: FC<{
-  state: "riven" | "hotad" | "räddad";
+  dictStates: States;
+  state: string;
   filter?: string;
   onClick: (state?: string) => void;
-}> = ({ state, filter, onClick }) => {
+}> = ({ state, filter, onClick, dictStates }) => {
   const handleClick = useCallback(
     () => onClick(filter === state ? undefined : state),
     [state, filter],
@@ -20,7 +21,7 @@ export const FilterButton: FC<{
       )}
       onClick={handleClick}
     >
-      <StateIcon state={state} />
+      <StateIcon state={state} dictStates={dictStates} />
       {state}
     </button>
   );

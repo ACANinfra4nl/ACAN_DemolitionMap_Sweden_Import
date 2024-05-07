@@ -36,6 +36,7 @@ export const Navigation: FC<{ scaleLogo?: boolean; dict: Dictionary }> = ({
   dict,
 }) => {
   const path = usePathname();
+
   return (
     <nav className="acan-text-menu grid w-full grid-cols-6 items-start justify-between gap-10 p-5">
       <div className="col-span-2">
@@ -70,10 +71,10 @@ export const Navigation: FC<{ scaleLogo?: boolean; dict: Dictionary }> = ({
       </div>
       <div className="col-span-2">
         {scaleLogo ? (
-          <ScalingAcanLogo />
+          <ScalingAcanLogo language={dict.nav.language} />
         ) : (
           <div className="ml-auto w-logo">
-            <AcanLogoCircle />
+            <AcanLogoCircle language={dict.nav.language} />
           </div>
         )}
       </div>
