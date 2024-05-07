@@ -1,0 +1,90 @@
+{
+  "nav": {
+    "title": "<p>rivings&shy;kart</p>",
+    "map": "kart",
+    "list": "liste",
+    "about": "om kartet",
+    "addOne": "legg til",
+    "addTwo": "bygning"
+  },
+  "search": "søk",
+  "sort": {
+    "added": "lagt til",
+    "buildYear": "byggeår",
+    "demolitionYear": "rivingsår"
+  },
+  "categories": {
+    "residence": "bolig",
+    "office": "kontor",
+    "commercial": "næring",
+    "communityProperty": "offentlig",
+    "industry": "industri",
+    "other": "øvrige"
+  },
+  "states": {
+    "demolished": "revet",
+    "threatened": "truet",
+    "saved": "reddet"
+  },
+  "newFeatureForm": {
+    "addLocation": "Velg sted på kartet",
+    "addBuilding": "legg til bygning",
+    "imageInput": "dra og slipp bildene dine her for opplasting",
+    "category": "kategori",
+    "state": "status",
+    "buildingName": "bygningsnavn",
+    "address": "adresse",
+    "blockName": "bydel",
+    "propertyDesignation": "gårdsnummer / bruksnummer",
+    "size": "størrelse",
+    "architect": "arkitekt",
+    "propertyOwner": "grunneier",
+    "buildYear": "byggeår",
+    "demolitionYear": "rivingsår",
+    "description": "bygningsbeskrivelse",
+    "demolitionCause": "bakgrunn for riving (oppgi gjerne kilde)",
+    "sources": "bildekilde",
+    "sender": "avsender",
+    "contributor": "navn",
+    "email": "e-post",
+    "addEmail": "oppgi e-postadressen din hvis du vil motta en melding når bidraget ditt er gjennomgått",
+    "accept": "jeg aksepterer vilkårene",
+    "cancel": "avbryt",
+    "save": "lagre"
+  },
+  "detailsPanel": {
+    "description": "bygningsbeskrivelse",
+    "demolitionCause": "bakgrunn for riving",
+    "sources": "bildekilde",
+    "share": "del",
+    "linkCopied": "lenke kopiert",
+    "shareFailed": "delingen mislyktes",
+    "add": "legg til beskrivelse"
+  },
+  "building": {
+    "architect": "arkitekt",
+    "size": "størrelse",
+    "blockName": "bydel",
+    "propertyOwner": "grunneier",
+    "boundCO2": {
+      "label": "innbundet CO²",
+      "unit": "tonn"
+    },
+    "buildYear": "byggeår",
+    "demolitionYear": "rivingsår",
+    "category": "kategori"
+  },
+  "notFound": "siden finnes ikke",
+  "slugs": {
+    "map": "kart",
+    "list": "liste"
+  },
+  "ariaLabels": {
+    "close": "lukk",
+    "filter": "filtrer",
+    "previous": "forrige",
+    "next": "neste",
+    "image": "bilde",
+    "remove": "ta bort"
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "nav": {
+    "title": "<p>purku&shy;kartta</p>",
+    "map": "kartta",
+    "list": "lista",
+    "about": "tietoja kartasta",
+    "addOne": "lisää",
+    "addTwo": "rakennus"
+  },
+  "search": "hae",
+  "sort": {
+    "added": "lisätty",
+    "buildYear": "rakennusvuosi",
+    "demolitionYear": "purkuvuosi"
+  },
+  "categories": {
+    "residence": "asuinrakennus",
+    "office": "toimisto",
+    "commercial": "liiketoiminta",
+    "communityProperty": "julkinen rakennus",
+    "industry": "teollisuusrakennus",
+    "other": "muu"
+  },
+  "states": {
+    "demolished": "purettu",
+    "threatened": "uhattu",
+    "saved": "pelastettu"
+  },
+  "newFeatureForm": {
+    "addLocation": "Valitse paikka kartalta",
+    "addBuilding": "lisää rakennus",
+    "imageInput": "raahaa ja pudota kuvasi tähän",
+    "category": "kategoria",
+    "state": "status",
+    "buildingName": "rakennuksen nimi",
+    "address": "osoite",
+    "blockName": "kortteli",
+    "propertyDesignation": "kiinteistötunnus",
+    "size": "kerrosala",
+    "architect": "Arkkitehti",
+    "propertyOwner": "kiinteistönomistaja",
+    "buildYear": "rakennusvuosi",
+    "demolitionYear": "purkuvuosi",
+    "description": "rakennuksen kuvaus",
+    "demolitionCause": "purkusyy",
+    "sources": "lähteet",
+    "sender": "lähettäjä",
+    "contributor": "nimi",
+    "email": "sähköposti",
+    "addEmail": "lisää sähköpostiosoitteesi jos haluat ilmoituksen, kun lisäyksesi on hyväksytty.",
+    "accept": "hyväksyn ehdot.",
+    "cancel": "peruuta",
+    "save": "tallenna"
+  },
+  "detailsPanel": {
+    "description": "rakennuksen kuvaus",
+    "demolitionCause": "purkusyy",
+    "sources": "lähteet",
+    "share": "jaa",
+    "linkCopied": "linkki kopioitu",
+    "shareFailed": "jakaminen epäonnistui",
+    "add": "lisää"
+  },
+  "building": {
+    "architect": "arkkitehti",
+    "size": "rakennusala",
+    "blockName": "kortteli",
+    "propertyOwner": "kiinteistönomistaja",
+    "boundCO2": {
+      "label": "varastoitu CO²",
+      "unit": "tonni"
+    },
+    "buildYear": "rakennusvuosi",
+    "demolitionYear": "purkuvuosi",
+    "category": "kategoria"
+  },
+
+  "notFound": "sivua ei löytynyt",
+  "slugs": {
+    "map": "kartta",
+    "list": "lista"
+  },
+  "ariaLabels": {
+    "close": "sulje",
+    "filter": "suodata",
+    "previous": "edellinen",
+    "next": "seuraava",
+    "image": "kuva",
+    "remove": "poista"
+  }
+}
