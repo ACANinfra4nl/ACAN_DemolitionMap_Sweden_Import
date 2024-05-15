@@ -87,5 +87,6 @@
     "next": "nästa",
     "image": "bild",
     "remove": "ta bort"
-  }
+  },
+  "bounds": [10, 55, 25, 69]
 }

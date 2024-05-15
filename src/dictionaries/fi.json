@@ -88,5 +88,6 @@
     "next": "seuraava",
     "image": "kuva",
     "remove": "poista"
-  }
+  },
+  "bounds": [14, 57, 35, 71]
 }
