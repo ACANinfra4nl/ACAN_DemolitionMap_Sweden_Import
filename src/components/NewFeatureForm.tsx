@@ -23,6 +23,7 @@ interface NewFeatureFormProps {
   isSaving?: boolean;
   onSubmit: FormEventHandler<HTMLFormElement>;
   onCancel: () => void;
+  dict: Dictionary;
 }
 
 export const NewFeatureForm = ({
@@ -30,6 +31,7 @@ export const NewFeatureForm = ({
   isSaving,
   onCancel,
   onSubmit,
+  dict,
 }: NewFeatureFormProps) => {
   const panelEl = useRef<HTMLDivElement>(null);
   const [lookupResult, setLookupResult] = useState<ReverseGeocodeResult>();
@@ -53,52 +55,57 @@ export const NewFeatureForm = ({
     [],
   );
 
-  useEffect(() => {
-    // force wait cursor on the entire document
-    document.body.classList.toggle("waiting", isSaving);
-  }, [isSaving]);
-
   // throw new Error(
   //   "fixa så att cursor är progress på hela sidan när man sparar, fattar inte riktigt hur man ska göra, kanske med nån portal?",
   // );
   return (
     <div ref={panelEl}>
-      <CloseButton onClick={onCancel} />
+      <CloseButton onClick={onCancel} close={dict.ariaLabels.close} />
       <form onSubmit={onSubmit} autoComplete="off">
         <fieldset
           disabled={isSaving}
           className="flex flex-col gap-4 disabled:text-disabled"
         >
-          <legend className="acan-text-menu mb-4">Lägg till byggnad</legend>
+          <legend className="acan-text-menu mb-4 first-letter:uppercase">
+            {dict.newFeatureForm.addBuilding}
+          </legend>
           <input type="hidden" name="lat" value={latLng.lat} />
           <input type="hidden" name="lng" value={latLng.lng} />
           <div>
-            <ImageInput />
+            <ImageInput
+              text={dict.newFeatureForm.imageInput}
+              ariaLabels={dict.ariaLabels}
+            />
           </div>
 
           <div>
             <Select
-              label="Kategori"
+              label={dict.newFeatureForm.category}
               name="category"
               options={categories}
               required
+              formList={dict.categories}
             />
           </div>
           <div>
             <Select
-              label="Status"
+              label={dict.newFeatureForm.state}
               name="state"
               options={states}
               required
               onChange={handleChangeState}
+              formList={dict.states}
             />
           </div>
           <div>
-            <Input label="Byggnadens namn" name="buildingName" />
+            <Input
+              label={dict.newFeatureForm.buildingName}
+              name="buildingName"
+            />
           </div>
           <div>
             <Input
-              label="Adress"
+              label={dict.newFeatureForm.address}
               name=""
               defaultValue={formatAddress(
                 lookupResult?.address,
@@ -125,24 +132,35 @@ export const NewFeatureForm = ({
             />
           </div>
           <div>
-            <Input label="Kvartersnamn" name="blockName" />
+            <Input label={dict.newFeatureForm.blockName} name="blockName" />
           </div>
           <div>
-            <Input label="Fastighetsbeteckning" name="propertyDesignation" />
+            <Input
+              label={dict.newFeatureForm.propertyDesignation}
+              name="propertyDesignation"
+            />
           </div>
           <div>
-            <Input label="Storlek (m²)" name="size" type="number" min={0} />
+            <Input
+              label={dict.newFeatureForm.size + " (m²)"}
+              name="size"
+              type="number"
+              min={0}
+            />
           </div>
           <div>
-            <Input label="Arkitekt" name="architect" />
+            <Input label={dict.newFeatureForm.architect} name="architect" />
           </div>
           <div>
-            <Input label="Fastighetsägare" name="propertyOwner" />
+            <Input
+              label={dict.newFeatureForm.propertyOwner}
+              name="propertyOwner"
+            />
           </div>
           <div className="flex gap-4">
             <div className="flex-grow">
               <Input
-                label="Byggår"
+                label={dict.newFeatureForm.buildYear}
                 name="buildYear"
                 type="number"
                 min={0}
@@ -151,7 +169,7 @@ export const NewFeatureForm = ({
             </div>
             <div className="flex-grow">
               <Input
-                label="Rivningsår"
+                label={dict.newFeatureForm.demolitionYear}
                 name="demolitionYear"
                 type="number"
                 min={process.env.NEXT_PUBLIC_MIN_DEMOLITION_YEAR || 2016}
@@ -162,7 +180,7 @@ export const NewFeatureForm = ({
           </div>
           <div>
             <TextArea
-              label="Berättelser om byggnaden"
+              label={dict.newFeatureForm.description}
               name="description"
               rows={3}
               required
@@ -170,43 +188,53 @@ export const NewFeatureForm = ({
           </div>
           <div>
             <TextArea
-              label="Bakgrund till rivning (ange gärna källa)"
+              label={dict.newFeatureForm.demolitionCause}
               name="demolitionCause"
               rows={3}
               required
             />
           </div>
           <div>
-            <TextArea label="Bildkällor" name="sources" rows={3} />
+            <TextArea
+              label={dict.newFeatureForm.sources}
+              name="sources"
+              rows={3}
+            />
           </div>
           <div>
-            <div className="mb-4 text-body">Avsändare</div>
+            <div className="mb-4 text-body first-letter:uppercase">
+              {dict.newFeatureForm.sender}
+            </div>
             <div className="flex w-full flex-col items-stretch justify-stretch gap-4 md:flex-row">
               <div className="flex-grow">
-                <Input label="Namn" name="contributor" />
+                <Input
+                  label={dict.newFeatureForm.contributor}
+                  name="contributor"
+                />
               </div>
               <div className="flex-grow">
                 <Input
-                  label="E-post"
+                  label={dict.newFeatureForm.email}
                   name="contributor-email"
                   type="email"
                   required
                 />
               </div>
             </div>
-            <p className="mt-2 text-sm">
-              Ange din e-post-adress om du vill få en notis när ditt bidrag
-              granskats.
+            <p className="mt-2 text-sm first-letter:uppercase">
+              {dict.newFeatureForm.addEmail}
             </p>
           </div>
           <div className="hidden" aria-hidden>
-            <label htmlFor="accept">Jag accepterar villkoren</label>
+            <label className="first-letter:uppercase" htmlFor="accept">
+              {dict.newFeatureForm.accept}
+            </label>
             <input type="checkbox" name="accept" id="accept" />
           </div>
           <div className="flex gap-5">
-            <Button onClick={onCancel}>Avbryt</Button>
+            <Button onClick={onCancel}>{dict.newFeatureForm.cancel}</Button>
             <Button type="submit" className="w-full">
-              Spara
+              {dict.newFeatureForm.save}
             </Button>
           </div>
         </fieldset>

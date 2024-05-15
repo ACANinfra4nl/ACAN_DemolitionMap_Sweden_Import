@@ -1,0 +1,91 @@
+{
+  "nav": {
+    "title": "<p>rivnings&shy;kartan</p>",
+    "map": "karta",
+    "list": "lista",
+    "about": "om kartan",
+    "addOne": "lägg till",
+    "addTwo": "byggnad",
+    "language": "sv"
+  },
+  "search": "sök",
+  "sort": {
+    "added": "tillagd",
+    "buildYear": "byggår",
+    "demolitionYear": "rivningsår"
+  },
+  "categories": {
+    "residence": "bostad",
+    "office": "kontor",
+    "commercial": "kommersiell",
+    "communityProperty": "samhällsfastighet",
+    "industry": "industri",
+    "other": "övrigt"
+  },
+  "states": {
+    "demolished": "riven",
+    "threatened": "hotad",
+    "saved": "räddad"
+  },
+  "newFeatureForm": {
+    "addLocation": "Välj plats på kartan",
+    "addBuilding": "lägg till byggnad",
+    "imageInput": "dra och släpp dina bilder här för att ladda upp",
+    "category": "kategori",
+    "state": "status",
+    "buildingName": "byggnadens namn",
+    "address": "adress",
+    "blockName": "kvartersnamn",
+    "propertyDesignation": "fastighetsbeteckning",
+    "size": "storlek",
+    "architect": "arkitekt",
+    "propertyOwner": "fastighetsägare",
+    "buildYear": "byggår",
+    "demolitionYear": "rivningsår",
+    "description": "berättelser om byggnaden",
+    "demolitionCause": "bakgrund till rivning (ange gärna källa)",
+    "sources": "bildkällor",
+    "sender": "avsändare",
+    "contributor": "namn",
+    "email": "e-post",
+    "addEmail": "ange din e-post-adress om du vill få en notis när ditt bidrag granskats.",
+    "accept": "jag accepterar villkoren",
+    "cancel": "avbryt",
+    "save": "spara"
+  },
+  "detailsPanel": {
+    "description": "berättelser om byggnaden",
+    "demolitionCause": "anledning till rivning",
+    "sources": "bildkällor",
+    "share": "dela",
+    "linkCopied": "länk kopierad",
+    "shareFailed": "delningen misslyckades",
+    "add": "lägg till berättelse"
+  },
+  "building": {
+    "architect": "arkitekt",
+    "size": "storlek",
+    "blockName": "kvarter",
+    "propertyOwner": "fastighetsägare",
+    "boundCO2": {
+      "label": "Inbunden CO²",
+      "unit": "ton"
+    },
+    "buildYear": "byggår",
+    "demolitionYear": "rivningsår",
+    "category": "kategori"
+  },
+  "notFound": "sidan finns inte",
+  "slugs": {
+    "map": "karta",
+    "list": "lista"
+  },
+  "ariaLabels": {
+    "close": "stäng",
+    "filter": "filtrera",
+    "previous": "föregående",
+    "next": "nästa",
+    "image": "bild",
+    "remove": "ta bort"
+  }
+}

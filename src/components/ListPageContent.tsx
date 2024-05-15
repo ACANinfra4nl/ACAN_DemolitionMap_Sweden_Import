@@ -81,7 +81,8 @@ export const ListPageContent: FC<{
     type: "FeatureCollection";
     features: Feature<Point, FeatureBuilding>[];
   };
-}> = ({ buildings }) => {
+  dict: Dictionary;
+}> = ({ buildings, dict }) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -151,7 +152,7 @@ export const ListPageContent: FC<{
       <div className="h-screen">
         <div className="min-h-[1px]"></div>
         <header className="fixed left-0 right-0 top-0 z-10">
-          <Navigation />
+          <Navigation dict={dict} />
         </header>
         <main className="mt-header-s grid grid-cols-1 grid-rows-[auto_1fr] pt-20 xs:pt-12 sm:mt-header sm:pt-16 md:pt-10">
           <Transition
@@ -171,6 +172,7 @@ export const ListPageContent: FC<{
                 <DetailsPanel
                   properties={selectedBuilding}
                   onClose={handleClearSelection}
+                  dict={dict}
                 />
               )}
             </Transition.Child>
@@ -189,30 +191,33 @@ export const ListPageContent: FC<{
           <div className="acan-text-menu fixed top-header-s z-10 grid w-full grid-cols-[auto_1fr_auto] gap-x-10 gap-y-3 px-5 sm:top-header">
             <div className="col-span-3 flex gap-2 md:col-span-1">
               <FilterButton
-                state="riven"
+                state={dict.states.demolished}
                 filter={stateFilter}
                 onClick={setStateFilter}
+                dictStates={dict.states}
               />
               <FilterButton
-                state="hotad"
+                state={dict.states.threatened}
                 filter={stateFilter}
                 onClick={setStateFilter}
+                dictStates={dict.states}
               />
               <FilterButton
-                state="räddad"
+                state={dict.states.saved}
                 filter={stateFilter}
                 onClick={setStateFilter}
+                dictStates={dict.states}
               />
             </div>
             <div className="relative col-span-3 items-center xs:col-span-2 md:col-span-1 md:col-start-2">
               <input
-                aria-label="Filtrera"
+                aria-label={dict.ariaLabels.filter}
                 id="filter"
                 type="text"
                 name="filter"
                 className="peer w-full border-b border-current bg-transparent pl-6 uppercase outline-none placeholder:uppercase placeholder:text-current focus:border-b-acan-blue"
                 onChange={handleFilterChange}
-                placeholder="Sök"
+                placeholder={dict.search}
               />
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -234,7 +239,7 @@ export const ListPageContent: FC<{
                 sortDesc={sortDesc}
                 onClick={handleSortBy("_createdAt")}
               >
-                Tillagd
+                {dict.sort.added}
               </SortButton>
               <SortButton
                 sortKey="buildYear"
@@ -242,7 +247,7 @@ export const ListPageContent: FC<{
                 sortDesc={sortDesc}
                 onClick={handleSortBy("buildYear")}
               >
-                Byggår
+                {dict.sort.buildYear}
               </SortButton>
               <SortButton
                 sortKey="demolitionYear"
@@ -250,7 +255,7 @@ export const ListPageContent: FC<{
                 sortDesc={sortDesc}
                 onClick={handleSortBy("demolitionYear")}
               >
-                Rivningsår
+                {dict.sort.demolitionYear}
               </SortButton>
             </div>
           </div>
@@ -272,7 +277,11 @@ export const ListPageContent: FC<{
                       state={building.properties.state}
                       sizes="(min-width: 1600px) 16vw, (min-width: 1024px) 25vw, (min-width: 768px) 33vw, (min-width: 640px) 49vw, 99vw"
                     />
-                    <BuildingHeading building={building.properties} list />
+                    <BuildingHeading
+                      building={building.properties}
+                      list
+                      dictStates={dict.states}
+                    />
                   </a>
                 </li>
               ))}

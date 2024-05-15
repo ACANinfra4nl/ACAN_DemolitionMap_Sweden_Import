@@ -6,7 +6,8 @@ export const BuildingHeading: FC<{
   building: FeatureBuilding;
   showYear?: boolean;
   list?: boolean;
-}> = ({ building, showYear, list }) => {
+  dictStates: States;
+}> = ({ building, showYear, list, dictStates }) => {
   return (
     <div
       className={classNames(
@@ -31,7 +32,7 @@ export const BuildingHeading: FC<{
         {building.city}
       </div>
       <div className="flex shrink-0 items-center gap-2">
-        <StateIcon state={building.state} />
+        <StateIcon state={building.state} dictStates={dictStates} />
         {showYear && (
           <span>
             {building.state}{" "}

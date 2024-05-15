@@ -8,7 +8,9 @@ import {
   useState,
 } from "react";
 
-export const Carousel: FC<PropsWithChildren> = ({ children }) => {
+export const Carousel: FC<
+  PropsWithChildren<Pick<Dictionary, "ariaLabels">>
+> = ({ children, ariaLabels }) => {
   const ref = useRef<HTMLDivElement>(null);
   const [numSlides] = useState(children instanceof Array ? children.length : 1);
 
@@ -38,7 +40,7 @@ export const Carousel: FC<PropsWithChildren> = ({ children }) => {
           <>
             <button
               onClick={handlePrev}
-              aria-label="Previous"
+              aria-label={ariaLabels.previous}
               className="absolute bottom-0 left-0 top-0 flex items-center fill-white opacity-0 transition-opacity group-hover:opacity-100"
             >
               <span className="flex h-10 w-10 items-center justify-center bg-black hover:bg-acan-blue">
@@ -54,7 +56,7 @@ export const Carousel: FC<PropsWithChildren> = ({ children }) => {
             </button>
             <button
               onClick={handleNext}
-              aria-label="Next"
+              aria-label={ariaLabels.next}
               className="absolute bottom-0 right-0 top-0 flex items-center fill-white opacity-0 transition-opacity group-hover:opacity-100"
             >
               <span className="flex h-10 w-10 items-center justify-center bg-black hover:bg-acan-blue">
@@ -81,11 +83,13 @@ export const Carousel: FC<PropsWithChildren> = ({ children }) => {
   );
 };
 
-const Dots: FC<{
-  count: number;
-  currentSlide: number;
-  onClick: (n: number) => void;
-}> = ({ count, currentSlide, onClick }) => {
+const Dots: FC<
+  Pick<Dictionary, "ariaLabels"> & {
+    count: number;
+    currentSlide: number;
+    onClick: (n: number) => void;
+  }
+> = ({ count, currentSlide, onClick, ariaLabels }) => {
   const dotsArray = new Array(count).fill(0).map((_, n) => n);
   return (
     <nav className="absolute bottom-2 left-0 right-0 flex items-center justify-center">
@@ -93,7 +97,7 @@ const Dots: FC<{
         <button
           key={n}
           onClick={() => onClick(n)}
-          aria-label={`Bild ${n + 1}`}
+          aria-label={`${ariaLabels.image} ${n + 1}`}
           className="p-0.5"
         >
           <span

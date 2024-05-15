@@ -7,6 +7,7 @@ import {
   useState,
 } from "react";
 import classNames from "classnames";
+import { TitledListValue } from "sanity";
 
 export const Select: FC<
   Exclude<
@@ -15,9 +16,10 @@ export const Select: FC<
   > & {
     name: string;
     label: string;
-    options: string[];
+    options: TitledListValue<string>[];
+    formList: Categories | States;
   }
-> = ({ label, onChange, autoFocus, options, ...props }) => {
+> = ({ label, onChange, autoFocus, options, formList, ...props }) => {
   const [hasValue, setHasValue] = useState(false);
   const [interacted, setInteracted] = useState(false);
   const handleChange: ChangeEventHandler<HTMLSelectElement> = useCallback(
@@ -39,14 +41,21 @@ export const Select: FC<
         onBlur={handleInteracted}
       >
         <option></option>
-        {options.map((opt) => (
-          <option key={opt}>{opt}</option>
+
+        {options.map((opt, i) => (
+          <option
+            className="capitalize"
+            key={opt.title}
+            value={opt.value ?? ""}
+          >
+            {formList[opt.title as keyof typeof formList]}
+          </option>
         ))}
       </select>
       <label
         htmlFor={props.name}
         className={classNames(
-          "absolute left-0 top-0 origin-top-left text-body transition-transform peer-focus:-translate-y-2 peer-focus:scale-50",
+          "absolute left-0 top-0 origin-top-left text-body transition-transform first-letter:uppercase peer-focus:-translate-y-2 peer-focus:scale-50",
           hasValue && "-translate-y-2 scale-50",
           interacted && "peer-invalid:text-demolished",
         )}

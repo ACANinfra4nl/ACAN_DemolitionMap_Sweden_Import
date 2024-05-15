@@ -2,19 +2,22 @@ import { capitalize } from "@/lib/capitalize";
 import classNames from "classnames";
 import { FC } from "react";
 
-export const StateIcon: FC<{ state: string }> = ({ state }) => (
+export const StateIcon: FC<{ state: string; dictStates: States }> = ({
+  state,
+  dictStates,
+}) => (
   <div
     className={classNames(
       "h-4 w-4 shrink-0 rounded-full",
-      state === "riven"
+      state === dictStates.demolished
         ? "bg-demolished"
-        : state === "hotad"
+        : state === dictStates.threatened
         ? "bg-threatened"
-        : state === "räddad"
+        : state === dictStates.saved
         ? "bg-saved"
         : "bg-gray-unknown",
     )}
-    aria-label={capitalize(state)}
-    title={capitalize(state)}
+    aria-label={state}
+    title={state}
   ></div>
 );
