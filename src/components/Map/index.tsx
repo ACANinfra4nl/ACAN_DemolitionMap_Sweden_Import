@@ -29,6 +29,7 @@ interface MapProps {
   onAddMarker: (latLng: LatLng) => void;
   onClickFeature: (id: string) => void;
   className?: string;
+  bounds: [number, number, number, number];
 }
 
 export const Map: FC<MapProps> = ({
@@ -38,6 +39,7 @@ export const Map: FC<MapProps> = ({
   onAddMarker,
   onClickFeature,
   className,
+  bounds,
 }) => {
   const mapRef = useRef<MapRef>(null);
   const [cursor, setCursor] = useState("grab");
@@ -81,7 +83,7 @@ export const Map: FC<MapProps> = ({
         mapLib={import("maplibre-gl")}
         mapStyle={mapStyle}
         initialViewState={{
-          bounds: [10, 55, 25, 69],
+          bounds: bounds,
         }}
         onClick={handleClickMap}
         ref={mapRef}

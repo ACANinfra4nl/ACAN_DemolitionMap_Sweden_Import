@@ -87,5 +87,6 @@
     "next": "neste",
     "image": "bilde",
     "remove": "ta bort"
-  }
+  },
+  "bounds": [10, 55, 25, 69]
 }

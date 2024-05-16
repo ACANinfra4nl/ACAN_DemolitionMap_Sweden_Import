@@ -8,4 +8,4 @@ const dictionaries = {
 };
 
 export const getDictionary = async () =>
-  dictionaries[locale as keyof typeof dictionaries]();
+  dictionaries[locale as keyof typeof dictionaries]() as Promise<Dictionary>;

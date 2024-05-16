@@ -139,6 +139,7 @@ interface Dictionary {
     image: string;
     remove: string;
   };
+  bounds: [number, number, number, number];
 }
 
 interface Categories {
