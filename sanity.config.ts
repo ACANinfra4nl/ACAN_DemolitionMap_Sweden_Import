@@ -45,27 +45,27 @@ export default defineConfig({
               .id("reviewed")
               .icon(ReviewedBuildingIcon)
               .child(
-                S.documentTypeList("building").filter(
-                  groq`_type == "building" && reviewed == true`,
-                ),
+                S.documentTypeList("building")
+                  .apiVersion(apiVersion)
+                  .filter(groq`_type == "building" && reviewed == true`),
               ),
             S.listItem()
               .title("Unreviewed buildings")
               .id("unreviewed")
               .icon(UnreviewedBuildingIcon)
               .child(
-                S.documentTypeList("building").filter(
-                  groq`_type == "building" && reviewed != true`,
-                ),
+                S.documentTypeList("building")
+                  .apiVersion(apiVersion)
+                  .filter(groq`_type == "building" && reviewed != true`),
               ),
             S.listItem()
               .title("All buildings")
               .id("buildings")
               .icon(BuildingIcon)
               .child(
-                S.documentTypeList("building").filter(
-                  groq`_type == "building"`,
-                ),
+                S.documentTypeList("building")
+                  .apiVersion(apiVersion)
+                  .filter(groq`_type == "building"`),
               ),
             S.divider(),
             S.listItem()

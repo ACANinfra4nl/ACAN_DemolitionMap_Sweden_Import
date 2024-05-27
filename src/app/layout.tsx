@@ -9,6 +9,8 @@ export async function generateMetadata(): Promise<Metadata> {
     tags: ["settings"],
   });
 
+  if (!settings) return {};
+
   return {
     title: settings.siteTitle,
     description: settings.seo.description,
