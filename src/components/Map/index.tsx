@@ -30,6 +30,7 @@ interface MapProps {
   onAddMarker: (latLng: LatLng) => void;
   onClickFeature: (id: string) => void;
   className?: string;
+  bounds: LngLatBoundsLike;
 }
 
 export const Map: FC<MapProps> = ({
@@ -39,15 +40,10 @@ export const Map: FC<MapProps> = ({
   onAddMarker,
   onClickFeature,
   className,
+  bounds,
 }) => {
   const mapRef = useRef<MapRef>(null);
   const [cursor, setCursor] = useState("grab");
-
-  let bounds: LngLatBoundsLike | undefined;
-
-  process.env.LANGUGAGE === "fi"
-    ? (bounds = [14, 57, 35, 71])
-    : (bounds = [10, 55, 25, 69]);
 
   const handleClickMap: (e: MapLayerMouseEvent) => void = useCallback(
     (e) => {
@@ -103,6 +99,9 @@ export const Map: FC<MapProps> = ({
         }
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
+        onDrag={() =>
+          console.log("bounds", mapRef.current?.getBounds().toArray())
+        }
       >
         <Source
           id="annotations"

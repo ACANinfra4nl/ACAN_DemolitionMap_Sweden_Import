@@ -163,6 +163,7 @@ export const MapPageContent: FC<
             addingLocation={addingLocation}
             onAddMarker={handleAddMarker}
             onClickFeature={handleClickFeature}
+            bounds={dict.map.bounds}
           />
         </div>
       </main>

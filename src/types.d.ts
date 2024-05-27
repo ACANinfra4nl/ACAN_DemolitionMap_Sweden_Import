@@ -84,7 +84,6 @@ type BuildingCollection = GeoJSON.FeatureCollection<
 >;
 
 interface ManifestDocumentType {
-  heading: string;
   intro: import("sanity").PortableTextBlock[];
   content: import("sanity").PortableTextBlock[];
   // latestBuildings: SanityBuilding<LatLng>[];
@@ -137,6 +136,9 @@ interface Dictionary {
     next: string;
     image: string;
     remove: string;
+  };
+  map: {
+    bounds: [number, number, number, number];
   };
 }
 

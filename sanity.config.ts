@@ -76,13 +76,19 @@ export default defineConfig({
                 S.document()
                   .schemaType("manifest")
                   .id("manifest")
+                  .title("Manifest")
                   .views(createPreview(S)),
               ),
             S.listItem()
               .title("Settings")
               .id("settings")
               .icon(SettingsIcon)
-              .child(S.document().schemaType("settings").id("settings")),
+              .child(
+                S.document()
+                  .schemaType("settings")
+                  .id("settings")
+                  .title("Settings"),
+              ),
           ]),
     }),
 

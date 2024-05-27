@@ -8,12 +8,6 @@ export const manifest: SchemaTypeDefinition = {
   description: "Content for manifest page",
   fields: [
     {
-      name: "heading",
-      type: "string",
-      title: "Heading",
-      validation: (Rule) => Rule.required(),
-    },
-    {
       name: "intro",
       type: "array",
       title: "Intro",
