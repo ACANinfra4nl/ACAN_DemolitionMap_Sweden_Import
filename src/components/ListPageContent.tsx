@@ -82,7 +82,8 @@ export const ListPageContent: FC<{
     features: Feature<Point, FeatureBuilding>[];
   };
   dict: Dictionary;
-}> = ({ buildings, dict }) => {
+  language: string;
+}> = ({ buildings, dict, language }) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -152,7 +153,7 @@ export const ListPageContent: FC<{
       <div className="h-screen">
         <div className="min-h-[1px]"></div>
         <header className="fixed left-0 right-0 top-0 z-10">
-          <Navigation dict={dict} />
+          <Navigation dict={dict} language={language} />
         </header>
         <main className="mt-header-s grid grid-cols-1 grid-rows-[auto_1fr] pt-20 xs:pt-12 sm:mt-header sm:pt-16 md:pt-10">
           <Transition

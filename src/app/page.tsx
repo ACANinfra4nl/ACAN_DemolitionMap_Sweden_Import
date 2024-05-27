@@ -27,5 +27,11 @@ export default async function ManifestPage() {
     );
   }
 
-  return <ManifestPageContent data={data} dict={dict} />;
+  return (
+    <ManifestPageContent
+      data={data}
+      dict={dict}
+      language={process.env.LANGUAGE!}
+    />
+  );
 }

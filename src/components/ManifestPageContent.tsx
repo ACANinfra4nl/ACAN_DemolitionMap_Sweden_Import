@@ -3,7 +3,7 @@ import { SanityDocument } from "next-sanity";
 import { FC } from "react";
 import { Image } from "@/components/portableText/Image";
 import { SallyLogo } from "./SallyLogo";
-import { AcanLogoText } from "./AcanLogoText";
+import { AcanLogoText } from "./Logo/AcanLogoText";
 import { IntroText } from "./IntroText";
 import { Navigation } from "./Navigation";
 import Link from "next/link";
@@ -11,14 +11,15 @@ import Link from "next/link";
 export const ManifestPageContent: FC<{
   data: SanityDocument<ManifestDocumentType>;
   dict: Dictionary;
-}> = ({ data, dict }) => {
+  language: string;
+}> = ({ data, dict, language }) => {
   return (
     <>
       <div className="absolute min-h-[1px]">
         {/* HACK: this is a hack to fix a bug with NextJS scroll restoration */}
       </div>
       <header className="pointer-events-none sticky top-0 z-10">
-        <Navigation scaleLogo dict={dict} />
+        <Navigation scaleLogo dict={dict} language={language} />
       </header>
       <main className="mt-column">
         <div className="mx-5">

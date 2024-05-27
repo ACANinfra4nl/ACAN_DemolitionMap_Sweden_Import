@@ -48,7 +48,6 @@ export const Map: FC<MapProps> = ({
   const handleClickMap: (e: MapLayerMouseEvent) => void = useCallback(
     (e) => {
       e.preventDefault();
-      console.log("bounds", e);
       if (isAdding) {
         const coords = { lat: e.lngLat.lat, lng: e.lngLat.lng };
         onAddMarker(coords);
@@ -99,9 +98,6 @@ export const Map: FC<MapProps> = ({
         }
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        onDrag={() =>
-          console.log("bounds", mapRef.current?.getBounds().toArray())
-        }
       >
         <Source
           id="annotations"

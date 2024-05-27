@@ -1,10 +1,10 @@
 "use client";
-import { FC, MouseEventHandler, ReactNode } from "react";
+import { FC, MouseEventHandler, PropsWithChildren, ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import classNames from "classnames";
-import { AcanLogoCircle } from "./AcanLogoCircle";
-import { ScalingAcanLogo } from "./ScalingAcanLogo";
+import { AcanLogoCircle } from "./Logo/AcanLogoCircle";
+import { ScalingAcanLogo } from "./Logo/ScalingAcanLogo";
 
 const stopPropagation: MouseEventHandler<HTMLAnchorElement> = (e) => {
   e.nativeEvent.stopImmediatePropagation();
@@ -31,10 +31,11 @@ const NavLink: FC<{
   </Link>
 );
 
-export const Navigation: FC<{ scaleLogo?: boolean; dict: Dictionary }> = ({
-  scaleLogo,
-  dict,
-}) => {
+export const Navigation: FC<{
+  scaleLogo?: boolean;
+  dict: Dictionary;
+  language: string;
+}> = ({ scaleLogo, dict, language }) => {
   const path = usePathname();
   return (
     <nav className="acan-text-menu grid w-full grid-cols-6 items-start justify-between gap-10 p-5">
@@ -70,10 +71,10 @@ export const Navigation: FC<{ scaleLogo?: boolean; dict: Dictionary }> = ({
       </div>
       <div className="col-span-2">
         {scaleLogo ? (
-          <ScalingAcanLogo />
+          <ScalingAcanLogo language={language} />
         ) : (
           <div className="ml-auto w-logo">
-            <AcanLogoCircle />
+            <AcanLogoCircle language={language} />
           </div>
         )}
       </div>

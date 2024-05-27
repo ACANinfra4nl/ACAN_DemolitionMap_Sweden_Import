@@ -20,8 +20,9 @@ export const MapPageContent: FC<
       features: Feature<Point, FeatureBuilding>[];
     };
     dict: Dictionary;
+    language: string;
   }
-> = ({ confirmationMessage, errorMessage, buildings, dict }) => {
+> = ({ confirmationMessage, errorMessage, buildings, dict, language }) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -120,7 +121,7 @@ export const MapPageContent: FC<
   return (
     <>
       <header className="col-span-12 col-start-1 row-start-1">
-        <Navigation dict={dict} />
+        <Navigation dict={dict} language={language} />
       </header>
       <main className="col-span-12 col-start-1 row-start-2 grid w-full grid-cols-1 grid-rows-[auto_1fr]">
         <div className="col-start-1 row-start-1 mx-5 flex gap-2 pb-2">

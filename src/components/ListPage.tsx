@@ -20,6 +20,7 @@ export const ListPage = async () => {
       <ListPageContent
         buildings={{ type: "FeatureCollection", features }}
         dict={dict}
+        language={process.env.LANGUAGE!}
       />
     </Suspense>
   );
