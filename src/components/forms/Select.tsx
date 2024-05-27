@@ -8,6 +8,7 @@ import {
 } from "react";
 import classNames from "classnames";
 import { TitledListValue } from "sanity";
+import { capitalize } from "@/lib/capitalize";
 
 export const Select: FC<
   Exclude<
@@ -48,7 +49,7 @@ export const Select: FC<
             key={opt.title}
             value={opt.value ?? ""}
           >
-            {formList[opt.title as keyof typeof formList]}
+            {capitalize(formList[opt.title as keyof typeof formList])}
           </option>
         ))}
       </select>
