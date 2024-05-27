@@ -31,12 +31,12 @@ const NavLink: FC<{
   </Link>
 );
 
-export const Navigation: FC<{
-  scaleLogo?: boolean;
-  dict: Dictionary;
-  language: string;
-}> = ({ scaleLogo, dict, language }) => {
+export const Navigation: FC<{ scaleLogo?: boolean; dict: Dictionary }> = ({
+  scaleLogo,
+  dict,
+}) => {
   const path = usePathname();
+
   return (
     <nav className="acan-text-menu grid w-full grid-cols-6 items-start justify-between gap-10 p-5">
       <div className="col-span-2">
@@ -71,10 +71,10 @@ export const Navigation: FC<{
       </div>
       <div className="col-span-2">
         {scaleLogo ? (
-          <ScalingAcanLogo language={language} />
+          <ScalingAcanLogo language={dict.nav.language} />
         ) : (
           <div className="ml-auto w-logo">
-            <AcanLogoCircle language={language} />
+            <AcanLogoCircle language={dict.nav.language} />
           </div>
         )}
       </div>

@@ -58,11 +58,6 @@ export const NewFeatureForm = ({
     [],
   );
 
-  useEffect(() => {
-    // force wait cursor on the entire document
-    document.body.classList.toggle("waiting", isSaving);
-  }, [isSaving]);
-
   // throw new Error(
   //   "fixa så att cursor är progress på hela sidan när man sparar, fattar inte riktigt hur man ska göra, kanske med nån portal?",
   // );

@@ -11,15 +11,14 @@ import Link from "next/link";
 export const ManifestPageContent: FC<{
   data: SanityDocument<ManifestDocumentType>;
   dict: Dictionary;
-  language: string;
-}> = ({ data, dict, language }) => {
+}> = ({ data, dict }) => {
   return (
     <>
       <div className="absolute min-h-[1px]">
         {/* HACK: this is a hack to fix a bug with NextJS scroll restoration */}
       </div>
       <header className="pointer-events-none sticky top-0 z-10">
-        <Navigation scaleLogo dict={dict} language={language} />
+        <Navigation scaleLogo dict={dict} />
       </header>
       <main className="mt-column">
         <div className="mx-5">

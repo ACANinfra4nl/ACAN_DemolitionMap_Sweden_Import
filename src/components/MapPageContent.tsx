@@ -20,9 +20,8 @@ export const MapPageContent: FC<
       features: Feature<Point, FeatureBuilding>[];
     };
     dict: Dictionary;
-    language: string;
   }
-> = ({ confirmationMessage, errorMessage, buildings, dict, language }) => {
+> = ({ confirmationMessage, errorMessage, buildings, dict }) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -85,10 +84,18 @@ export const MapPageContent: FC<
         .catch(() => {
           setAddedBuilding(false);
         })
-        .finally(() => setSavingBuilding(false));
+        .finally(() => {
+          setSavingBuilding(false);
+        });
     },
     [],
   );
+
+  useEffect(() => {
+    // force wait cursor on the entire document
+    document.body.classList.toggle("waiting", savingBuilding);
+  }, [savingBuilding]);
+
   const handleClickFeature: (id: string) => void = useCallback(
     (id) => {
       const feature = buildings?.features.find((f) => f.properties._id === id);
@@ -121,7 +128,7 @@ export const MapPageContent: FC<
   return (
     <>
       <header className="col-span-12 col-start-1 row-start-1">
-        <Navigation dict={dict} language={language} />
+        <Navigation dict={dict} />
       </header>
       <main className="col-span-12 col-start-1 row-start-2 grid w-full grid-cols-1 grid-rows-[auto_1fr]">
         <div className="col-start-1 row-start-1 mx-5 flex gap-2 pb-2">

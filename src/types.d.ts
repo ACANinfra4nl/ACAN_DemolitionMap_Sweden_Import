@@ -114,6 +114,7 @@ interface Dictionary {
     about: string;
     addOne: string;
     addTwo: string;
+    language: string;
   };
   search: string;
   sort: {

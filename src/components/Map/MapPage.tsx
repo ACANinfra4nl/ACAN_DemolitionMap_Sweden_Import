@@ -27,7 +27,6 @@ export const MapPage = async () => {
           {...newBuildingTexts}
           buildings={{ type: "FeatureCollection", features }}
           dict={dict}
-          language={process.env.LANGUAGE!}
         />
       </Suspense>
     </div>

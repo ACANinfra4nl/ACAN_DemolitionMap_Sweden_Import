@@ -3,7 +3,6 @@ import {
   FC,
   InputHTMLAttributes,
   useCallback,
-  useEffect,
   useState,
 } from "react";
 import classNames from "classnames";
@@ -45,7 +44,7 @@ export const Select: FC<
 
         {options.map((opt, i) => (
           <option
-            className="first-letter:uppercase"
+            className="capitalize"
             key={opt.title}
             value={opt.value ?? ""}
           >
