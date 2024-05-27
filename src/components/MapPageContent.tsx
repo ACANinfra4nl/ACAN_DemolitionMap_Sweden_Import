@@ -212,6 +212,7 @@ export const MapPageContent: FC<
               setShowNewBuildingForm(false);
               setTimeout(setAddedBuilding, 300, undefined);
             }}
+            dict={dict}
           />
         )}
         {addedBuilding === false && (
@@ -221,6 +222,7 @@ export const MapPageContent: FC<
               setShowNewBuildingForm(false);
               setTimeout(setAddedBuilding, 300, undefined);
             }}
+            dict={dict}
           />
         )}
       </Transition>

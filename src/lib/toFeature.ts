@@ -5,6 +5,7 @@ export const toFeature = <
   T extends {
     location: { _type?: string; lat: number; lng: number };
     state: string;
+    status?: string;
     category: string;
   },
 >(

@@ -21,6 +21,7 @@ interface SanityBuilding<T extends LatLng> {
   location: T;
   category: string;
   state: string;
+  status?: string;
   name?: string;
   address?: string;
   postcode?: string;
@@ -49,6 +50,7 @@ interface FeatureBuilding {
   location: LatLng;
   category: string;
   state: string;
+  status?: string;
   name?: string;
   address?: string;
   postcode?: string;
