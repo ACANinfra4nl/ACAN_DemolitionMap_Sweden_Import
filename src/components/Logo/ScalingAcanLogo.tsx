@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren, useEffect, useRef } from "react";
+import { FC, useEffect, useRef } from "react";
 import { AcanLogoCircle } from "./AcanLogoCircle";
 
 function easeInOutCubic(x: number): number {
