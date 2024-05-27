@@ -45,27 +45,27 @@ export default defineConfig({
               .id("reviewed")
               .icon(ReviewedBuildingIcon)
               .child(
-                S.documentTypeList("building").filter(
-                  groq`_type == "building" && reviewed == true`,
-                ),
+                S.documentTypeList("building")
+                  .apiVersion(apiVersion)
+                  .filter(groq`_type == "building" && reviewed == true`),
               ),
             S.listItem()
               .title("Unreviewed buildings")
               .id("unreviewed")
               .icon(UnreviewedBuildingIcon)
               .child(
-                S.documentTypeList("building").filter(
-                  groq`_type == "building" && reviewed != true`,
-                ),
+                S.documentTypeList("building")
+                  .apiVersion(apiVersion)
+                  .filter(groq`_type == "building" && reviewed != true`),
               ),
             S.listItem()
               .title("All buildings")
               .id("buildings")
               .icon(BuildingIcon)
               .child(
-                S.documentTypeList("building").filter(
-                  groq`_type == "building"`,
-                ),
+                S.documentTypeList("building")
+                  .apiVersion(apiVersion)
+                  .filter(groq`_type == "building"`),
               ),
             S.divider(),
             S.listItem()
@@ -76,13 +76,19 @@ export default defineConfig({
                 S.document()
                   .schemaType("manifest")
                   .id("manifest")
+                  .title("Manifest")
                   .views(createPreview(S)),
               ),
             S.listItem()
               .title("Settings")
               .id("settings")
               .icon(SettingsIcon)
-              .child(S.document().schemaType("settings").id("settings")),
+              .child(
+                S.document()
+                  .schemaType("settings")
+                  .id("settings")
+                  .title("Settings"),
+              ),
           ]),
     }),
 

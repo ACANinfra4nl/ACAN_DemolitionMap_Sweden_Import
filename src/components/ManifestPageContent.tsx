@@ -3,7 +3,7 @@ import { SanityDocument } from "next-sanity";
 import { FC } from "react";
 import { Image } from "@/components/portableText/Image";
 import { SallyLogo } from "./SallyLogo";
-import { AcanLogoText } from "./AcanLogoText";
+import { AcanLogoText } from "./Logo/AcanLogoText";
 import { IntroText } from "./IntroText";
 import { Navigation } from "./Navigation";
 import Link from "next/link";
@@ -28,10 +28,16 @@ export const ManifestPageContent: FC<{
             </div>
             <div className="acan-text-intro col-span-2 col-start-5 flex justify-end sm:col-span-1 sm:col-start-6 sm:justify-start">
               <div>
-                <Link href="/karta" className="block whitespace-nowrap">
+                <Link
+                  href={`/${dict.slugs.map}`}
+                  className="block whitespace-nowrap"
+                >
                   {dict.nav.map} &rarr;
                 </Link>
-                <Link href="/lista" className="block whitespace-nowrap">
+                <Link
+                  href={`/${dict.slugs.list}`}
+                  className="block whitespace-nowrap"
+                >
                   {dict.nav.list} &rarr;
                 </Link>
               </div>

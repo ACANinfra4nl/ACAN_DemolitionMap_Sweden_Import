@@ -21,6 +21,7 @@ interface SanityBuilding<T extends LatLng> {
   location: T;
   category: string;
   state: string;
+  status?: string;
   name?: string;
   address?: string;
   postcode?: string;
@@ -49,6 +50,7 @@ interface FeatureBuilding {
   location: LatLng;
   category: string;
   state: string;
+  status?: string;
   name?: string;
   address?: string;
   postcode?: string;
@@ -84,7 +86,6 @@ type BuildingCollection = GeoJSON.FeatureCollection<
 >;
 
 interface ManifestDocumentType {
-  heading: string;
   intro: import("sanity").PortableTextBlock[];
   content: import("sanity").PortableTextBlock[];
   // latestBuildings: SanityBuilding<LatLng>[];
@@ -97,6 +98,7 @@ interface MessageType {
 
 interface SettingsType {
   siteTitle: string;
+  feedbackEmail?: string;
   confirmationMessage: MessageType;
   errorMessage: MessageType;
   seo: {
@@ -139,7 +141,9 @@ interface Dictionary {
     image: string;
     remove: string;
   };
-  bounds: [number, number, number, number];
+  map: {
+    bounds: [number, number, number, number];
+  };
 }
 
 interface Categories {
@@ -165,6 +169,7 @@ interface DetailsPanel {
   linkCopied: string;
   shareFailed: string;
   add: string;
+  emailSubject: string;
 }
 
 interface NewFeatureForm {

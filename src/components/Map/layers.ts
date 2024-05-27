@@ -26,17 +26,17 @@ export const CLUSTERED_COUNT_LAYER_STYLE: SymbolLayer = {
 };
 export const SAVED_EXPR: ExpressionSpecification = [
   "==",
-  ["get", "state"],
+  ["get", "status"],
   "räddad",
 ];
 export const THREATENED_EXPR: ExpressionSpecification = [
   "==",
-  ["get", "state"],
+  ["get", "status"],
   "hotad",
 ];
 export const DEMOLISHED_EXPR: ExpressionSpecification = [
   "==",
-  ["get", "state"],
+  ["get", "status"],
   "riven",
 ];
 export const UNCLUSTERED_LAYER_STYLE: CircleLayer = {

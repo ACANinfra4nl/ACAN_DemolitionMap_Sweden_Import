@@ -1,10 +1,10 @@
 "use client";
-import { FC, MouseEventHandler, ReactNode } from "react";
+import { FC, MouseEventHandler, PropsWithChildren, ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import classNames from "classnames";
-import { AcanLogoCircle } from "./AcanLogoCircle";
-import { ScalingAcanLogo } from "./ScalingAcanLogo";
+import { AcanLogoCircle } from "./Logo/AcanLogoCircle";
+import { ScalingAcanLogo } from "./Logo/ScalingAcanLogo";
 
 const stopPropagation: MouseEventHandler<HTMLAnchorElement> = (e) => {
   e.nativeEvent.stopImmediatePropagation();

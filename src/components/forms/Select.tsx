@@ -3,11 +3,11 @@ import {
   FC,
   InputHTMLAttributes,
   useCallback,
-  useEffect,
   useState,
 } from "react";
 import classNames from "classnames";
 import { TitledListValue } from "sanity";
+import { capitalize } from "@/lib/capitalize";
 
 export const Select: FC<
   Exclude<
@@ -36,7 +36,7 @@ export const Select: FC<
       <select
         {...props}
         id={props.name}
-        className="peer w-full appearance-none border-b border-current text-body capitalize outline-none focus-within:border-acan-blue"
+        className="peer w-full appearance-none border-b border-current text-body outline-none first-letter:uppercase focus-within:border-acan-blue"
         onChange={handleChange}
         onBlur={handleInteracted}
       >
@@ -48,7 +48,7 @@ export const Select: FC<
             key={opt.title}
             value={opt.value ?? ""}
           >
-            {formList[opt.title as keyof typeof formList]}
+            {capitalize(formList[opt.title as keyof typeof formList])}
           </option>
         ))}
       </select>

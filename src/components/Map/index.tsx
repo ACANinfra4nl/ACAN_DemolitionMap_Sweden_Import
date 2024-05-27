@@ -6,6 +6,7 @@ import ReactMapGl, {
   MapRef,
   Marker,
   NavigationControl,
+  LngLatBoundsLike,
 } from "react-map-gl/maplibre";
 import type { Feature, Point } from "geojson";
 import classNames from "classnames";
@@ -29,7 +30,7 @@ interface MapProps {
   onAddMarker: (latLng: LatLng) => void;
   onClickFeature: (id: string) => void;
   className?: string;
-  bounds: [number, number, number, number];
+  bounds: LngLatBoundsLike;
 }
 
 export const Map: FC<MapProps> = ({

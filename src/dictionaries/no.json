@@ -60,7 +60,8 @@
     "share": "del",
     "linkCopied": "lenke kopiert",
     "shareFailed": "delingen mislyktes",
-    "add": "legg til beskrivelse"
+    "add": "legg til beskrivelse",
+    "emailSubject": "Historier om"
   },
   "building": {
     "architect": "arkitekt",
@@ -88,5 +89,7 @@
     "image": "bilde",
     "remove": "ta bort"
   },
-  "bounds": [10, 55, 25, 69]
+  "map": {
+    "bounds": [2.37, 56.88, 25.46, 71.22]
+  }
 }

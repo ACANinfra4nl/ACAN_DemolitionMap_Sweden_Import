@@ -60,7 +60,8 @@
     "share": "jaa",
     "linkCopied": "linkki kopioitu",
     "shareFailed": "jakaminen epäonnistui",
-    "add": "lisää"
+    "add": "lisää",
+    "emailSubject": "Tarinoita aiheesta"
   },
   "building": {
     "architect": "arkkitehti",
@@ -89,5 +90,7 @@
     "image": "kuva",
     "remove": "poista"
   },
-  "bounds": [14, 57, 35, 71]
+  "map": {
+    "bounds": [17.02, 59.05, 36.37, 70.75]
+  }
 }

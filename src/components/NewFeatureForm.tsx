@@ -48,6 +48,9 @@ export const NewFeatureForm = ({
         "form *:is(input, textarea, select):not([type=hidden], :disabled)",
       ) as HTMLElement | undefined
     )?.focus();
+    return () => {
+      document.body.classList.remove("waiting");
+    };
   }, []);
 
   const handleChangeState: ChangeEventHandler<HTMLSelectElement> = useCallback(

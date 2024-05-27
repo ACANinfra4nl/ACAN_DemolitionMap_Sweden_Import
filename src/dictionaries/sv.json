@@ -60,7 +60,8 @@
     "share": "dela",
     "linkCopied": "länk kopierad",
     "shareFailed": "delningen misslyckades",
-    "add": "lägg till berättelse"
+    "add": "lägg till berättelse",
+    "emailSubject": "Berättelser om"
   },
   "building": {
     "architect": "arkitekt",
@@ -88,5 +89,7 @@
     "image": "bild",
     "remove": "ta bort"
   },
-  "bounds": [10, 55, 25, 69]
+  "map": {
+    "bounds": [10, 55, 25, 69]
+  }
 }

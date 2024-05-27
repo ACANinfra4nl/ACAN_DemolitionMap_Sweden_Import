@@ -13,6 +13,13 @@ export const settings: SchemaTypeDefinition = {
       validation: (Rule) => Rule.required(),
     },
     {
+      name: "feedbackEmail",
+      type: "email",
+      title: "Feedback email",
+      description:
+        "This email address is linked from the details pane where users can add details and suggest changes",
+    },
+    {
       name: "confirmationMessage",
       type: "object",
       title: "Confirmation message",

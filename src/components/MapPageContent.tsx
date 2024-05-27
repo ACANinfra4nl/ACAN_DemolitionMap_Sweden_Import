@@ -21,7 +21,7 @@ export const MapPageContent: FC<
     };
     dict: Dictionary;
   }
-> = ({ confirmationMessage, errorMessage, buildings, dict }) => {
+> = ({ feedbackEmail, confirmationMessage, errorMessage, buildings, dict }) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -70,6 +70,7 @@ export const MapPageContent: FC<
       const formData = new FormData(e.target as HTMLFormElement);
       // save info from form
       setSavingBuilding(true);
+      document.body.classList.add("waiting");
       fetch("/api/buildings", {
         method: "POST",
         body: formData,
@@ -86,15 +87,11 @@ export const MapPageContent: FC<
         })
         .finally(() => {
           setSavingBuilding(false);
+          document.body.classList.remove("waiting");
         });
     },
     [],
   );
-
-  useEffect(() => {
-    // force wait cursor on the entire document
-    document.body.classList.toggle("waiting", savingBuilding);
-  }, [savingBuilding]);
 
   const handleClickFeature: (id: string) => void = useCallback(
     (id) => {
@@ -171,7 +168,7 @@ export const MapPageContent: FC<
             addingLocation={addingLocation}
             onAddMarker={handleAddMarker}
             onClickFeature={handleClickFeature}
-            bounds={dict.bounds}
+            bounds={dict.map.bounds}
           />
         </div>
       </main>
@@ -187,6 +184,7 @@ export const MapPageContent: FC<
       >
         {selectedFeature && (
           <DetailsPanel
+            feedbackEmail={feedbackEmail}
             properties={selectedFeature.properties}
             onClose={clearSelectedFeature}
             dict={dict}
@@ -219,6 +217,7 @@ export const MapPageContent: FC<
               setShowNewBuildingForm(false);
               setTimeout(setAddedBuilding, 300, undefined);
             }}
+            dict={dict}
           />
         )}
         {addedBuilding === false && (
@@ -228,6 +227,7 @@ export const MapPageContent: FC<
               setShowNewBuildingForm(false);
               setTimeout(setAddedBuilding, 300, undefined);
             }}
+            dict={dict}
           />
         )}
       </Transition>

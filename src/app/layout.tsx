@@ -9,11 +9,13 @@ export async function generateMetadata(): Promise<Metadata> {
     tags: ["settings"],
   });
 
+  if (!settings) return {};
+
   return {
     title: settings.siteTitle,
-    description: settings.seo.description,
+    description: settings.seo?.description,
     openGraph: {
-      images: [settings.seo.image.asset.url],
+      images: [settings.seo?.image.asset.url],
     },
   };
 }
