@@ -77,12 +77,13 @@ const SortArrow: FC<{ descending?: boolean }> = ({ descending }) => (
 );
 
 export const ListPageContent: FC<{
+  feedbackEmail?: string;
   buildings: {
     type: "FeatureCollection";
     features: Feature<Point, FeatureBuilding>[];
   };
   dict: Dictionary;
-}> = ({ buildings, dict }) => {
+}> = ({ feedbackEmail, buildings, dict }) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -170,6 +171,7 @@ export const ListPageContent: FC<{
             >
               {selectedBuilding && (
                 <DetailsPanel
+                  feedbackEmail={feedbackEmail}
                   properties={selectedBuilding}
                   onClose={handleClearSelection}
                   dict={dict}

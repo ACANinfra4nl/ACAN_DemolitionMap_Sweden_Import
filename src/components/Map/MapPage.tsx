@@ -6,7 +6,7 @@ import { toFeature } from "@/lib/toFeature";
 import { getDictionary } from "@/lib/dictionaries";
 
 export const MapPage = async () => {
-  const newBuildingTexts = await sanityFetch<SettingsType>({
+  const settings = await sanityFetch<SettingsType>({
     query: settingsQuery,
     tags: ["settings"],
   });
@@ -24,7 +24,7 @@ export const MapPage = async () => {
     <div className="grid h-screen grid-cols-12 grid-rows-[auto_1fr]">
       <Suspense>
         <MapPageContent
-          {...newBuildingTexts}
+          {...settings}
           buildings={{ type: "FeatureCollection", features }}
           dict={dict}
         />

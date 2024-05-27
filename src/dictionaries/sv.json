@@ -60,7 +60,8 @@
     "share": "dela",
     "linkCopied": "länk kopierad",
     "shareFailed": "delningen misslyckades",
-    "add": "lägg till berättelse"
+    "add": "lägg till berättelse",
+    "emailSubject": "Berättelser om"
   },
   "building": {
     "architect": "arkitekt",

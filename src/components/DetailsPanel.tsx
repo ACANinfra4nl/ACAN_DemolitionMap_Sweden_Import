@@ -21,12 +21,14 @@ const Detail: FC<{ label: string; value: string | number | ReactNode }> = ({
 );
 
 interface DetailsProps {
+  feedbackEmail?: string;
   properties: FeatureBuilding;
   onClose: () => void;
   dict: Dictionary;
 }
 
 export const DetailsPanel: FC<DetailsProps> = ({
+  feedbackEmail,
   properties,
   onClose,
   dict,
@@ -112,18 +114,20 @@ export const DetailsPanel: FC<DetailsProps> = ({
           >
             {dict.detailsPanel.share}
           </ShareButton>
-          <Link
-            href={`mailto:rivningskartan@architectscan.se?subject=${encodeURIComponent(
-              `Berättelse om ${formatAddress(
-                properties.address,
-                properties.postcode,
-                properties.city,
-              )}`,
-            )}`}
-            className="text-body underline first-letter:uppercase hover:text-acan-blue focus-visible:text-acan-blue"
-          >
-            {dict.detailsPanel.add}
-          </Link>
+          {feedbackEmail && (
+            <Link
+              href={`mailto:${feedbackEmail}?subject=${encodeURIComponent(
+                `${dict.detailsPanel.emailSubject} ${formatAddress(
+                  properties.address,
+                  properties.postcode,
+                  properties.city,
+                )}`,
+              )}`}
+              className="text-body underline first-letter:uppercase hover:text-acan-blue focus-visible:text-acan-blue"
+            >
+              {dict.detailsPanel.add}
+            </Link>
+          )}
         </div>
       </div>
     </div>

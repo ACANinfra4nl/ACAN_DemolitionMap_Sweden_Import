@@ -60,7 +60,8 @@
     "share": "jaa",
     "linkCopied": "linkki kopioitu",
     "shareFailed": "jakaminen epäonnistui",
-    "add": "lisää"
+    "add": "lisää",
+    "emailSubject": "Tarinoita aiheesta"
   },
   "building": {
     "architect": "arkkitehti",

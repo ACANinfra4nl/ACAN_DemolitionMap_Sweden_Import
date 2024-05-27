@@ -60,7 +60,8 @@
     "share": "share",
     "linkCopied": "link copied",
     "shareFailed": "share failed",
-    "add": "add"
+    "add": "add",
+    "emailSubject": "Stories about"
   },
   "building": {
     "architect": "architect",

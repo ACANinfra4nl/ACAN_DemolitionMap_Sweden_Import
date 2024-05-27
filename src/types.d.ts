@@ -98,6 +98,7 @@ interface MessageType {
 
 interface SettingsType {
   siteTitle: string;
+  feedbackEmail?: string;
   confirmationMessage: MessageType;
   errorMessage: MessageType;
   seo: {
@@ -168,6 +169,7 @@ interface DetailsPanel {
   linkCopied: string;
   shareFailed: string;
   add: string;
+  emailSubject: string;
 }
 
 interface NewFeatureForm {
