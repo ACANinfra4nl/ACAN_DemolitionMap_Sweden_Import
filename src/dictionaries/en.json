@@ -1,0 +1,91 @@
+{
+  "nav": {
+    "title": "demolition map",
+    "map": "map",
+    "list": "list",
+    "about": "about the map",
+    "addOne": "add",
+    "addTwo": "building",
+    "language": "sv"
+  },
+  "search": "search",
+  "sort": {
+    "added": "added",
+    "buildYear": "year built",
+    "demolitionYear": "year demolished"
+  },
+  "categories": {
+    "residence": "residential",
+    "office": "office",
+    "commercial": "commercial",
+    "communityProperty": "community",
+    "industry": "industrial",
+    "other": "other"
+  },
+  "states": {
+    "demolished": "demolished",
+    "threatened": "threatened",
+    "saved": "saved"
+  },
+  "newFeatureForm": {
+    "addLocation": "add location",
+    "addBuilding": "add building",
+    "imageInput": "upload image",
+    "category": "category",
+    "state": "status",
+    "buildingName": "building name (if applicable)",
+    "address": "address",
+    "blockName": "region (city or county)",
+    "propertyDesignation": "listed building designation (if applicable)",
+    "size": "size (total m2)",
+    "architect": "architect",
+    "propertyOwner": "ownership",
+    "buildYear": "year of construction",
+    "demolitionYear": "year of demolition",
+    "description": "description",
+    "demolitionCause": "reason for demolition\nplanning application reference (if applicable)",
+    "sources": "sources",
+    "sender": "sender",
+    "contributor": "contributor",
+    "email": "e-mail",
+    "addEmail": "add contact email address",
+    "accept": "accept",
+    "cancel": "cancel",
+    "save": "save"
+  },
+  "detailsPanel": {
+    "description": "description",
+    "demolitionCause": "reason for demolition",
+    "sources": "sources",
+    "share": "share",
+    "linkCopied": "link copied",
+    "shareFailed": "share failed",
+    "add": "add"
+  },
+  "building": {
+    "architect": "architect",
+    "size": "size (total m2)",
+    "blockName": "region (city or county)",
+    "propertyOwner": "ownership",
+    "boundCO2": {
+      "label": "Bound CO²",
+      "unit": "tonnes"
+    },
+    "buildYear": "year of construction",
+    "demolitionYear": "year of demolition",
+    "category": "category"
+  },
+  "notFound": "not found",
+  "slugs": {
+    "map": "map",
+    "list": "list"
+  },
+  "ariaLabels": {
+    "close": "close",
+    "filter": "filter",
+    "previous": "previous",
+    "next": "next",
+    "image": "image",
+    "remove": "remove"
+  }
+}
