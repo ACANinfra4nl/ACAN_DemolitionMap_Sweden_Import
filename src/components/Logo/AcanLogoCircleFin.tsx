@@ -3,7 +3,7 @@ import { FC } from "react";
 
 export const AcanLogoCircleFin: FC = () => (
   <Link
-    href="https://www.architectscan.se/"
+    href="https://www.acan.fi/"
     rel="noopener noreferrer"
     target="_blank"
     title="Architects Climate Action Network"
