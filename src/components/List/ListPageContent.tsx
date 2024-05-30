@@ -4,7 +4,6 @@ import { DetailsPanel } from "@/components/DetailsPanel";
 import { Navigation } from "@/components/Navigation";
 import classNames from "classnames";
 import {
-  ChangeEventHandler,
   FC,
   MouseEvent,
   PropsWithChildren,
@@ -12,13 +11,14 @@ import {
   useEffect,
   useState,
 } from "react";
-import { FilterButton } from "@/components/FilterButton";
 import { Transition } from "@headlessui/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { BuildingImage } from "@/components/BuildingImage";
 import { buildingToQueryParams } from "@/lib/buildingToQueryParams";
 import { BuildingHeading } from "@/components/BuildingHeading";
 import { Feature, Point } from "geojson";
+import { ListFilter } from "./ListFilter";
+import { SORTERS } from "./sorting";
 
 const matchesIgnoreCase = (haystack: string | undefined, needle: string) =>
   haystack?.toLowerCase().includes(needle.toLowerCase());
@@ -40,41 +40,6 @@ const filterBuildings = (filters: string) => (feature: BuildingFeature) =>
         matchesIgnoreCase(feature.properties.state, filter) ||
         matchesIgnoreCase(feature.properties.category, filter),
     );
-
-type BuildingSorter = (
-  descending: boolean,
-) => (a: BuildingFeature, b: BuildingFeature) => number;
-const buildYearSorter: BuildingSorter = (desc) => (a, b) =>
-  (a.properties.buildYear - b.properties.buildYear) * (desc ? -1 : 1);
-const demolitionYearSorter: BuildingSorter = (desc) => (a, b) =>
-  a.properties.demolitionYear && b.properties.demolitionYear
-    ? (a.properties.demolitionYear - b.properties.demolitionYear) *
-      (desc ? -1 : 1)
-    : a.properties.demolitionYear
-    ? -1
-    : 1;
-// const addressSorter: BuildingSorter = (desc) => (a, b) =>
-//   (a.properties.address &&
-//   b.properties.address &&
-//   a.properties.address < b.properties.address
-//     ? -1
-//     : 1) * (desc ? -1 : 1);
-const createdAtSorter: BuildingSorter = (desc) => (a, b) =>
-  (a.properties._createdAt < b.properties._createdAt ? -1 : 1) *
-  (desc ? -1 : 1);
-
-const SORTERS = {
-  buildYear: buildYearSorter,
-  demolitionYear: demolitionYearSorter,
-  // address: addressSorter,
-  _createdAt: createdAtSorter,
-};
-
-const SortArrow: FC<{ descending?: boolean }> = ({ descending }) => (
-  <span className="inline-block w-4 text-center">
-    {typeof descending === "boolean" && (descending ? "↓" : "↑")}
-  </span>
-);
 
 export const ListPageContent: FC<{
   feedbackEmail?: string;
@@ -107,14 +72,6 @@ export const ListPageContent: FC<{
     }
   }, [selectedId]);
 
-  const handleFilterChange: ChangeEventHandler<HTMLInputElement> = useCallback(
-    (e) => {
-      const value = e.target.value;
-      setFilter(value.trim());
-    },
-    [],
-  );
-
   const handleSelectBuilding = useCallback(
     (building: FeatureBuilding, e: MouseEvent<HTMLAnchorElement>) => {
       e.preventDefault();
@@ -132,12 +89,6 @@ export const ListPageContent: FC<{
     router.push(pathname, { scroll: false });
   }, [router, pathname]);
 
-  const handleSortBy = (key: keyof typeof SORTERS) => () => {
-    if (sortBy === key) setSortDesc((old) => !old);
-    else setSortDesc(false);
-    setSortBy(key);
-  };
-
   let rows =
     buildings?.features
       .filter(
@@ -150,12 +101,22 @@ export const ListPageContent: FC<{
 
   return (
     <>
-      <div className="h-screen">
+      <div className="min-h-screen">
         <div className="min-h-[1px]"></div>
-        <header className="fixed left-0 right-0 top-0 z-10">
+        <header className="sticky top-0 z-10">
           <Navigation dict={dict} />
+          <ListFilter
+            stateFilter={stateFilter}
+            setStateFilter={setStateFilter}
+            sortBy={sortBy}
+            setSortBy={setSortBy}
+            sortDesc={sortDesc}
+            setSortDesc={setSortDesc}
+            setFilter={setFilter}
+            dict={dict}
+          />
         </header>
-        <main className="mt-header-s grid grid-cols-1 grid-rows-[auto_1fr] pt-20 xs:pt-12 sm:mt-header sm:pt-16 md:pt-10">
+        <main className="grid grid-cols-1 grid-rows-[auto_1fr]">
           <Transition
             show={hasSelectedBuilding}
             className="fixed bottom-0 left-0 right-0 top-0 z-20 grid grid-cols-12 grid-rows-1"
@@ -190,78 +151,8 @@ export const ListPageContent: FC<{
               {selectedBuilding && <DetailsMap building={selectedBuilding} />}
             </Transition.Child>
           </Transition>
-          <div className="acan-text-menu fixed top-header-s z-10 grid w-full grid-cols-[auto_1fr_auto] gap-x-10 gap-y-3 px-5 sm:top-header">
-            <div className="col-span-3 flex gap-2 md:col-span-1">
-              <FilterButton
-                state={dict.states.demolished}
-                filter={stateFilter}
-                onClick={setStateFilter}
-                dictStates={dict.states}
-              />
-              <FilterButton
-                state={dict.states.threatened}
-                filter={stateFilter}
-                onClick={setStateFilter}
-                dictStates={dict.states}
-              />
-              <FilterButton
-                state={dict.states.saved}
-                filter={stateFilter}
-                onClick={setStateFilter}
-                dictStates={dict.states}
-              />
-            </div>
-            <div className="relative col-span-3 items-center xs:col-span-2 md:col-span-1 md:col-start-2">
-              <input
-                aria-label={dict.ariaLabels.filter}
-                id="filter"
-                type="text"
-                name="filter"
-                className="peer w-full border-b border-current bg-transparent pl-6 uppercase outline-none placeholder:uppercase placeholder:text-current focus:border-b-acan-blue"
-                onChange={handleFilterChange}
-                placeholder={dict.search}
-              />
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                strokeWidth={2}
-                className="absolute bottom-1 left-0 stroke-black peer-focus:stroke-acan-blue"
-              >
-                <circle cx="6.5" cy="6.5" r="5.5" />
-                <path d="m10 10 5 5" />
-              </svg>
-            </div>
-            <div className="col-span-3 flex items-center justify-end gap-2 xs:col-span-1 xs:col-start-3">
-              <SortButton
-                sortKey="_createdAt"
-                sortBy={sortBy}
-                sortDesc={sortDesc}
-                onClick={handleSortBy("_createdAt")}
-              >
-                {dict.sort.added}
-              </SortButton>
-              <SortButton
-                sortKey="buildYear"
-                sortBy={sortBy}
-                sortDesc={sortDesc}
-                onClick={handleSortBy("buildYear")}
-              >
-                {dict.sort.buildYear}
-              </SortButton>
-              <SortButton
-                sortKey="demolitionYear"
-                sortBy={sortBy}
-                sortDesc={sortDesc}
-                onClick={handleSortBy("demolitionYear")}
-              >
-                {dict.sort.demolitionYear}
-              </SortButton>
-            </div>
-          </div>
-          <div className="col-start-1 row-start-2 px-5 pb-20">
+
+          <div className="col-start-1 row-start-2 px-5 pb-20 pt-5">
             <ul className="grid auto-rows-fr grid-cols-1 items-start gap-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
               {rows.map((building) => (
                 <li key={building.properties._id}>
@@ -292,27 +183,5 @@ export const ListPageContent: FC<{
         </main>
       </div>
     </>
-  );
-};
-
-const SortButton: FC<
-  PropsWithChildren<{
-    sortKey: keyof FeatureBuilding;
-    sortBy: string;
-    sortDesc?: boolean;
-    onClick: () => void;
-  }>
-> = ({ sortKey, sortBy, sortDesc, onClick, children }) => {
-  return (
-    <button
-      onClick={onClick}
-      className={classNames(
-        "whitespace-nowrap uppercase outline-none hover:text-acan-blue focus-visible:text-acan-blue",
-        sortBy === sortKey && "underline",
-      )}
-    >
-      {children}
-      <SortArrow descending={sortBy === sortKey ? sortDesc : undefined} />
-    </button>
   );
 };

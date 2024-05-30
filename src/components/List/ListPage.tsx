@@ -1,7 +1,7 @@
-import { ListPageContent } from "@/components/ListPageContent";
+import { ListPageContent } from "./ListPageContent";
 import { sanityFetch } from "@/lib/sanityFetch";
 import { Suspense } from "react";
-import { buildingsQuery, settingsQuery } from "../../sanity/lib/queries";
+import { buildingsQuery, settingsQuery } from "../../../sanity/lib/queries";
 import { toFeature } from "@/lib/toFeature";
 import { getDictionary } from "@/lib/dictionaries";
 

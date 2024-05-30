@@ -1,4 +1,4 @@
-import { ListPage } from "@/components/ListPage";
+import { ListPage } from "@/components/List/ListPage";
 import { MapPage } from "@/components/Map/MapPage";
 import NotFound from "../not-found";
 import { getDictionary } from "@/lib/dictionaries";
