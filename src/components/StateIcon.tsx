@@ -17,7 +17,7 @@ export const StateIcon: FC<{ state: string; dictStates: States }> = ({
         ? "bg-saved"
         : "bg-gray-unknown",
     )}
-    aria-label={state}
-    title={state}
+    aria-label={state in dictStates ? state : undefined}
+    title={state in dictStates ? state : undefined}
   ></div>
 );
