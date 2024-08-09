@@ -45,7 +45,7 @@
     "description": "berättelser om byggnaden",
     "demolitionCause": "bakgrund till rivning (ange gärna källa)",
     "sources": "bildkällor",
-    "sender": "avsändare",
+    "sender": "avsändare (informationen publiceras inte)",
     "contributor": "namn",
     "email": "e-post",
     "addEmail": "ange din e-post-adress om du vill få en notis när ditt bidrag granskats.",

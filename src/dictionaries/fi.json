@@ -45,7 +45,7 @@
     "description": "rakennuksen kuvaus",
     "demolitionCause": "purkusyy",
     "sources": "lähteet",
-    "sender": "lähettäjä",
+    "sender": "lähettäjä (tietoja ei julkaista)",
     "contributor": "nimi",
     "email": "sähköposti",
     "addEmail": "lisää sähköpostiosoitteesi jos haluat ilmoituksen, kun lisäyksesi on hyväksytty.",

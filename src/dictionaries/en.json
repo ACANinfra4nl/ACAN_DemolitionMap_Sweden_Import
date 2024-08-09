@@ -45,7 +45,7 @@
     "description": "description",
     "demolitionCause": "reason for demolition\nplanning application reference (if applicable)",
     "sources": "sources",
-    "sender": "sender",
+    "sender": "sender (information will not be published)",
     "contributor": "contributor",
     "email": "e-mail",
     "addEmail": "add contact email address",

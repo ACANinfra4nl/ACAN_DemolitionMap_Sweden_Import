@@ -45,7 +45,7 @@
     "description": "bygningsbeskrivelse",
     "demolitionCause": "bakgrunn for riving (oppgi gjerne kilde)",
     "sources": "bildekilde",
-    "sender": "avsender",
+    "sender": "avsender (informasjonen publiseres ikke)",
     "contributor": "navn",
     "email": "e-post",
     "addEmail": "oppgi e-postadressen din hvis du vil motta en melding når bidraget ditt er gjennomgått",
