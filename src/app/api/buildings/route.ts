@@ -71,6 +71,8 @@ export async function POST(request: NextRequest) {
       description: formData.get("description") as string | undefined,
       // Anledning till rivning, fritext (vad planeras i dess ställe)
       demolitionCause: formData.get("demolitionCause") as string | undefined,
+      // Bildkällor
+      sources: formData.get("sources") as string | undefined,
       // (Datum för inlägget)
       // Minnen, öppet för alla att lägga till
       images: imageAssets.length > 0 ? imageAssets : undefined,
