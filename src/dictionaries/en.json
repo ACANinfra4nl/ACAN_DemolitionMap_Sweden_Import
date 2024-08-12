@@ -30,7 +30,8 @@
   "newFeatureForm": {
     "addLocation": "Select location on map",
     "addBuilding": "add building",
-    "imageInput": "upload image",
+    "imageInput": "upload images",
+    "imageMaxSize": "The total size of all images must not exceed 4MB.",
     "category": "category",
     "state": "status",
     "buildingName": "building name (if applicable)",

@@ -77,6 +77,7 @@ export const NewFeatureForm = ({
           <div>
             <ImageInput
               text={dict.newFeatureForm.imageInput}
+              maxSizeText={dict.newFeatureForm.imageMaxSize}
               ariaLabels={dict.ariaLabels}
             />
           </div>

@@ -31,6 +31,7 @@
     "addLocation": "Velg sted på kartet",
     "addBuilding": "legg til bygning",
     "imageInput": "dra og slipp bildene dine her for opplasting",
+    "imageMaxSize": "Den totale størrelsen på alle bildene må ikke overstige 4 MB.",
     "category": "kategori",
     "state": "status",
     "buildingName": "bygningsnavn",

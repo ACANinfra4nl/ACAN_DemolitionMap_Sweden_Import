@@ -31,6 +31,7 @@
     "addLocation": "Valitse paikka kartalta",
     "addBuilding": "lisää rakennus",
     "imageInput": "raahaa ja pudota kuvasi tähän",
+    "imageMaxSize": "Kuvien yhteenlaskettu koko ei saa ylittää 4 Mt.",
     "category": "kategoria",
     "state": "status",
     "buildingName": "rakennuksen nimi",
