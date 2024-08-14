@@ -2,7 +2,7 @@
 import { FC, MouseEventHandler, PropsWithChildren, ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import classNames from "classnames";
+import classNames from "clsx";
 import { AcanLogoCircle } from "./Logo/AcanLogoCircle";
 import { ScalingAcanLogo } from "./Logo/ScalingAcanLogo";
 

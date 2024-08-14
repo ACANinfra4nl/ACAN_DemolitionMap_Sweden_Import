@@ -176,6 +176,7 @@ interface NewFeatureForm {
   addLocation: string;
   addBuilding: string;
   imageInput: string;
+  imageMaxSize: string;
   category: string;
   state: string;
   buildingName: string;

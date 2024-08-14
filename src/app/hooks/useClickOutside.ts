@@ -6,7 +6,11 @@ export const useClickOutside = <T extends Node>(
 ) => {
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (!element.current || element.current.contains(e.target as Node))
+      if (
+        !document.body.contains(e.target as Node) || // NOTE: do not trigger click outside if the clicked element was removed from the DOM
+        !element.current ||
+        element.current.contains(e.target as Node)
+      )
         return;
       onClick();
     };

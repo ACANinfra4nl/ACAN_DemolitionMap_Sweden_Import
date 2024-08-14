@@ -1,15 +1,18 @@
-import { ListPage } from "@/components/List/ListPage";
-import { MapPage } from "@/components/Map/MapPage";
-import NotFound from "../not-found";
 import { getDictionary } from "@/lib/dictionaries";
+import dynamic from "next/dynamic";
 
 const dict = await getDictionary();
+const ListPage = dynamic(() =>
+  import("@/components/List/ListPage").then((mod) => mod.ListPage),
+);
+const MapPage = dynamic(() =>
+  import("@/components/Map/MapPage").then((mod) => mod.MapPage),
+);
+const NotFound = dynamic(() => import("../not-found"));
 
 export function generateStaticParams() {
   return [{ slug: dict.slugs.list }, { slug: dict.slugs.map }];
 }
-
-export const revalidate = 3600;
 
 export default function SlugPage({ params }: { params: { slug: string } }) {
   switch (params.slug) {

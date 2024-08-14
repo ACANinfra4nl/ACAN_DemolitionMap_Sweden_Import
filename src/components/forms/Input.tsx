@@ -6,7 +6,7 @@ import {
   useCallback,
   useState,
 } from "react";
-import classNames from "classnames";
+import classNames from "clsx";
 
 export const Input: FC<
   Exclude<

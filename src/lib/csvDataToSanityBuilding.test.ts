@@ -1,9 +1,8 @@
 import { GeopointValue } from "sanity";
-import { csvDataToSanityBuilding } from "./csvDataToSanityBuilding";
+import { csvDataToSanityBuilding, CsvRow } from "./csvDataToSanityBuilding";
 
 it("should convert data from csv file to sanity building", () => {
   const csvData = {
-    NAMN: "",
     BILD: "",
     KATEGORI: "Kontor",
     STATUS: "Riven",
@@ -24,6 +23,9 @@ it("should convert data from csv file to sanity building", () => {
     ARKITEKTUR: "",
     RIVNINGSORSAK: "",
     "ÖVRIGT/BERÄTTELSE": "",
+    "BILD UPPHOVSRÄTT ": "",
+    "BAKGRUND TILL RIVNING (KÄLLA)": "",
+    "BYGGNADENS NAMN": "namn",
   };
 
   const result = csvDataToSanityBuilding(csvData);
@@ -35,6 +37,7 @@ it("should convert data from csv file to sanity building", () => {
       lat: 59.311583,
       lng: 18.031,
     },
+    name: "namn",
     category: "kontor",
     state: "riven",
     propertyDesignation: "Marievik 15",

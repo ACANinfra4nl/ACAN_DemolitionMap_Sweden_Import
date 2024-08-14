@@ -1,5 +1,5 @@
 import { capitalize } from "@/lib/capitalize";
-import classNames from "classnames";
+import classNames from "clsx";
 import { FC } from "react";
 
 export const StateIcon: FC<{ state: string; dictStates: States }> = ({

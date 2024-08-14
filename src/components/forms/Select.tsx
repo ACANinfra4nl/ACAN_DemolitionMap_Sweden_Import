@@ -5,7 +5,7 @@ import {
   useCallback,
   useState,
 } from "react";
-import classNames from "classnames";
+import classNames from "clsx";
 import { TitledListValue } from "sanity";
 import { capitalize } from "@/lib/capitalize";
 

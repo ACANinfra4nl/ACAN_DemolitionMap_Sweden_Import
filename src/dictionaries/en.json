@@ -28,9 +28,10 @@
     "saved": "saved"
   },
   "newFeatureForm": {
-    "addLocation": "add location",
+    "addLocation": "Select location on map",
     "addBuilding": "add building",
-    "imageInput": "upload image",
+    "imageInput": "upload images",
+    "imageMaxSize": "The total size of all images must not exceed 4MB.",
     "category": "category",
     "state": "status",
     "buildingName": "building name (if applicable)",
@@ -45,7 +46,7 @@
     "description": "description",
     "demolitionCause": "reason for demolition\nplanning application reference (if applicable)",
     "sources": "sources",
-    "sender": "sender",
+    "sender": "sender (information will not be published)",
     "contributor": "contributor",
     "email": "e-mail",
     "addEmail": "add contact email address",
