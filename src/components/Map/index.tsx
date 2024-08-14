@@ -9,7 +9,7 @@ import ReactMapGl, {
   LngLatBoundsLike,
 } from "react-map-gl/maplibre";
 import type { Feature, Point } from "geojson";
-import classNames from "classnames";
+import classNames from "clsx";
 import {
   CLUSTERED_COUNT_LAYER_STYLE,
   CLUSTERED_LAYER_STYLE,

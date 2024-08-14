@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { StateIcon } from "./StateIcon";
-import classNames from "classnames";
+import classNames from "clsx";
 
 export const BuildingHeading: FC<{
   building: FeatureBuilding;

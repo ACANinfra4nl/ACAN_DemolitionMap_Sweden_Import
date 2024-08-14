@@ -1,5 +1,5 @@
 "use client";
-import classNames from "classnames";
+import classNames from "clsx";
 import { ComponentProps, FC } from "react";
 import { Image } from "./Image";
 

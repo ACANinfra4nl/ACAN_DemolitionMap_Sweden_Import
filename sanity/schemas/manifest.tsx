@@ -1,4 +1,3 @@
-import classNames from "classnames";
 import { SchemaTypeDefinition } from "sanity";
 
 export const manifest: SchemaTypeDefinition = {

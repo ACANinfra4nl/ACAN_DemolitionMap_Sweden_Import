@@ -2,7 +2,7 @@
 import { DetailsMap } from "@/components/DetailsMap";
 import { DetailsPanel } from "@/components/DetailsPanel";
 import { Navigation } from "@/components/Navigation";
-import classNames from "classnames";
+import classNames from "clsx";
 import {
   FC,
   MouseEvent,

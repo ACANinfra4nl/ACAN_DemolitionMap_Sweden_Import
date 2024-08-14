@@ -1,6 +1,6 @@
 "use client";
 import { StateIcon } from "@/components/StateIcon";
-import classNames from "classnames";
+import classNames from "clsx";
 import { FC, useCallback } from "react";
 
 export const FilterButton: FC<{

@@ -7,7 +7,7 @@ import {
   useRef,
   useState,
 } from "react";
-import classNames from "classnames";
+import classNames from "clsx";
 
 interface ImageType {
   name: string;

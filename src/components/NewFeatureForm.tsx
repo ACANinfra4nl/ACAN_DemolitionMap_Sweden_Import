@@ -16,7 +16,7 @@ import { formatAddress } from "../lib/formatAddress";
 import { ImageInput } from "./forms/ImageInput";
 import { Button } from "./Button";
 import { useClickOutside } from "@/app/hooks/useClickOutside";
-import classNames from "classnames";
+import classNames from "clsx";
 
 interface NewFeatureFormProps {
   latLng: LatLng;
