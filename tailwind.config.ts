@@ -14,6 +14,7 @@ const config: Config = {
         saved: "#41B82E",
         "acan-blue": "#2637f3",
         "acan-green": "#a9bb4f",
+        "acan-red": "#f00",
         disabled: "#9E9E9E",
         gray: {
           list: "#292929",
