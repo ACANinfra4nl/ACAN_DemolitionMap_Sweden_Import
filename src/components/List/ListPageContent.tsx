@@ -167,7 +167,9 @@ export const ListPageContent: FC<{
                   >
                     <BuildingImage
                       images={building.properties.images}
-                      state={building.properties.state}
+                      state={
+                        building.properties.status ?? building.properties.state
+                      }
                       sizes="(min-width: 1600px) 16vw, (min-width: 1024px) 25vw, (min-width: 768px) 33vw, (min-width: 640px) 49vw, 99vw"
                     />
                     <BuildingHeading
