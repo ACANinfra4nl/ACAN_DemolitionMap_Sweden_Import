@@ -18,6 +18,10 @@ const dictionaries = {
     import("../dictionaries/en.json").then(
       (module) => module.default as unknown as Dictionary,
     ),
+  nl: () =>
+    import("../dictionaries/nl.json").then(
+      (module) => module.default as unknown as Dictionary,
+    ),
 };
 
 export const getDictionary = async () =>

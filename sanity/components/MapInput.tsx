@@ -54,7 +54,7 @@ export const MapInput: FC<MapInputProps> = (props) => {
                   longitude: props.value.lng,
                   zoom: 15,
                 }
-              : { bounds: [10, 55, 25, 69] }
+              : { bounds: [3.2, 50.7, 7.2, 53.7] }
           }
           attributionControl={false}
           onClick={props.readOnly ? undefined : handleMapClick}

@@ -1,0 +1,97 @@
+{
+  "nav": {
+    "title": "<p>sloop&shy;atlas</p>",
+    "map": "kaart",
+    "list": "lijst",
+    "about": "over de kaart",
+    "addOne": "voeg",
+    "addTwo": "gebouw toe",
+    "language": "nl"
+  },
+  "search": "zoeken",
+  "sort": {
+    "added": "toegevoegd",
+    "buildYear": "bouwjaar",
+    "demolitionYear": "sloopjaar"
+  },
+  "categories": {
+    "residence": "woning",
+    "office": "kantoor",
+    "commercial": "commercieel",
+    "communityProperty": "gemeenschapsgebouw",
+    "industry": "industrie",
+    "other": "overig"
+  },
+  "states": {
+    "demolished": "gesloopt",
+    "threatened": "bedreigd",
+    "saved": "gered"
+  },
+  "newFeatureForm": {
+    "addLocation": "Selecteer locatie op kaart",
+    "addBuilding": "voeg gebouw toe",
+    "imageInput": "sleep en zet uw afbeeldingen hier neer om te uploaden",
+    "imageMaxSize": "De totale grootte van alle afbeeldingen mag niet meer dan 4 MB bedragen.",
+    "category": "categorie",
+    "state": "status",
+    "buildingName": "gebouwnaam",
+    "address": "adres",
+    "blockName": "wijk",
+    "propertyDesignation": "monumentnummer",
+    "size": "grootte",
+    "architect": "architect",
+    "propertyOwner": "eigenaar",
+    "buildYear": "bouwjaar",
+    "demolitionYear": "sloopjaar",
+    "description": "verhalen over het gebouw",
+    "demolitionCause": "reden voor sloop (graag bron vermelden)",
+    "sources": "beeldbronnen",
+    "sender": "afzender (informatie wordt niet gepubliceerd)",
+    "contributor": "naam",
+    "email": "e-mail",
+    "addEmail": "voeg uw e-mailadres toe als u een melding wilt ontvangen wanneer uw bijdrage is beoordeeld.",
+    "accept": "ik accepteer de voorwaarden",
+    "cancel": "annuleren",
+    "save": "opslaan"
+  },
+  "detailsPanel": {
+    "description": "verhalen over het gebouw",
+    "demolitionCause": "reden voor sloop",
+    "sources": "beeldbronnen",
+    "share": "delen",
+    "linkCopied": "link gekopieerd",
+    "shareFailed": "delen mislukt",
+    "add": "voeg verhaal toe",
+    "emailSubject": "Verhalen over"
+  },
+  "building": {
+    "architect": "architect",
+    "size": "grootte",
+    "blockName": "wijk",
+    "propertyOwner": "eigenaar",
+    "boundCO2": {
+      "label": "Gebonden CO²",
+      "unit": "ton"
+    },
+    "buildYear": "bouwjaar",
+    "demolitionYear": "sloopjaar",
+    "category": "categorie"
+  },
+  "notFound": "pagina niet gevonden",
+  "slugs": {
+    "map": "kaart",
+    "list": "lijst"
+  },
+  "ariaLabels": {
+    "close": "sluiten",
+    "filter": "filter",
+    "previous": "vorige",
+    "next": "volgende",
+    "image": "afbeelding",
+    "remove": "verwijderen"
+  },
+  "map": {
+    "bounds": [3.2, 50.7, 7.2, 53.7]
+  }
+}
+
