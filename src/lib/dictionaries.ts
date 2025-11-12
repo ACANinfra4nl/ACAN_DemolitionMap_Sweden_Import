@@ -1,9 +1,6 @@
 import "server-only";
 
-const locale =
-  ((globalThis as typeof globalThis & {
-    process?: { env?: Record<string, string | undefined> };
-  }).process?.env?.LANGUAGE as string | undefined) || "en";
+const locale = (process.env.LANGUAGE as string | undefined) || "en";
 const dictionaries = {
   sv: () =>
     import("../dictionaries/sv.json").then(
