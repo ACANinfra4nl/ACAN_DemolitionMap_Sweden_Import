@@ -15,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: settings.siteTitle,
     description: settings.seo?.description,
     openGraph: {
-      images: [settings.seo?.image.asset.url],
+      images: settings.seo?.image?.asset?.url ? [settings.seo.image.asset.url] : [],
     },
   };
 }

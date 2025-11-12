@@ -1,6 +1,9 @@
 import "server-only";
 
-const locale = process.env.LANGUAGE;
+const locale =
+  ((globalThis as typeof globalThis & {
+    process?: { env?: Record<string, string | undefined> };
+  }).process?.env?.LANGUAGE as string | undefined) || "en";
 const dictionaries = {
   sv: () =>
     import("../dictionaries/sv.json").then(
@@ -24,5 +27,8 @@ const dictionaries = {
     ),
 };
 
-export const getDictionary = async () =>
-  dictionaries[locale as keyof typeof dictionaries]();
+export const getDictionary = async () => {
+  const loader =
+    dictionaries[locale as keyof typeof dictionaries] || dictionaries.en;
+  return loader();
+};

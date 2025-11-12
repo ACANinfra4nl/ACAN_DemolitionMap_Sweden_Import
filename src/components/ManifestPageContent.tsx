@@ -9,9 +9,18 @@ import { Navigation } from "./Navigation";
 import Link from "next/link";
 
 export const ManifestPageContent: FC<{
-  data: SanityDocument<ManifestDocumentType>;
+  data: SanityDocument<ManifestDocumentType> | null;
   dict: Dictionary;
 }> = ({ data, dict }) => {
+  if (!data) {
+    return (
+      <div className="p-8">
+        <h1 className="text-2xl font-bold mb-4">Manifest Not Found</h1>
+        <p>The manifest document could not be loaded.</p>
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="absolute min-h-[1px]">
