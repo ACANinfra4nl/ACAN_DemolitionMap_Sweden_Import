@@ -35,7 +35,7 @@ export async function geocode(
     return null;
   }
 
-  const lang = process.env.LANGUAGE === 'au' ? 'en' : 'nl';
+  const lang = process.env.LANGUAGE === 'au' ? 'en' : process.env.LANGUAGE === 'dk' ? 'da' : 'nl';
   
   // Try without country filter first (more reliable)
   // If that fails, we can try with filter, but filters can cause 400 errors

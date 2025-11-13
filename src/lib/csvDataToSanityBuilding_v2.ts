@@ -271,7 +271,7 @@ export async function csvDataToSanityBuilding_v2(
         city: city ? String(city).trim() : undefined,
         postcode: postcode ? String(postcode).trim() : undefined,
         blockName: blockName ? String(blockName).trim() : undefined,
-        country: process.env.LANGUAGE === 'au' ? 'AU' : undefined,
+        country: process.env.LANGUAGE === 'au' ? 'AU' : process.env.LANGUAGE === 'dk' ? 'DK' : undefined,
       });
 
       if (addressString) {
@@ -279,7 +279,7 @@ export async function csvDataToSanityBuilding_v2(
           // Attempt to geocode the address
           const geocodeResult = await geocode(
             addressString,
-            process.env.LANGUAGE === 'au' ? 'AU' : undefined,
+            process.env.LANGUAGE === 'au' ? 'AU' : process.env.LANGUAGE === 'dk' ? 'DK' : undefined,
           );
 
           if (geocodeResult) {

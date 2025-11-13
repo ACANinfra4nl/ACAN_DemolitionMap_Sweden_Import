@@ -1,0 +1,97 @@
+{
+  "nav": {
+    "title": "<p>rivnings&shy;kort</p>",
+    "map": "kort",
+    "list": "liste",
+    "about": "om kortet",
+    "addOne": "tilføj",
+    "addTwo": "bygning",
+    "language": "da"
+  },
+  "search": "søg",
+  "sort": {
+    "added": "tilføjet",
+    "buildYear": "byggeår",
+    "demolitionYear": "rivningsår"
+  },
+  "categories": {
+    "residence": "bolig",
+    "office": "kontor",
+    "commercial": "erhverv",
+    "communityProperty": "offentlig",
+    "industry": "industri",
+    "other": "øvrige"
+  },
+  "states": {
+    "demolished": "revet ned",
+    "threatened": "truet",
+    "saved": "reddet"
+  },
+  "newFeatureForm": {
+    "addLocation": "Vælg sted på kortet",
+    "addBuilding": "tilføj bygning",
+    "imageInput": "træk og slip dine billeder her for upload",
+    "imageMaxSize": "Den samlede størrelse af alle billeder må ikke overstige 4 MB.",
+    "category": "kategori",
+    "state": "status",
+    "buildingName": "bygningsnavn",
+    "address": "adresse",
+    "blockName": "bydel",
+    "propertyDesignation": "ejendomsbetegnelse",
+    "size": "størrelse",
+    "architect": "arkitekt",
+    "propertyOwner": "ejer",
+    "buildYear": "byggeår",
+    "demolitionYear": "rivningsår",
+    "description": "bygningsbeskrivelse",
+    "demolitionCause": "baggrund for rivning (angiv gerne kilde)",
+    "sources": "billedkilde",
+    "sender": "afsender (oplysningerne offentliggøres ikke)",
+    "contributor": "navn",
+    "email": "e-mail",
+    "addEmail": "angiv din e-mailadresse, hvis du vil modtage en besked, når dit bidrag er gennemgået",
+    "accept": "jeg accepterer vilkårene",
+    "cancel": "annuller",
+    "save": "gem"
+  },
+  "detailsPanel": {
+    "description": "bygningsbeskrivelse",
+    "demolitionCause": "baggrund for rivning",
+    "sources": "billedkilde",
+    "share": "del",
+    "linkCopied": "link kopieret",
+    "shareFailed": "delingen mislykkedes",
+    "add": "tilføj beskrivelse",
+    "emailSubject": "Historier om"
+  },
+  "building": {
+    "architect": "arkitekt",
+    "size": "størrelse",
+    "blockName": "bydel",
+    "propertyOwner": "ejer",
+    "boundCO2": {
+      "label": "bundet CO²",
+      "unit": "ton"
+    },
+    "buildYear": "byggeår",
+    "demolitionYear": "rivningsår",
+    "category": "kategori"
+  },
+  "notFound": "siden findes ikke",
+  "slugs": {
+    "map": "kort",
+    "list": "liste"
+  },
+  "ariaLabels": {
+    "close": "luk",
+    "filter": "filtrer",
+    "previous": "forrige",
+    "next": "næste",
+    "image": "billede",
+    "remove": "fjern"
+  },
+  "map": {
+    "bounds": [8.0, 54.5, 12.7, 57.8]
+  }
+}
+
