@@ -1,6 +1,5 @@
 import { parseBody } from "next-sanity/webhook";
-import { revalidateTag } from "next/cache";
-import { notFound } from "next/navigation";
+import { revalidateTag, revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 if (!process.env.SANITY_REVALIDATE_SECRET) {
@@ -14,14 +13,44 @@ export async function POST(request: NextRequest) {
       request,
       process.env.SANITY_REVALIDATE_SECRET,
     );
-    if (!isValidSignature) throw new Error("Invalid signature");
-    if (!body?._type) throw new Error("Invalid request: missing _type");
-    // revalidate tags and/or paths
-    revalidateTag(body._type);
-    // return ok
-    return NextResponse.json({});
+    if (!isValidSignature) {
+      console.error("Invalid webhook signature");
+      throw new Error("Invalid signature");
+    }
+    if (!body?._type) {
+      console.error("Missing _type in webhook body:", body);
+      throw new Error("Invalid request: missing _type");
+    }
+    
+    const documentType = body._type;
+    console.log(`Revalidating cache for document type: ${documentType}`);
+    
+    // Revalidate the tag
+    revalidateTag(documentType);
+    
+    // Also revalidate the relevant pages
+    if (documentType === "building") {
+      revalidatePath("/", "layout");
+      revalidatePath("/map", "page");
+      revalidatePath("/list", "page");
+      console.log("Revalidated building pages");
+    } else if (documentType === "manifest" || documentType === "settings") {
+      revalidatePath("/", "page");
+      revalidatePath("/map", "page");
+      revalidatePath("/list", "page");
+      console.log(`Revalidated pages for ${documentType}`);
+    }
+    
+    return NextResponse.json({ 
+      revalidated: true, 
+      tag: documentType,
+      timestamp: new Date().toISOString()
+    });
   } catch (e) {
-    console.error(e);
-    notFound();
+    console.error("Revalidation error:", e);
+    return NextResponse.json(
+      { error: "Revalidation failed", message: e instanceof Error ? e.message : String(e) },
+      { status: 500 }
+    );
   }
 }

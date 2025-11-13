@@ -1,4 +1,4 @@
-import { revalidateTag } from "next/cache";
+import { revalidateTag, revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 /**
@@ -6,33 +6,68 @@ import { NextRequest, NextResponse } from "next/server";
  * Use this to manually trigger cache revalidation
  * 
  * Usage:
+ * GET /api/revalidate-manual?tag=building
  * POST /api/revalidate-manual?tag=building
- * or
  * POST /api/revalidate-manual with body: { tag: "building" }
  */
+export async function GET(request: NextRequest) {
+  return handleRevalidation(request);
+}
+
 export async function POST(request: NextRequest) {
+  return handleRevalidation(request);
+}
+
+async function handleRevalidation(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
-    const tag = searchParams.get("tag");
+    let tag = searchParams.get("tag");
 
     if (!tag) {
       // Try to get from body
-      const body = await request.json().catch(() => ({}));
-      const bodyTag = body.tag;
-      
-      if (!bodyTag) {
-        return NextResponse.json(
-          { error: "Missing tag parameter. Use ?tag=building or { tag: 'building' } in body" },
-          { status: 400 }
-        );
+      try {
+        const body = await request.json();
+        tag = body.tag;
+      } catch {
+        // Body parsing failed, that's ok
       }
-      
-      revalidateTag(bodyTag);
-      return NextResponse.json({ revalidated: true, tag: bodyTag, now: Date.now() });
     }
 
+    if (!tag) {
+      return NextResponse.json(
+        { 
+          error: "Missing tag parameter", 
+          usage: "Use ?tag=building or POST with { tag: 'building' } in body",
+          availableTags: ["building", "settings", "manifest"]
+        },
+        { status: 400 }
+      );
+    }
+
+    console.log(`Manual revalidation triggered for tag: ${tag}`);
+    
+    // Revalidate the tag
     revalidateTag(tag);
-    return NextResponse.json({ revalidated: true, tag, now: Date.now() });
+    
+    // Also revalidate the relevant pages
+    if (tag === "building") {
+      revalidatePath("/", "layout");
+      revalidatePath("/map", "page");
+      revalidatePath("/list", "page");
+      console.log("Revalidated building pages");
+    } else if (tag === "manifest" || tag === "settings") {
+      revalidatePath("/", "page");
+      revalidatePath("/map", "page");
+      revalidatePath("/list", "page");
+      console.log(`Revalidated pages for ${tag}`);
+    }
+    
+    return NextResponse.json({ 
+      revalidated: true, 
+      tag,
+      timestamp: new Date().toISOString(),
+      message: `Cache revalidated for ${tag}. Pages should update within a few seconds.`
+    });
   } catch (e) {
     console.error("Revalidation error:", e);
     return NextResponse.json(
