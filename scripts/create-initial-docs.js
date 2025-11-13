@@ -34,10 +34,24 @@ const client = createClient({
 
 async function createDocuments() {
   try {
-    const isAU = process.env.LANGUAGE === "au";
-    
+    const language = process.env.LANGUAGE || "en";
+    const isAU = language === "au";
+    const isDK = language === "dk";
+
     // Create manifest document
     console.log("Creating manifest document...");
+    let manifestIntro, manifestContent;
+    if (isAU) {
+      manifestIntro = "Welcome to the Demolition Atlas AU. This is temporary placeholder text.";
+      manifestContent = "Placeholder content. You can edit this later in Studio.";
+    } else if (isDK) {
+      manifestIntro = "Velkommen til Rivningskort DK. Dette er midlertidig placeholder-tekst.";
+      manifestContent = "Placeholder-indhold. Du kan redigere dette senere i Studio.";
+    } else {
+      manifestIntro = "Welkom bij de Demolition Atlas NL. Dit is tijdelijke placeholder-tekst.";
+      manifestContent = "Placeholder content. Je kunt dit later aanpassen in Studio.";
+    }
+
     const manifest = await client.createOrReplace({
       _id: "manifest",
       _type: "manifest",
@@ -48,9 +62,7 @@ async function createDocuments() {
           children: [
             {
               _type: "span",
-              text: isAU
-                ? "Welcome to the Demolition Atlas AU. This is temporary placeholder text."
-                : "Welkom bij de Demolition Atlas NL. Dit is tijdelijke placeholder-tekst.",
+              text: manifestIntro,
             },
           ],
         },
@@ -62,9 +74,7 @@ async function createDocuments() {
           children: [
             {
               _type: "span",
-              text: isAU
-                ? "Placeholder content. You can edit this later in Studio."
-                : "Placeholder content. Je kunt dit later aanpassen in Studio.",
+              text: manifestContent,
             },
           ],
         },
@@ -74,18 +84,40 @@ async function createDocuments() {
 
     // Create settings document
     console.log("Creating settings document...");
+    let siteTitle, seoDescription, confirmationHeading, confirmationBody, errorHeading, errorBody;
+    if (isAU) {
+      siteTitle = "Demolition Atlas AU";
+      seoDescription = "Demolition Atlas for Australia";
+      confirmationHeading = "Thank you!";
+      confirmationBody = "We will let you know once your contribution has been reviewed.";
+      errorHeading = "Something went wrong";
+      errorBody = "Please try again later.";
+    } else if (isDK) {
+      siteTitle = "Rivningskort DK";
+      seoDescription = "Rivningskort for Danmark";
+      confirmationHeading = "Tak!";
+      confirmationBody = "Vi giver dig besked, når dit bidrag er gennemgået.";
+      errorHeading = "Noget gik galt";
+      errorBody = "Prøv venligst igen senere.";
+    } else {
+      siteTitle = "Demolition Atlas NL";
+      seoDescription = "Demolition Atlas voor Nederland";
+      confirmationHeading = "Bedankt!";
+      confirmationBody = "We laten het je weten zodra je bijdrage beoordeeld is.";
+      errorHeading = "Er is iets misgegaan";
+      errorBody = "Probeer het later opnieuw.";
+    }
+
     const settings = await client.createOrReplace({
       _id: "settings",
       _type: "settings",
-      siteTitle: isAU ? "Demolition Atlas AU" : "Demolition Atlas NL",
+      siteTitle: siteTitle,
       feedbackEmail: "info@example.com",
       seo: {
-        description: isAU
-          ? "Demolition Atlas for Australia"
-          : "Demolition Atlas voor Nederland",
+        description: seoDescription,
       },
       confirmationMessage: {
-        heading: isAU ? "Thank you!" : "Bedankt!",
+        heading: confirmationHeading,
         body: [
           {
             _type: "block",
@@ -93,16 +125,14 @@ async function createDocuments() {
             children: [
               {
                 _type: "span",
-                text: isAU
-                  ? "We will let you know once your contribution has been reviewed."
-                  : "We laten het je weten zodra je bijdrage beoordeeld is.",
+                text: confirmationBody,
               },
             ],
           },
         ],
       },
       errorMessage: {
-        heading: isAU ? "Something went wrong" : "Er is iets misgegaan",
+        heading: errorHeading,
         body: [
           {
             _type: "block",
@@ -110,9 +140,7 @@ async function createDocuments() {
             children: [
               {
                 _type: "span",
-                text: isAU
-                  ? "Please try again later."
-                  : "Probeer het later opnieuw.",
+                text: errorBody,
               },
             ],
           },
