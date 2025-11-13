@@ -34,6 +34,8 @@ const client = createClient({
 
 async function createDocuments() {
   try {
+    const isAU = process.env.LANGUAGE === "au";
+    
     // Create manifest document
     console.log("Creating manifest document...");
     const manifest = await client.createOrReplace({
@@ -46,7 +48,9 @@ async function createDocuments() {
           children: [
             {
               _type: "span",
-              text: "Welkom bij de Demolition Atlas NL. Dit is tijdelijke placeholder-tekst.",
+              text: isAU
+                ? "Welcome to the Demolition Atlas AU. This is temporary placeholder text."
+                : "Welkom bij de Demolition Atlas NL. Dit is tijdelijke placeholder-tekst.",
             },
           ],
         },
@@ -58,7 +62,9 @@ async function createDocuments() {
           children: [
             {
               _type: "span",
-              text: "Placeholder content. Je kunt dit later aanpassen in Studio.",
+              text: isAU
+                ? "Placeholder content. You can edit this later in Studio."
+                : "Placeholder content. Je kunt dit later aanpassen in Studio.",
             },
           ],
         },
@@ -71,13 +77,15 @@ async function createDocuments() {
     const settings = await client.createOrReplace({
       _id: "settings",
       _type: "settings",
-      siteTitle: "Demolition Atlas NL",
+      siteTitle: isAU ? "Demolition Atlas AU" : "Demolition Atlas NL",
       feedbackEmail: "info@example.com",
       seo: {
-        description: "Demolition Atlas voor Nederland",
+        description: isAU
+          ? "Demolition Atlas for Australia"
+          : "Demolition Atlas voor Nederland",
       },
       confirmationMessage: {
-        heading: "Bedankt!",
+        heading: isAU ? "Thank you!" : "Bedankt!",
         body: [
           {
             _type: "block",
@@ -85,14 +93,16 @@ async function createDocuments() {
             children: [
               {
                 _type: "span",
-                text: "We laten het je weten zodra je bijdrage beoordeeld is.",
+                text: isAU
+                  ? "We will let you know once your contribution has been reviewed."
+                  : "We laten het je weten zodra je bijdrage beoordeeld is.",
               },
             ],
           },
         ],
       },
       errorMessage: {
-        heading: "Er is iets misgegaan",
+        heading: isAU ? "Something went wrong" : "Er is iets misgegaan",
         body: [
           {
             _type: "block",
@@ -100,7 +110,9 @@ async function createDocuments() {
             children: [
               {
                 _type: "span",
-                text: "Probeer het later opnieuw.",
+                text: isAU
+                  ? "Please try again later."
+                  : "Probeer het later opnieuw.",
               },
             ],
           },

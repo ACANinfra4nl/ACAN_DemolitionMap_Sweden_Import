@@ -1,8 +1,9 @@
 import { GeoJSONFeature } from "maplibre-gl";
 
 export const reverse = async (lat: string | number, lng: string | number) => {
+  const lang = process.env.LANGUAGE === "au" ? "en" : "nl";
   const results = await fetch(
-    `https://api.geoapify.com/v1/geocode/reverse?lat=${lat}&lon=${lng}&lang=nl&apiKey=${process.env.GEOAPIFY_TOKEN}`,
+    `https://api.geoapify.com/v1/geocode/reverse?lat=${lat}&lon=${lng}&lang=${lang}&apiKey=${process.env.GEOAPIFY_TOKEN}`,
   ).then((response) => response.json());
   const result = results.features[0] as {
     properties: {
