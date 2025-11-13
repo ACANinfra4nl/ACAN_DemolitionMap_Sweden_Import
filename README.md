@@ -24,6 +24,9 @@ The Netherlands site runs from the `kauter-dev-NL` branch.
 
 The Australian site runs from the `kauter-dev-AU` branch. 
 
+## Denmark deployment
+
+The Denmark site runs from the `kauter-dev-DK` branch. 
 
 ## Importing content
 

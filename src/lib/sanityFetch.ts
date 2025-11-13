@@ -28,7 +28,7 @@ export async function sanityFetch<QueryResponse>({
   return client
     .withConfig({ useCdn: !isDevelopment }) // Disable CDN in development to avoid stale data
     .fetch<QueryResponse>(query, params, {
-      cache: isDevelopment || isDraftMode ? undefined : "force-cache",
+      cache: isDevelopment || isDraftMode ? "no-store" : "force-cache",
       ...(isDraftMode && {
         token: readToken,
         perspective: "previewDrafts",
