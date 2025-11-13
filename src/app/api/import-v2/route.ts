@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { client } from '@/lib/sanityClient';
 import * as papa from 'papaparse';
 import { notFound } from 'next/navigation';
+import { GeopointValue } from 'sanity';
 import { parseExcelFile, isExcelFile, type ParsedRow } from '@/lib/excelParser';
 import {
   autoDetectMappings,
@@ -131,12 +132,15 @@ export async function POST(request: NextRequest) {
 
       return NextResponse.json({
         success: true,
-        preview: true,
         totalRows: rows.length,
-        sampleRows,
-        mappings,
-        unmappedColumns,
-        headers,
+        successful: 0,
+        failed: 0,
+        errors: [],
+        preview: {
+          sampleRows,
+          mappings,
+          unmappedColumns,
+        },
       } as ImportResult);
     }
 
@@ -167,8 +171,8 @@ export async function POST(request: NextRequest) {
       );
       
       // Small delay to avoid rate limiting on geocoding API
-      // Only delay if we're not in preview mode (preview doesn't geocode)
-      if (config.mode !== 'preview' && i < rows.length - 1) {
+      // Only delay if we're not on the last row
+      if (i < rows.length - 1) {
         await wait(200); // 200ms delay between rows (5 requests per second max)
       }
 
@@ -190,9 +194,13 @@ export async function POST(request: NextRequest) {
     if (config.mode === 'dry-run') {
       return NextResponse.json({
         ...result,
-        dryRun: true,
-        validRows: validBuildings.map((vb) => vb.building),
-        invalidRows: result.errors,
+        dryRun: {
+          validRows: validBuildings.map((vb) => vb.building),
+          invalidRows: result.errors.map((err) => ({
+            row: err.row,
+            errors: [err.message],
+          })),
+        },
       } as ImportResult);
     }
 

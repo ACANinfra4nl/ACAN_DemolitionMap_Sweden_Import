@@ -72,20 +72,20 @@ const parseCategory = (str: string | number | undefined): string => {
 
   // Try to match by value
   const byValue = categories.find((cat) => cat.value === cleaned);
-  if (byValue) return byValue.value;
+  if (byValue?.value) return byValue.value;
 
   // Try to match by title (English)
   const byTitle = categories.find(
     (cat) => cat.title.toLowerCase() === cleaned,
   );
-  if (byTitle) return byTitle.value;
+  if (byTitle?.value) return byTitle.value;
 
   // Try partial match
   const partial = categories.find((cat) =>
     cleaned.includes(cat.title.toLowerCase()) ||
     cat.title.toLowerCase().includes(cleaned),
   );
-  if (partial) return partial.value;
+  if (partial?.value) return partial.value;
 
   return 'övrig'; // Default
 };
@@ -100,11 +100,11 @@ const parseState = (str: string | number | undefined): string => {
 
   // Try to match by value
   const byValue = states.find((state) => state.value === cleaned);
-  if (byValue) return byValue.value;
+  if (byValue?.value) return byValue.value;
 
   // Try to match by title (English)
   const byTitle = states.find((state) => state.title.toLowerCase() === cleaned);
-  if (byTitle) return byTitle.value;
+  if (byTitle?.value) return byTitle.value;
 
   // Try partial match
   const partial = states.find(
@@ -112,7 +112,7 @@ const parseState = (str: string | number | undefined): string => {
       cleaned.includes(state.title.toLowerCase()) ||
       state.title.toLowerCase().includes(cleaned),
   );
-  if (partial) return partial.value;
+  if (partial?.value) return partial.value;
 
   // If no match found, use default state
   return states[0]?.value || '';
@@ -212,7 +212,7 @@ export async function csvDataToSanityBuilding_v2(
   mapping: ColumnMapping,
   unmappedColumns: string[],
   config: ImportConfig,
-): {
+): Promise<{
   building: Omit<SanityBuilding<GeopointValue>, '_id' | 'images'> & {
     _type: 'building';
     images?: Array<{
@@ -224,7 +224,7 @@ export async function csvDataToSanityBuilding_v2(
     }>;
   } | null;
   errors: string[];
-} {
+}> {
   const errors: string[] = [];
 
   // Get location (required) - handle both combined and separate fields
@@ -329,22 +329,23 @@ export async function csvDataToSanityBuilding_v2(
     return { building: null, errors };
   }
 
-  // Build building object
-  const building: Omit<SanityBuilding<GeopointValue>, '_id' | 'images'> & {
-    _type: 'building';
-    images?: Array<{
-      _type: string;
-      asset: {
-        _type: string;
-        _ref: string;
-      };
-    }>;
-  } = {
-    _type: 'building',
-    location,
-    category,
-    state,
-  };
+  // Get buildYear (required) - use default if not provided
+  const buildYearValue = parseNumber(getMappedValue(row, mapping, 'buildYear'));
+  let buildYear: number;
+  if (buildYearValue !== undefined) {
+    // Validate buildYear is within acceptable range (0 to current year)
+    const currentYear = new Date().getFullYear();
+    const year = Math.round(buildYearValue);
+    if (year >= 0 && year <= currentYear) {
+      buildYear = year;
+    } else {
+      // Invalid year, use default (current year - 50 as reasonable default)
+      buildYear = currentYear - 50;
+    }
+  } else {
+    // Missing buildYear, use default (current year - 50 as reasonable default)
+    buildYear = new Date().getFullYear() - 50;
+  }
 
   // Handle images/links columns
   const linksImagesValue = getMappedValue(row, mapping, 'linksImages');
@@ -367,70 +368,25 @@ export async function csvDataToSanityBuilding_v2(
     // This would require additional logic to upload images to Sanity
   }
 
-  // Optional fields - use empty string as placeholder if missing
+  // Calculate all optional field values
   const name = getMappedValue(row, mapping, 'name');
-  building.name = name ? String(name).trim() : '';
-
   const address = getMappedValue(row, mapping, 'address');
-  building.address = address ? String(address).trim() : '';
-
   const postcode = getMappedValue(row, mapping, 'postcode');
-  building.postcode = postcode ? String(postcode).trim() : '';
-
   const city = getMappedValue(row, mapping, 'city');
-  building.city = city ? String(city).trim() : '';
-
   const blockName = getMappedValue(row, mapping, 'blockName');
-  building.blockName = blockName ? String(blockName).trim() : '';
-
   const propertyDesignation = getMappedValue(
     row,
     mapping,
     'propertyDesignation',
   );
-  building.propertyDesignation = propertyDesignation
-    ? String(propertyDesignation).trim()
-    : '';
-
   const size = parseNumber(getMappedValue(row, mapping, 'size'));
-  building.size = size !== undefined ? size : undefined;
-
   const architect = getMappedValue(row, mapping, 'architect');
-  building.architect = architect ? String(architect).trim() : '';
-
   const propertyOwner = getMappedValue(row, mapping, 'propertyOwner');
-  building.propertyOwner = propertyOwner ? String(propertyOwner).trim() : '';
-
-  // Get buildYear (required) - use default if not provided
-  const buildYear = parseNumber(getMappedValue(row, mapping, 'buildYear'));
-  if (buildYear !== undefined) {
-    // Validate buildYear is within acceptable range (0 to current year)
-    const currentYear = new Date().getFullYear();
-    const year = Math.round(buildYear);
-    if (year >= 0 && year <= currentYear) {
-      building.buildYear = year;
-    } else {
-      // Invalid year, use default (current year - 50 as reasonable default)
-      building.buildYear = currentYear - 50;
-    }
-  } else {
-    // Missing buildYear, use default (current year - 50 as reasonable default)
-    building.buildYear = new Date().getFullYear() - 50;
-  }
-
   const demolitionYear = parseNumber(
     getMappedValue(row, mapping, 'demolitionYear'),
   );
-  building.demolitionYear =
-    demolitionYear !== undefined ? Math.round(demolitionYear) : undefined;
-
   const demolitionCause = getMappedValue(row, mapping, 'demolitionCause');
-  building.demolitionCause = demolitionCause
-    ? String(demolitionCause).trim()
-    : '';
-
   const sources = getMappedValue(row, mapping, 'sources');
-  building.sources = sources ? String(sources).trim() : '';
 
   // Build description with unmapped columns and links
   const mappedDescription = getMappedValue(row, mapping, 'description');
@@ -447,15 +403,50 @@ export async function csvDataToSanityBuilding_v2(
   );
 
   // Add links from images/links column to description
+  let finalDescription: string;
   if (descriptionParts.length > 0) {
     if (description) {
-      building.description = description + ' & ' + descriptionParts.join(' & ');
+      finalDescription = description + ' & ' + descriptionParts.join(' & ');
     } else {
-      building.description = descriptionParts.join(' & ');
+      finalDescription = descriptionParts.join(' & ');
     }
   } else {
-    building.description = description || '';
+    finalDescription = description || '';
   }
+
+  // Build building object with all properties at once
+  const building: Omit<SanityBuilding<GeopointValue>, '_id' | 'images'> & {
+    _type: 'building';
+    images?: Array<{
+      _type: string;
+      asset: {
+        _type: string;
+        _ref: string;
+      };
+    }>;
+  } = {
+    _type: 'building',
+    location,
+    category,
+    state,
+    buildYear,
+    name: name ? String(name).trim() : '',
+    address: address ? String(address).trim() : '',
+    postcode: postcode ? String(postcode).trim() : '',
+    city: city ? String(city).trim() : '',
+    blockName: blockName ? String(blockName).trim() : '',
+    propertyDesignation: propertyDesignation
+      ? String(propertyDesignation).trim()
+      : '',
+    size: size !== undefined ? size : undefined,
+    architect: architect ? String(architect).trim() : '',
+    propertyOwner: propertyOwner ? String(propertyOwner).trim() : '',
+    demolitionYear:
+      demolitionYear !== undefined ? Math.round(demolitionYear) : undefined,
+    demolitionCause: demolitionCause ? String(demolitionCause).trim() : '',
+    sources: sources ? String(sources).trim() : '',
+    description: finalDescription,
+  };
 
   return { building, errors: [] };
 }
