@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Import V2</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            background: #0070f3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0051cc;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        pre {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .error {
+            color: red;
+        }
+        .success {
+            color: green;
+        }
+        input[type="file"] {
+            margin: 10px 0;
+        }
+        select {
+            padding: 5px;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Import V2 Test Page</h1>
+    
+    <div class="section">
+        <h2>1. Select File</h2>
+        <input type="file" id="fileInput" accept=".csv,.xlsx,.xls">
+        <p>Selected: <span id="fileName">No file selected</span></p>
+    </div>
+
+    <div class="section">
+        <h2>2. Select Mode</h2>
+        <select id="modeSelect">
+            <option value="preview">Preview (show first 5 rows)</option>
+            <option value="dry-run">Dry-Run (validate all, no import)</option>
+            <option value="import">Import (create documents)</option>
+        </select>
+    </div>
+
+    <div class="section">
+        <h2>3. Test Import</h2>
+        <button id="previewBtn" onclick="testImport('preview')">Preview</button>
+        <button id="dryRunBtn" onclick="testImport('dry-run')">Dry-Run</button>
+        <button id="importBtn" onclick="testImport('import')">Import</button>
+    </div>
+
+    <div class="section">
+        <h2>Result</h2>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const fileName = document.getElementById('fileName');
+        const modeSelect = document.getElementById('modeSelect');
+        const resultDiv = document.getElementById('result');
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                fileName.textContent = file.name;
+            } else {
+                fileName.textContent = 'No file selected';
+            }
+        });
+
+        async function testImport(mode) {
+            const file = fileInput.files[0];
+            if (!file) {
+                resultDiv.innerHTML = '<p class="error">Please select a file first</p>';
+                return;
+            }
+
+            // Update mode select
+            modeSelect.value = mode;
+
+            // Disable buttons
+            document.querySelectorAll('button').forEach(btn => btn.disabled = true);
+            resultDiv.innerHTML = '<p>Processing... Please wait.</p>';
+
+            try {
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('config', JSON.stringify({ mode }));
+
+                const response = await fetch('/api/import-v2', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    displayResult(result, true);
+                } else {
+                    displayResult(result, false);
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<p class="error">Error: ${error.message}</p>`;
+            } finally {
+                // Re-enable buttons
+                document.querySelectorAll('button').forEach(btn => btn.disabled = false);
+            }
+        }
+
+        function displayResult(result, success) {
+            let html = '';
+            
+            if (success) {
+                html += '<p class="success">✅ Request successful!</p>';
+                
+                if (result.preview) {
+                    html += '<h3>Preview Results</h3>';
+                    html += `<p>Total rows in file: ${result.totalRows}</p>`;
+                    html += `<p>Sample rows shown: ${result.sampleRows.length}</p>`;
+                    
+                    html += '<h4>Column Mappings:</h4>';
+                    html += '<pre>' + JSON.stringify(result.mappings, null, 2) + '</pre>';
+                    
+                    if (result.unmappedColumns && result.unmappedColumns.length > 0) {
+                        html += '<h4>Unmapped Columns (will be added to description):</h4>';
+                        html += '<ul>';
+                        result.unmappedColumns.forEach(col => {
+                            html += `<li>${col}</li>`;
+                        });
+                        html += '</ul>';
+                    }
+                    
+                    html += '<h4>Sample Data:</h4>';
+                    html += '<pre>' + JSON.stringify(result.sampleRows, null, 2) + '</pre>';
+                } else if (result.dryRun) {
+                    html += '<h3>Dry-Run Results</h3>';
+                    html += `<p>Total rows: ${result.totalRows}</p>`;
+                    html += `<p class="success">Valid rows: ${result.successful}</p>`;
+                    html += `<p class="error">Invalid rows: ${result.failed}</p>`;
+                    
+                    if (result.errors && result.errors.length > 0) {
+                        html += '<h4>Errors:</h4>';
+                        html += '<pre>' + JSON.stringify(result.errors, null, 2) + '</pre>';
+                    }
+                } else {
+                    html += '<h3>Import Results</h3>';
+                    html += `<p>Total rows: ${result.totalRows}</p>`;
+                    html += `<p class="success">Successfully imported: ${result.successful}</p>`;
+                    html += `<p class="error">Failed: ${result.failed}</p>`;
+                    
+                    if (result.errors && result.errors.length > 0) {
+                        html += '<h4>Errors:</h4>';
+                        html += '<pre>' + JSON.stringify(result.errors, null, 2) + '</pre>';
+                    }
+                }
+            } else {
+                html += '<p class="error">❌ Request failed</p>';
+                html += `<p class="error">Error: ${result.error || 'Unknown error'}</p>`;
+                
+                if (result.missingFields) {
+                    html += '<h4>Missing Required Fields:</h4>';
+                    html += '<ul>';
+                    result.missingFields.forEach(field => {
+                        html += `<li>${field}</li>`;
+                    });
+                    html += '</ul>';
+                }
+                
+                if (result.mappings) {
+                    html += '<h4>Detected Mappings:</h4>';
+                    html += '<pre>' + JSON.stringify(result.mappings, null, 2) + '</pre>';
+                }
+                
+                if (result.unmappedColumns) {
+                    html += '<h4>Unmapped Columns:</h4>';
+                    html += '<ul>';
+                    result.unmappedColumns.forEach(col => {
+                        html += `<li>${col}</li>`;
+                    });
+                    html += '</ul>';
+                }
+            }
+
+            html += '<h4>Full Response:</h4>';
+            html += '<pre>' + JSON.stringify(result, null, 2) + '</pre>';
+            
+            resultDiv.innerHTML = html;
+        }
+    </script>
+</body>
+</html>
+
