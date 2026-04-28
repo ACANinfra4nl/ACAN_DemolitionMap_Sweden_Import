@@ -9,9 +9,6 @@ export const building: SchemaTypeDefinition = {
   type: "document",
   title: "Building",
   description: "Demolition reported by user",
-  // Ensure all core actions stay available in Studio for building docs.
-  // This includes delete, which some Studio setups can otherwise hide.
-  __experimental_actions: ["create", "update", "delete", "publish"],
   fields: [
     {
       name: "reviewed",
