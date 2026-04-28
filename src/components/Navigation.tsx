@@ -36,12 +36,13 @@ export const Navigation: FC<{ scaleLogo?: boolean; dict: Dictionary }> = ({
   dict,
 }) => {
   const path = usePathname();
+  const titleHref = path === "/" ? `/${dict.nav.map}` : "/";
 
   return (
     <nav className="acan-text-menu grid w-full grid-cols-6 items-start justify-between gap-10 p-5">
       <div className="col-span-2">
         <Link
-          href={`/${dict.nav.map}`}
+          href={titleHref}
           className="pointer-events-auto outline-none hover:text-acan-blue focus-visible:text-acan-blue"
           dangerouslySetInnerHTML={{ __html: dict.nav.title }}
         ></Link>

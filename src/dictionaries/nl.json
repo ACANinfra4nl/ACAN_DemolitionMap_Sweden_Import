@@ -1,6 +1,6 @@
 {
   "nav": {
-    "title": "<p>sloop&shy;atlas</p>",
+    "title": "<p>sloop&shy;kaart</p>",
     "map": "kaart",
     "list": "lijst",
     "about": "over de kaart",
@@ -43,9 +43,9 @@
     "propertyOwner": "eigenaar",
     "buildYear": "bouwjaar",
     "demolitionYear": "sloopjaar",
-    "description": "verhalen over het gebouw",
-    "demolitionCause": "reden voor sloop (graag bron vermelden)",
-    "sources": "beeldbronnen",
+    "description": "over het gebouw (informatie, verhalen uit de wijk, etc.)",
+    "demolitionCause": "reden voor status",
+    "sources": "bronnen (beeld, tekst, website, etc.)",
     "sender": "afzender (informatie wordt niet gepubliceerd)",
     "contributor": "naam",
     "email": "e-mail",
@@ -55,9 +55,9 @@
     "save": "opslaan"
   },
   "detailsPanel": {
-    "description": "verhalen over het gebouw",
-    "demolitionCause": "reden voor sloop",
-    "sources": "beeldbronnen",
+    "description": "over het gebouw",
+    "demolitionCause": "reden voor status",
+    "sources": "bronnen",
     "share": "delen",
     "linkCopied": "link gekopieerd",
     "shareFailed": "delen mislukt",

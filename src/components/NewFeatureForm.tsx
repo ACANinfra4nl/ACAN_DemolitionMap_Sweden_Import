@@ -38,10 +38,26 @@ export const NewFeatureForm = ({
   const [isDemolished, setIsDemolished] = useState(false);
   useClickOutside(panelEl, onCancel);
   useEffect(() => {
+    const controller = new AbortController();
+
     // do reverse geocoding of latlng and populate address fields
-    fetch(`/api/reverse?lat=${latLng.lat}&lng=${latLng.lng}`)
-      .then((r) => r.json() as unknown as ReverseGeocodeResult)
-      .then(setLookupResult);
+    fetch(`/api/reverse?lat=${latLng.lat}&lng=${latLng.lng}`, {
+      signal: controller.signal,
+    })
+      .then(async (r) => {
+        if (!r.ok) return undefined;
+        const text = await r.text();
+        if (!text) return undefined;
+        return JSON.parse(text) as ReverseGeocodeResult;
+      })
+      .then((result) => {
+        if (result) setLookupResult(result);
+      })
+      .catch((error) => {
+        if ((error as Error).name !== "AbortError") {
+          console.error("Reverse geocoding failed:", error);
+        }
+      });
     // focus first enabled input
     (
       panelEl.current?.querySelector(
@@ -49,6 +65,7 @@ export const NewFeatureForm = ({
       ) as HTMLElement | undefined
     )?.focus();
     return () => {
+      controller.abort();
       document.body.classList.remove("waiting");
     };
   }, []);
@@ -179,6 +196,7 @@ export const NewFeatureForm = ({
                 min={process.env.NEXT_PUBLIC_MIN_DEMOLITION_YEAR || 2016}
                 max={9999}
                 disabled={!isDemolished}
+                required={isDemolished}
               />
             </div>
           </div>
@@ -187,7 +205,6 @@ export const NewFeatureForm = ({
               label={dict.newFeatureForm.description}
               name="description"
               rows={3}
-              required
             />
           </div>
           <div>

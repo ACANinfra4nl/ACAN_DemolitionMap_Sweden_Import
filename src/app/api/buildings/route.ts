@@ -3,6 +3,20 @@ import { NextRequest, NextResponse } from "next/server";
 import { toFeature } from "@/lib/toFeature";
 import { nanoid } from "nanoid";
 
+const getOptionalString = (formData: FormData, key: string) => {
+  const value = formData.get(key);
+  if (typeof value !== "string") return undefined;
+  const trimmed = value.trim();
+  return trimmed.length > 0 ? trimmed : undefined;
+};
+
+const getOptionalNumber = (formData: FormData, key: string) => {
+  const value = getOptionalString(formData, key);
+  if (typeof value === "undefined") return undefined;
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : undefined;
+};
+
 const uploadAssets = async (images: File[]) => {
   const imageAssets = [];
   for (const image of images) {
@@ -21,70 +35,98 @@ const uploadAssets = async (images: File[]) => {
 };
 
 export async function POST(request: NextRequest) {
-  const formData = await request.formData();
-  //   TODO: validate input!
+  try {
+    if (!process.env.SANITY_AUTH_TOKEN) {
+      return NextResponse.json(
+        {
+          error:
+            "Server is missing SANITY_AUTH_TOKEN. Add it to .env.local to enable submissions.",
+        },
+        { status: 500 },
+      );
+    }
 
-  // save info from form
-  const formImages = formData.getAll("images") as File[];
-  const imageAssets = await uploadAssets(formImages);
-  const createdBuilding = await client.create(
-    {
-      _type: "building",
-      location: {
-        _type: "geopoint",
-        lat: Number(formData.get("lat")),
-        lng: Number(formData.get("lng")),
-      },
-      // Kategori - bostad, kontor, kommersiell, samhällsfastighet, industri, övrig
-      category: formData.get("category") as string,
-      // Status - hotad (rivningslov), riven, räddad - färgkodad
-      state: formData.get("state") as string,
-      // Byggnadens namn, use `buildingName` instead of name to not trigger autocomplete
-      name: formData.get("buildingName") as string | undefined,
-      // Adress
-      address: formData.get("address") as string | undefined,
-      postcode: formData.get("postcode") as string | undefined,
-      city: formData.get("city") as string | undefined,
-      // Kvartersnamn
-      blockName: formData.get("blockName") as string | undefined,
-      // Fastighetsbeteckning
-      propertyDesignation: formData.get("propertyDesignation") as
-        | string
-        | undefined,
-      // Storlek m2
-      size: formData.has("size") ? Number(formData.get("size")) : undefined,
-      // (Inbunden C02)
-      boundCO2: formData.has("boundCO2")
-        ? Number(formData.get("boundCO2"))
-        : undefined,
-      // Arkitekt
-      architect: formData.get("architect") as string | undefined,
-      // Fastighetsägare
-      propertyOwner: formData.get("propertyOwner") as string | undefined,
-      // Byggår
-      buildYear: Number(formData.get("buildYear")),
-      // Rivningsår
-      demolitionYear: formData.has("demolitionYear")
-        ? Number(formData.get("demolitionYear"))
-        : undefined,
-      // Arkitektur, historik - fritext (nuvarande verksamhet)
-      description: formData.get("description") as string | undefined,
-      // Anledning till rivning, fritext (vad planeras i dess ställe)
-      demolitionCause: formData.get("demolitionCause") as string | undefined,
-      // Bildkällor
-      sources: formData.get("sources") as string | undefined,
-      // (Datum för inlägget)
-      // Minnen, öppet för alla att lägga till
-      images: imageAssets.length > 0 ? imageAssets : undefined,
-      // Avsändare
-      contributor: {
-        name: formData.get("contributor") as string | undefined,
-        email: formData.get("contributor-email") as string | undefined,
-      },
-      reviewed: false,
-    },
-    { returnDocuments: true },
-  );
+    const formData = await request.formData();
+    const lat = getOptionalNumber(formData, "lat");
+    const lng = getOptionalNumber(formData, "lng");
+    const buildYear = getOptionalNumber(formData, "buildYear");
+    const category = getOptionalString(formData, "category");
+    const state = getOptionalString(formData, "state");
+    if (
+      typeof lat === "undefined" ||
+      typeof lng === "undefined" ||
+      typeof category === "undefined" ||
+      typeof state === "undefined"
+    ) {
+      return NextResponse.json(
+        {
+          error:
+            "Missing required fields: lat, lng, category, or state",
+        },
+        { status: 400 },
+      );
+    }
 
-  return NextResponse.json(toFeature(createdBuilding));
+    // save info from form
+    const formImages = formData.getAll("images") as File[];
+    const imageAssets = await uploadAssets(formImages);
+    const createdBuilding = await client.create(
+      {
+        _type: "building",
+        location: {
+          _type: "geopoint",
+          lat,
+          lng,
+        },
+        // Kategori - bostad, kontor, kommersiell, samhällsfastighet, industri, övrig
+        category,
+        // Status - hotad (rivningslov), riven, räddad - färgkodad
+        state,
+        // Byggnadens namn, use `buildingName` instead of name to not trigger autocomplete
+        name: getOptionalString(formData, "buildingName"),
+        // Adress
+        address: getOptionalString(formData, "address"),
+        postcode: getOptionalString(formData, "postcode"),
+        city: getOptionalString(formData, "city"),
+        // Kvartersnamn
+        blockName: getOptionalString(formData, "blockName"),
+        // Fastighetsbeteckning
+        propertyDesignation: getOptionalString(formData, "propertyDesignation"),
+        // Storlek m2
+        size: getOptionalNumber(formData, "size"),
+        // (Inbunden C02)
+        boundCO2: getOptionalNumber(formData, "boundCO2"),
+        // Arkitekt
+        architect: getOptionalString(formData, "architect"),
+        // Fastighetsägare
+        propertyOwner: getOptionalString(formData, "propertyOwner"),
+        // Byggår
+        buildYear,
+        // Rivningsår
+        demolitionYear: getOptionalNumber(formData, "demolitionYear"),
+        // Arkitektur, historik - fritext (nuvarande verksamhet)
+        description: getOptionalString(formData, "description"),
+        // Anledning till rivning, fritext (vad planeras i dess ställe)
+        demolitionCause: getOptionalString(formData, "demolitionCause"),
+        // Bildkällor
+        sources: getOptionalString(formData, "sources"),
+        // (Datum för inlägget)
+        // Minnen, öppet för alla att lägga till
+        images: imageAssets.length > 0 ? imageAssets : undefined,
+        // Avsändare
+        contributor: {
+          name: getOptionalString(formData, "contributor"),
+          email: getOptionalString(formData, "contributor-email"),
+        },
+        reviewed: false,
+      },
+      { returnDocuments: true },
+    );
+
+    return NextResponse.json(toFeature(createdBuilding));
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : "Failed to create building";
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
 }

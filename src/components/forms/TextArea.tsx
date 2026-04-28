@@ -26,7 +26,7 @@ export const TextArea: FC<
         )}
       >
         {label}
-        {props.required ? "*" : null}
+        {props.required ? <span className="text-demolished">*</span> : null}
       </label>
     </div>
   );

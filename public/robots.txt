@@ -1,0 +1,37 @@
+# ACAN Demolition Atlas crawling policy
+# Only the landing page may be indexed/read by automated agents.
+
+User-agent: *
+Disallow: /
+Allow: /$
+
+# Explicitly block common AI training/data extraction crawlers.
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: Claude-Web
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: PerplexityBot
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: Applebot-Extended
+Disallow: /
+
+# Human-readable policy page
+# /policy-licensing-disclaimer.html

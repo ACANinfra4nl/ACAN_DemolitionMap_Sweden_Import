@@ -90,8 +90,7 @@ export const building: SchemaTypeDefinition = {
       name: "buildYear",
       type: "number",
       title: "Build year",
-      validation: (Rule) =>
-        Rule.required().min(0).max(new Date().getFullYear()),
+      validation: (Rule) => Rule.min(0).max(new Date().getFullYear()),
     },
     {
       name: "demolitionYear",

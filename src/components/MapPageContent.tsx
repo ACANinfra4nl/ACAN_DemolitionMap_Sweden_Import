@@ -36,6 +36,7 @@ export const MapPageContent: FC<
   const [filter, setFilter] = useState<string>();
   const [addedBuilding, setAddedBuilding] = useState<boolean | undefined>();
   const [savingBuilding, setSavingBuilding] = useState(false);
+  const [submitError, setSubmitError] = useState<string>();
 
   // this is for handling menu click when already on map page
   if (shouldAdd && !isAdding) {
@@ -76,13 +77,28 @@ export const MapPageContent: FC<
         body: formData,
         cache: "no-cache",
       })
-        .then((r) => {
-          if (!r.ok) throw new Error(r.statusText);
+        .then(async (r) => {
+          if (!r.ok) {
+            let message = r.statusText;
+            try {
+              const body = (await r.json()) as { error?: string };
+              if (body?.error) message = body.error;
+            } catch {
+              // keep status text fallback when body is not JSON
+            }
+            throw new Error(message);
+          }
           setAddingLocation(undefined);
           setIsAdding(false);
+          setSubmitError(undefined);
           setAddedBuilding(true);
         })
-        .catch(() => {
+        .catch((error) => {
+          // Keep the existing UI behavior, but expose details in dev tools for faster debugging.
+          console.error("Building submission failed:", error);
+          setSubmitError(
+            error instanceof Error ? error.message : "Unknown submission error",
+          );
           setAddedBuilding(false);
         })
         .finally(() => {
@@ -223,6 +239,7 @@ export const MapPageContent: FC<
         {addedBuilding === false && (
           <MessagePanel
             {...errorMessage}
+            details={submitError}
             onClose={() => {
               setShowNewBuildingForm(false);
               setTimeout(setAddedBuilding, 300, undefined);
