@@ -3,19 +3,24 @@ import { client } from '@/lib/sanityClient';
 import * as papa from 'papaparse';
 import { notFound } from 'next/navigation';
 import { GeopointValue } from 'sanity';
-import { parseExcelFile, isExcelFile, type ParsedRow } from '@/lib/excelParser';
 import {
   autoDetectMappings,
   getUnmappedColumns,
   validateRequiredMappings,
 } from '@/lib/columnMapper';
-import { csvDataToSanityBuilding_v2 } from '@/lib/csvDataToSanityBuilding_v2';
 import {
   DEFAULT_IMPORT_CONFIG,
   type ImportConfig,
   type ImportResult,
 } from '@/lib/importConfig';
 import { wait } from '@/lib/wait';
+
+type ParsedRow = Record<string, string | number | undefined>;
+
+const lazyImport = new Function(
+  'modulePath',
+  'return import(modulePath)',
+) as (modulePath: string) => Promise<unknown>;
 
 export async function GET() {
   return NextResponse.json({
@@ -36,6 +41,35 @@ export async function POST(request: NextRequest) {
   if (process.env.NODE_ENV !== 'development') notFound();
 
   try {
+    const [{ parseExcelFile, isExcelFile }, { csvDataToSanityBuilding_v2 }] =
+      (await Promise.all([
+        lazyImport('../../../lib/excelParser'),
+        lazyImport('../../../lib/csvDataToSanityBuilding_v2'),
+      ])) as [
+        {
+          parseExcelFile: (buffer: Buffer) => {
+            headers: string[];
+            rows: ParsedRow[];
+          };
+          isExcelFile: (filename: string) => boolean;
+        },
+        {
+          csvDataToSanityBuilding_v2: (
+            row: ParsedRow,
+            mappings: Record<string, string>,
+            unmappedColumns: string[],
+            config: ImportConfig,
+          ) => Promise<{
+            building:
+              | (Omit<SanityBuilding<GeopointValue>, '_id' | 'images'> & {
+                  _type: 'building';
+                })
+              | null;
+            errors: string[];
+          }>;
+        },
+      ];
+
     // Parse request body
     const formData = await request.formData();
     const file = formData.get('file') as File | null;

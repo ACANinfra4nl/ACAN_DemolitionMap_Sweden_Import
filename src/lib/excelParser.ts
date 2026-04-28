@@ -3,7 +3,30 @@
  * Handles parsing of .xlsx and .xls files (first sheet only)
  */
 
-import * as XLSX from 'xlsx';
+type XlsxModule = {
+  read: (buffer: Buffer, options: { type: 'buffer' }) => {
+    SheetNames: string[];
+    Sheets: Record<string, unknown>;
+  };
+  utils: {
+    sheet_to_json: (
+      worksheet: unknown,
+      options: { header: number; defval: string; raw: boolean },
+    ) => unknown;
+  };
+};
+
+const getXlsx = (): XlsxModule => {
+  try {
+    // Runtime load keeps optional import tooling from blocking deployment builds.
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    return require('xlsx') as XlsxModule;
+  } catch {
+    throw new Error(
+      "Excel import dependency 'xlsx' is not installed in this environment.",
+    );
+  }
+};
 
 export interface ParsedRow {
   [columnName: string]: string | number | undefined;
@@ -18,6 +41,7 @@ export interface ParsedData {
  * Parse Excel file buffer and return data from first sheet
  */
 export function parseExcelFile(buffer: Buffer): ParsedData {
+  const XLSX = getXlsx();
   const workbook = XLSX.read(buffer, { type: 'buffer' });
 
   // Get first sheet
