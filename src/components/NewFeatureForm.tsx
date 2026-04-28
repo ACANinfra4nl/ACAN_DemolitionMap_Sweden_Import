@@ -252,6 +252,32 @@ export const NewFeatureForm = ({
             </label>
             <input type="checkbox" name="accept" id="accept" />
           </div>
+          <div className="acan-text-body">
+            <label
+              htmlFor="privacyConsent"
+              className="flex items-start gap-2 text-sm leading-snug"
+            >
+              <input
+                id="privacyConsent"
+                name="privacyConsent"
+                type="checkbox"
+                required
+                className="mt-1"
+              />
+              <span>
+                {dict.newFeatureForm.accept}{" "}
+                <a
+                  href="/policy-licensing-disclaimer.html"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline"
+                >
+                  Policy, Licensing & Disclaimer
+                </a>
+                <span className="text-demolished"> *</span>
+              </span>
+            </label>
+          </div>
           <div className="flex gap-5">
             <Button onClick={onCancel}>{dict.newFeatureForm.cancel}</Button>
             <Button type="submit" className="w-full">

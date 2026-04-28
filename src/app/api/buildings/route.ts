@@ -52,6 +52,7 @@ export async function POST(request: NextRequest) {
     const buildYear = getOptionalNumber(formData, "buildYear");
     const category = getOptionalString(formData, "category");
     const state = getOptionalString(formData, "state");
+    const privacyConsent = getOptionalString(formData, "privacyConsent");
     if (
       typeof lat === "undefined" ||
       typeof lng === "undefined" ||
@@ -63,6 +64,12 @@ export async function POST(request: NextRequest) {
           error:
             "Missing required fields: lat, lng, category, or state",
         },
+        { status: 400 },
+      );
+    }
+    if (privacyConsent !== "on") {
+      return NextResponse.json(
+        { error: "Privacy policy consent is required." },
         { status: 400 },
       );
     }
