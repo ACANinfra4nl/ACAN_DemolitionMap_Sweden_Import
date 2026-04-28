@@ -34,9 +34,15 @@ export const NewFeatureForm = ({
   dict,
 }: NewFeatureFormProps) => {
   const panelEl = useRef<HTMLDivElement>(null);
+  const formEl = useRef<HTMLFormElement>(null);
   const [lookupResult, setLookupResult] = useState<ReverseGeocodeResult>();
   const [isDemolished, setIsDemolished] = useState(false);
+  const [isFormValid, setIsFormValid] = useState(false);
   useClickOutside(panelEl, onCancel);
+
+  const updateFormValidity = useCallback(() => {
+    setIsFormValid(formEl.current?.checkValidity() ?? false);
+  }, []);
   useEffect(() => {
     const controller = new AbortController();
 
@@ -71,9 +77,20 @@ export const NewFeatureForm = ({
   }, []);
 
   const handleChangeState: ChangeEventHandler<HTMLSelectElement> = useCallback(
-    (e) => setIsDemolished(e.currentTarget.value === "riven"),
-    [],
+    (e) => {
+      setIsDemolished(e.currentTarget.value === "riven");
+      updateFormValidity();
+    },
+    [updateFormValidity],
   );
+
+  const handleFormChange = useCallback(() => {
+    updateFormValidity();
+  }, [updateFormValidity]);
+
+  useEffect(() => {
+    updateFormValidity();
+  }, [isDemolished, updateFormValidity]);
 
   // throw new Error(
   //   "fixa så att cursor är progress på hela sidan när man sparar, fattar inte riktigt hur man ska göra, kanske med nån portal?",
@@ -81,7 +98,13 @@ export const NewFeatureForm = ({
   return (
     <div ref={panelEl}>
       <CloseButton onClick={onCancel} close={dict.ariaLabels.close} />
-      <form onSubmit={onSubmit} autoComplete="off">
+      <form
+        ref={formEl}
+        onSubmit={onSubmit}
+        onInput={handleFormChange}
+        onChange={handleFormChange}
+        autoComplete="off"
+      >
         <fieldset
           disabled={isSaving}
           className="flex flex-col gap-4 disabled:text-disabled"
@@ -279,8 +302,14 @@ export const NewFeatureForm = ({
             </label>
           </div>
           <div className="flex gap-5">
-            <Button onClick={onCancel}>{dict.newFeatureForm.cancel}</Button>
-            <Button type="submit" className="w-full">
+            <Button type="button" onClick={onCancel}>
+              {dict.newFeatureForm.cancel}
+            </Button>
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={isSaving || !isFormValid}
+            >
               {dict.newFeatureForm.save}
             </Button>
           </div>
