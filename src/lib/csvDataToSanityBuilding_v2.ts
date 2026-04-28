@@ -22,9 +22,86 @@ const parseNumber = (
   if (typeof value === 'number') {
     return isNaN(value) ? undefined : value;
   }
-  const str = String(value).replace(',', '.').trim();
+  const raw = String(value).trim();
+  const isThousandsSeparated = /^-?\d{1,3}(,\d{3})+(\.\d+)?$/.test(raw);
+  const normalized = isThousandsSeparated ? raw.replace(/,/g, '') : raw;
+  const str = normalized.replace(',', '.');
   const num = parseFloat(str);
   return isNaN(num) ? undefined : num;
+};
+
+const normalizeCoordinate = (
+  value: number | undefined,
+  type: 'lat' | 'lng',
+): number | undefined => {
+  if (typeof value === 'undefined') return undefined;
+  const abs = Math.abs(value);
+  // Legacy datasets sometimes store coordinates as integer degrees * 10,000,000.
+  if (abs > 180 && abs > 1e6) {
+    value = value / 1e7;
+  }
+  const isValid =
+    type === 'lat' ? value >= -90 && value <= 90 : value >= -180 && value <= 180;
+  return isValid ? value : undefined;
+};
+
+const NL_BOUNDS = {
+  latMin: 50,
+  latMax: 54,
+  lngMin: 3,
+  lngMax: 8,
+};
+
+const isLikelyNlPoint = (lat: number, lng: number): boolean =>
+  lat >= NL_BOUNDS.latMin &&
+  lat <= NL_BOUNDS.latMax &&
+  lng >= NL_BOUNDS.lngMin &&
+  lng <= NL_BOUNDS.lngMax;
+
+const shouldUseNlRescue = (): boolean => {
+  const language = (process.env.LANGUAGE || '').toLowerCase().trim();
+  return language === 'nl' || language === '';
+};
+
+const rescueLikelyNlCoordinates = (
+  lat: number | undefined,
+  lng: number | undefined,
+): { lat: number; lng: number } | undefined => {
+  if (typeof lat !== 'number' || typeof lng !== 'number') return undefined;
+  if (!shouldUseNlRescue()) return { lat, lng };
+  if (isLikelyNlPoint(lat, lng)) return { lat, lng };
+
+  const scales = [1, 10, 100];
+  const candidates: Array<{ lat: number; lng: number; score: number }> = [];
+
+  for (const latScale of scales) {
+    for (const lngScale of scales) {
+      const candidateLat = lat * latScale;
+      const candidateLng = lng * lngScale;
+      if (isLikelyNlPoint(candidateLat, candidateLng)) {
+        candidates.push({
+          lat: candidateLat,
+          lng: candidateLng,
+          score: Math.abs(Math.log10(latScale)) + Math.abs(Math.log10(lngScale)),
+        });
+      }
+
+      const swappedLat = lng * latScale;
+      const swappedLng = lat * lngScale;
+      if (isLikelyNlPoint(swappedLat, swappedLng)) {
+        candidates.push({
+          lat: swappedLat,
+          lng: swappedLng,
+          score:
+            0.5 + Math.abs(Math.log10(latScale)) + Math.abs(Math.log10(lngScale)),
+        });
+      }
+    }
+  }
+
+  if (candidates.length === 0) return { lat, lng };
+  candidates.sort((a, b) => a.score - b.score);
+  return { lat: candidates[0].lat, lng: candidates[0].lng };
 };
 
 /**
@@ -238,21 +315,21 @@ export async function csvDataToSanityBuilding_v2(
   
   if (latStr && lngStr) {
     // Both separate fields are available
-    lat = parseNumber(latStr);
-    lng = parseNumber(lngStr);
+    lat = normalizeCoordinate(parseNumber(latStr), 'lat');
+    lng = normalizeCoordinate(parseNumber(lngStr), 'lng');
   } else {
     // Try combined location field as fallback
     const combinedLocation = getMappedValue(row, mapping, 'location.combined');
     if (combinedLocation) {
       const parsed = parseCombinedLocation(combinedLocation);
       if (parsed) {
-        lat = parsed.lat;
-        lng = parsed.lng;
+        lat = normalizeCoordinate(parsed.lat, 'lat');
+        lng = normalizeCoordinate(parsed.lng, 'lng');
       }
     } else {
       // Try to use whatever we have (one field might be missing)
-      if (latStr) lat = parseNumber(latStr);
-      if (lngStr) lng = parseNumber(lngStr);
+      if (latStr) lat = normalizeCoordinate(parseNumber(latStr), 'lat');
+      if (lngStr) lng = normalizeCoordinate(parseNumber(lngStr), 'lng');
     }
   }
 
@@ -306,6 +383,14 @@ export async function csvDataToSanityBuilding_v2(
       return { building: null, errors };
     }
   }
+
+  const rescuedCoordinates = rescueLikelyNlCoordinates(lat, lng);
+  if (!rescuedCoordinates) {
+    errors.push('Invalid location after coordinate normalization.');
+    return { building: null, errors };
+  }
+  lat = rescuedCoordinates.lat;
+  lng = rescuedCoordinates.lng;
 
   const location: GeopointValue = {
     _type: 'geopoint',
