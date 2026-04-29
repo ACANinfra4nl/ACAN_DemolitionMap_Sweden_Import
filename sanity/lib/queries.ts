@@ -19,10 +19,28 @@ export const manifestQuery = groq`*[_type == "manifest" && _id == "manifest"] | 
 }`;
 
 export const buildingsQuery = groq`*[_type == "building" && reviewed == true] {
-  ...,
+  _id,
+  _createdAt,
   location { lat, lng },
+  category,
+  state,
+  name,
+  address,
+  postcode,
+  city,
+  blockName,
+  propertyDesignation,
+  size,
+  boundCO2,
+  architect,
+  propertyOwner,
+  buildYear,
+  demolitionYear,
+  description,
+  demolitionCause,
+  sources,
   images[] {
-    ...,
+    _key,
     asset-> {
       _id,
       url,

@@ -10,14 +10,45 @@ import { wait } from "@/lib/wait";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { nanoid } from "nanoid";
+import { getRequestId, logEvent, withRequestId } from "@/lib/server/ops";
+
+const ensureDevImportAccess = (request: NextRequest, requestId: string) => {
+  if (process.env.NODE_ENV !== "development") notFound();
+  const adminSecret =
+    process.env.IMPORT_ADMIN_SECRET || process.env.SANITY_REVALIDATE_SECRET;
+  const provided = request.headers.get("x-import-secret");
+  if (!adminSecret || provided !== adminSecret) {
+    logEvent("warn", "import.unauthorized", { requestId });
+    return withRequestId(
+      NextResponse.json({ error: "Unauthorized" }, { status: 401 }),
+      requestId,
+    );
+  }
+  return null;
+};
+
+const resolveImportImagePath = (imageFilename: string): string | null => {
+  const importDirectory = path.resolve("./import-images");
+  const safeFilename = path.basename(imageFilename);
+  const filepath = path.resolve(importDirectory, safeFilename);
+  if (!filepath.startsWith(importDirectory + path.sep)) {
+    return null;
+  }
+  return filepath;
+};
 
 export async function POST(request: NextRequest) {
-  if (process.env.NODE_ENV !== "development") notFound();
+  const requestId = getRequestId(request);
+  const denial = ensureDevImportAccess(request, requestId);
+  if (denial) return denial;
   // get body and remove first 2 lines
   const body = stripLines(await request.text(), 2);
 
   if (!body)
-    return NextResponse.json({ error: "Invalid body" }, { status: 400 });
+    return withRequestId(
+      NextResponse.json({ error: "Invalid body" }, { status: 400 }),
+      requestId,
+    );
   try {
     // parse posted csv
     const parsedBody = papa.parse<CsvRow>(body, {
@@ -40,7 +71,10 @@ export async function POST(request: NextRequest) {
       // find the matching image
       const imageFilename = row.BILD.trim();
       if (imageFilename) {
-        const filepath = path.resolve("./import-images", imageFilename);
+        const filepath = resolveImportImagePath(imageFilename);
+        if (!filepath) {
+          continue;
+        }
         try {
           await fs.stat(filepath);
           // file exists, read it and upload to sanity
@@ -60,25 +94,28 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(allCreated);
   } catch (e) {
-    console.error(e);
-    return NextResponse.json(
-      { error: (e as Error).toString() },
-      { status: 500 },
+    logEvent("error", "import.failed", {
+      requestId,
+      message: e instanceof Error ? e.message : "unknown_error",
+    });
+    return withRequestId(
+      NextResponse.json({ error: "Import failed" }, { status: 500 }),
+      requestId,
     );
   }
 }
 
 export async function DELETE(request: NextRequest) {
-  if (process.env.NODE_ENV !== "development") {
-    notFound();
-  }
+  const requestId = getRequestId(request);
+  const denial = ensureDevImportAccess(request, requestId);
+  if (denial) return denial;
 
   // delete all uploaded content, for development only!
   const result = await client.delete({
     // query: groq`*[_type=="building" && !defined(reviewed)]`,
     query: groq`*[_type=="building" || (_type=="manifest" && _id!="manifest") || (_type=="settings" && _id!="settings") || _type=="sanity.imageAsset"]`,
   });
-  return NextResponse.json({ deleted: result.documentIds });
+  return withRequestId(NextResponse.json({ deleted: result.documentIds }), requestId);
 }
 
 const uploadAsset = async (image: Buffer, filename: string) => {

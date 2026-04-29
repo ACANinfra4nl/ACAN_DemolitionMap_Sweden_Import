@@ -16,6 +16,27 @@ import {
   type ImportResult,
 } from '@/lib/importConfig';
 import { wait } from '@/lib/wait';
+import {
+  getRequestId,
+  logEvent,
+  mapWithConcurrency,
+  withRequestId,
+} from '@/lib/server/ops';
+
+const ensureDevImportAccess = (request: NextRequest, requestId: string) => {
+  if (process.env.NODE_ENV !== 'development') notFound();
+  const adminSecret =
+    process.env.IMPORT_ADMIN_SECRET || process.env.SANITY_REVALIDATE_SECRET;
+  const provided = request.headers.get('x-import-secret');
+  if (!adminSecret || provided !== adminSecret) {
+    logEvent('warn', 'import-v2.unauthorized', { requestId });
+    return withRequestId(
+      NextResponse.json({ error: 'Unauthorized' }, { status: 401 }),
+      requestId,
+    );
+  }
+  return null;
+};
 
 export async function GET() {
   return NextResponse.json({
@@ -33,7 +54,9 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  if (process.env.NODE_ENV !== 'development') notFound();
+  const requestId = getRequestId(request);
+  const denial = ensureDevImportAccess(request, requestId);
+  if (denial) return denial;
 
   try {
     // Parse request body
@@ -205,34 +228,58 @@ export async function POST(request: NextRequest) {
     }
 
     // Import mode - create documents
+    const createResults = await mapWithConcurrency(
+      validBuildings,
+      3,
+      async ({ building, rowIndex }) => {
+        try {
+          const doc = await client.create(building);
+          return { doc, rowIndex, building, error: null as null | Error };
+        } catch (error) {
+          return {
+            doc: null,
+            rowIndex,
+            building,
+            error: error as Error,
+          };
+        }
+      },
+    );
+
     const created = [];
-    for (const { building, rowIndex } of validBuildings) {
-      try {
-        const doc = await client.create(building);
-        created.push(doc);
-        await wait(1000 / 5); // Rate limit: 5 per second
-      } catch (error) {
-        result.failed++;
-        result.successful--;
-        result.errors.push({
-          row: rowIndex,
-          message: `Failed to create document: ${(error as Error).message}`,
-          data: building,
-        });
+    for (const createResult of createResults) {
+      if (createResult.doc) {
+        created.push(createResult.doc);
+        continue;
       }
+      result.failed++;
+      result.successful--;
+      result.errors.push({
+        row: createResult.rowIndex,
+        message: `Failed to create document: ${
+          createResult.error?.message || 'Unknown error'
+        }`,
+        data: createResult.building,
+      });
     }
 
     result.created = created;
 
-    return NextResponse.json(result);
+    return withRequestId(NextResponse.json(result), requestId);
   } catch (error) {
-    console.error('Import error:', error);
-    return NextResponse.json(
+    logEvent('error', 'import-v2.failed', {
+      requestId,
+      message: error instanceof Error ? error.message : 'unknown_error',
+    });
+    return withRequestId(
+      NextResponse.json(
       {
         success: false,
-        error: (error as Error).message,
+        error: 'Import failed',
       },
       { status: 500 },
+      ),
+      requestId,
     );
   }
 }

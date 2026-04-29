@@ -8,6 +8,16 @@ This guide explains how to import building data from CSV or Excel files into the
 - Column headers in the first row
 - Required data: latitude, longitude, category, and state for each building
 
+### Local / development only
+
+`/api/import`, `/api/import-v2`, and bulk delete are **development-only** (`NODE_ENV=development`). Requests must include:
+
+```http
+x-import-secret: <IMPORT_ADMIN_SECRET>
+```
+
+Set `IMPORT_ADMIN_SECRET` in `.env.local` (fallback: same value as `SANITY_REVALIDATE_SECRET` if unset). Add this header to every `curl` below.
+
 ## Supported File Formats
 
 - **CSV files** (.csv) - Comma-separated values
@@ -106,6 +116,7 @@ Import mode actually creates the building documents:
 
 ```bash
 curl -X POST http://localhost:3000/api/import-v2 \
+  -H "x-import-secret: YOUR_IMPORT_ADMIN_SECRET" \
   -F "file=@your-data.csv" \
   -F 'config={"mode":"preview"}'
 ```
@@ -114,6 +125,7 @@ curl -X POST http://localhost:3000/api/import-v2 \
 
 ```bash
 curl -X POST http://localhost:3000/api/import-v2 \
+  -H "x-import-secret: YOUR_IMPORT_ADMIN_SECRET" \
   -F "file=@your-data.csv" \
   -F 'config={"mode":"dry-run"}'
 ```
@@ -122,6 +134,7 @@ curl -X POST http://localhost:3000/api/import-v2 \
 
 ```bash
 curl -X POST http://localhost:3000/api/import-v2 \
+  -H "x-import-secret: YOUR_IMPORT_ADMIN_SECRET" \
   -F "file=@your-data.csv" \
   -F 'config={"mode":"import"}'
 ```
@@ -132,6 +145,7 @@ If you need to manually map columns, include a mapping in the config:
 
 ```bash
 curl -X POST http://localhost:3000/api/import-v2 \
+  -H "x-import-secret: YOUR_IMPORT_ADMIN_SECRET" \
   -F "file=@your-data.csv" \
   -F 'config={
     "mode":"import",
