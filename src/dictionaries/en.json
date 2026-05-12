@@ -73,7 +73,8 @@
     "linkCopied": "link copied",
     "shareFailed": "share failed",
     "add": "add",
-    "emailSubject": "Stories about"
+    "emailSubject": "Stories about",
+    "pendingReviewBanner": "Entry is still to be reviewed"
   },
   "building": {
     "architect": "architect",

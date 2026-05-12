@@ -73,7 +73,8 @@
     "linkCopied": "lenke kopiert",
     "shareFailed": "delingen mislyktes",
     "add": "legg til beskrivelse",
-    "emailSubject": "Historier om"
+    "emailSubject": "Historier om",
+    "pendingReviewBanner": "Bidraget må fortsatt gjennomgås"
   },
   "building": {
     "architect": "arkitekt",

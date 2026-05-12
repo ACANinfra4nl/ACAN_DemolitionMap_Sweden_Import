@@ -73,7 +73,8 @@
     "linkCopied": "länk kopierad",
     "shareFailed": "delningen misslyckades",
     "add": "lägg till berättelse",
-    "emailSubject": "Berättelser om"
+    "emailSubject": "Berättelser om",
+    "pendingReviewBanner": "Inlägget är ännu inte granskat"
   },
   "building": {
     "architect": "arkitekt",

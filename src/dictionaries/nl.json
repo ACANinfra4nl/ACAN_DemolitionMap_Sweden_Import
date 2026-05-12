@@ -73,7 +73,8 @@
     "linkCopied": "link gekopieerd",
     "shareFailed": "delen mislukt",
     "add": "voeg verhaal toe",
-    "emailSubject": "Verhalen over"
+    "emailSubject": "Verhalen over",
+    "pendingReviewBanner": "Deze invoer moet nog worden beoordeeld"
   },
   "building": {
     "architect": "architect",

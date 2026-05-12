@@ -183,6 +183,7 @@ interface DetailsPanel {
   shareFailed: string;
   add: string;
   emailSubject: string;
+  pendingReviewBanner: string;
 }
 
 interface NewFeatureForm {

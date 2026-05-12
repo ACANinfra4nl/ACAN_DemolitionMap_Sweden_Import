@@ -56,6 +56,14 @@ export const DetailsPanel: FC<DetailsProps> = ({
       </div>
 
       <div className="col-start-1 row-span-2 row-start-1 mb-2">
+        {!properties.reviewed && (
+          <p
+            className="mb-2 w-full bg-threatened px-3 py-4 text-center font-condensed text-xl font-bold uppercase leading-snug tracking-wide text-black"
+            role="status"
+          >
+            {dict.detailsPanel.pendingReviewBanner}
+          </p>
+        )}
         {properties.images && properties.images.map ? (
           <Carousel ariaLabels={dict.ariaLabels}>
             {properties.images.map((image) => (

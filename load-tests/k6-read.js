@@ -22,7 +22,12 @@ export const options = {
 
 const BASE_URL = __ENV.BASE_URL || "http://localhost:3000";
 
-const READ_TARGETS = ["/", "/kaart", "/lijst"];
+/** Comma-separated paths, e.g. `READ_PATHS=/,/map,/list` for English slugs. */
+const READ_TARGETS = __ENV.READ_PATHS
+  ? __ENV.READ_PATHS.split(",")
+      .map((s) => s.trim())
+      .filter(Boolean)
+  : ["/", "/kaart", "/lijst"];
 
 export default function () {
   const path = READ_TARGETS[Math.floor(Math.random() * READ_TARGETS.length)];

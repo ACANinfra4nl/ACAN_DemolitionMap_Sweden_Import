@@ -12,7 +12,9 @@
     "test": "jest",
     "load:k6:read": "k6 run load-tests/k6-read.js",
     "load:k6:reverse": "k6 run load-tests/k6-reverse.js",
-    "load:artillery:buildings": "artillery run load-tests/artillery-buildings.yml"
+    "load:k6:all": "npm run load:k6:read && npm run load:k6:reverse",
+    "load:artillery:buildings": "artillery run load-tests/artillery-buildings.yml",
+    "load:artillery:smoke": "artillery run load-tests/artillery-buildings.yml --solo"
   },
   "dependencies": {
     "@fast-csv/parse": "^4.3.6",

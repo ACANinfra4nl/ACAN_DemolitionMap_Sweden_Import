@@ -73,7 +73,8 @@
     "linkCopied": "linkki kopioitu",
     "shareFailed": "jakaminen epäonnistui",
     "add": "lisää",
-    "emailSubject": "Tarinoita aiheesta"
+    "emailSubject": "Tarinoita aiheesta",
+    "pendingReviewBanner": "Merkintä odottaa vielä tarkistusta"
   },
   "building": {
     "architect": "arkkitehti",

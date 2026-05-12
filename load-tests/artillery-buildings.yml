@@ -1,18 +1,27 @@
+# Stress POST /api/buildings — uploads images and creates real Sanity drafts (reviewed: false).
+#
+# IMPORTANT
+# - Rate limit on route: 30 POSTs / minute / IP → keep arrivalRate × sustained requests under that.
+# - Point BASE_URL at staging or local — avoid spamming production datasets.
+# - Requires SANITY_AUTH_TOKEN on the server and fixtures under load-tests/fixtures/*.jpg
+
 config:
   target: "{{ $processEnvironment.BASE_URL || 'http://localhost:3000' }}"
   phases:
+    # Warm-up: ~9 submissions/min (under 30/min IP cap)
     - duration: 120
-      arrivalRate: 2
+      arrivalRate: 0.15
+    # Sustain: ~24/min (still under cap; expect occasional 429 if other traffic shares IP)
     - duration: 300
-      arrivalRate: 10
+      arrivalRate: 0.4
   defaults:
     headers:
       x-load-test: "artillery-buildings"
-      content-type: "multipart/form-data"
 
 scenarios:
-  - name: "create-building-no-image"
-    weight: 60
+  # All scenarios send ≥1 image (API rejects empty uploads).
+  - name: "create-building-single-image"
+    weight: 70
     flow:
       - post:
           url: "/api/buildings"
@@ -22,9 +31,12 @@ scenarios:
             category: "övrig"
             state: "hotad"
             buildingName: "Load Test Building"
+            demolitionCause: "Load test submission"
             contributor-email: "loadtest@example.com"
             privacyConsent: "on"
-  - name: "create-building-single-image"
+            images:
+              fromFile: "./fixtures/building-1.jpg"
+  - name: "create-building-three-images"
     weight: 30
     flow:
       - post:
@@ -35,21 +47,7 @@ scenarios:
             category: "övrig"
             state: "hotad"
             buildingName: "Load Test Building"
-            contributor-email: "loadtest@example.com"
-            privacyConsent: "on"
-            images:
-              fromFile: "./fixtures/building-1.jpg"
-  - name: "create-building-three-images"
-    weight: 10
-    flow:
-      - post:
-          url: "/api/buildings"
-          formData:
-            lat: "51.9242"
-            lng: "4.4792"
-            category: "övrig"
-            state: "hotad"
-            buildingName: "Load Test Building"
+            demolitionCause: "Load test submission"
             contributor-email: "loadtest@example.com"
             privacyConsent: "on"
             images:
