@@ -8,6 +8,14 @@
     "addTwo": "byggnad",
     "language": "sv"
   },
+  "landing": {
+    "partnersHeading": "Partners",
+    "supportersHeading": "Stödjare",
+    "partnerLogoPlaceholder": "Partner",
+    "supporterLogoPlaceholder": "Stödjare",
+    "placeholderStripAnnouncement": "Platshållare för logotyper — grafik kommer senare.",
+    "crdLogoAlt": "CRD — medverkande part (platshållare för logotyp)"
+  },
   "search": "sök",
   "sort": {
     "added": "tillagd",
@@ -31,7 +39,10 @@
     "addLocation": "Välj plats på kartan",
     "addBuilding": "lägg till byggnad",
     "imageInput": "dra och släpp dina bilder här för att ladda upp",
+    "imageLabel": "bilder",
     "imageMaxSize": "Den totala storleken på alla bilder får inte överstiga 4 MB.",
+    "imageRequired": "Ladda upp minst en bild.",
+    "draftRestoreImagesHint": "Utkast återställt i denna webbläsare — bifoga bilderna igen innan du skickar.",
     "category": "kategori",
     "state": "status",
     "buildingName": "byggnadens namn",

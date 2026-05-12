@@ -1,7 +1,7 @@
 import { ListPageContent } from "./ListPageContent";
 import { sanityFetch } from "@/lib/sanityFetch";
 import { Suspense } from "react";
-import { buildingsQuery, settingsQuery } from "../../../sanity/lib/queries";
+import { buildingsListQuery, settingsQuery } from "../../../sanity/lib/queries";
 import { toFeature } from "@/lib/toFeature";
 import { getDictionary } from "@/lib/dictionaries";
 
@@ -11,7 +11,7 @@ export const ListPage = async () => {
     tags: ["settings"],
   });
   const buildings = await sanityFetch<FeatureBuilding[]>({
-    query: buildingsQuery,
+    query: buildingsListQuery,
     tags: ["building"],
   });
   const dict = await getDictionary();

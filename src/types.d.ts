@@ -22,6 +22,8 @@ interface SanityBuilding<T extends LatLng> {
   category: string;
   state: string;
   status?: string;
+  reviewed?: boolean;
+  map_visibility?: boolean;
   name?: string;
   address?: string;
   postcode?: string;
@@ -47,6 +49,7 @@ interface SanityBuilding<T extends LatLng> {
 interface FeatureBuilding {
   _id: string;
   _createdAt: string;
+  reviewed: boolean;
   location: LatLng;
   category: string;
   state: string;
@@ -107,6 +110,15 @@ interface SettingsType {
   };
 }
 
+interface LandingDict {
+  partnersHeading: string;
+  supportersHeading: string;
+  partnerLogoPlaceholder: string;
+  supporterLogoPlaceholder: string;
+  placeholderStripAnnouncement: string;
+  crdLogoAlt: string;
+}
+
 interface Dictionary {
   nav: {
     title: string;
@@ -117,6 +129,7 @@ interface Dictionary {
     addTwo: string;
     language: string;
   };
+  landing: LandingDict;
   search: string;
   sort: {
     added: string;
@@ -176,7 +189,10 @@ interface NewFeatureForm {
   addLocation: string;
   addBuilding: string;
   imageInput: string;
+  imageLabel: string;
   imageMaxSize: string;
+  imageRequired: string;
+  draftRestoreImagesHint: string;
   category: string;
   state: string;
   buildingName: string;

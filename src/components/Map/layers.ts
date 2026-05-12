@@ -54,5 +54,18 @@ export const UNCLUSTERED_LAYER_STYLE: CircleLayer = {
       "#41B82E",
     ],
     "circle-radius": 12,
+    "circle-opacity": [
+      "case",
+      ["==", ["get", "reviewed"], true],
+      1,
+      0.45,
+    ],
+    "circle-stroke-width": [
+      "case",
+      ["==", ["get", "reviewed"], true],
+      0,
+      2,
+    ],
+    "circle-stroke-color": "#ffffff",
   },
 };

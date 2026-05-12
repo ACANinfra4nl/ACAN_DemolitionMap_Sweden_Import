@@ -18,9 +18,10 @@ export const manifestQuery = groq`*[_type == "manifest" && _id == "manifest"] | 
   // }
 }`;
 
-export const buildingsQuery = groq`*[_type == "building" && reviewed == true] {
+const buildingProjection = groq`{
   _id,
   _createdAt,
+  reviewed,
   location { lat, lng },
   category,
   state,
@@ -50,6 +51,15 @@ export const buildingsQuery = groq`*[_type == "building" && reviewed == true] {
     }
   }
 }`;
+
+/** Curated list: reviewed buildings only */
+export const buildingsListQuery = groq`*[_type == "building" && reviewed == true] ${buildingProjection}`;
+
+/** Map: reviewed buildings plus unreviewed when map_visibility is not explicitly false */
+export const buildingsMapQuery = groq`*[_type == "building" && (reviewed == true || (reviewed != true && coalesce(map_visibility, true)))] ${buildingProjection}`;
+
+/** @deprecated Use buildingsListQuery or buildingsMapQuery */
+export const buildingsQuery = buildingsListQuery;
 
 export const buildingMetaQuery = groq`*[_type == "building" && _id == $id] {
   _id,

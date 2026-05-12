@@ -1,6 +1,6 @@
 import { MapPageContent } from "@/components/MapPageContent";
 import { sanityFetch } from "@/lib/sanityFetch";
-import { buildingsQuery, settingsQuery } from "../../../sanity/lib/queries";
+import { buildingsMapQuery, settingsQuery } from "../../../sanity/lib/queries";
 import { Suspense } from "react";
 import { toFeature } from "@/lib/toFeature";
 import { getDictionary } from "@/lib/dictionaries";
@@ -12,7 +12,7 @@ export const MapPage = async () => {
   });
 
   const buildings = await sanityFetch<FeatureBuilding[]>({
-    query: buildingsQuery,
+    query: buildingsMapQuery,
     tags: ["building"],
   });
 

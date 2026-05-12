@@ -1,5 +1,6 @@
 import { client } from "@/lib/sanityClient";
 import { NextRequest, NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
 import { toFeature } from "@/lib/toFeature";
 import { nanoid } from "nanoid";
 import {
@@ -142,8 +143,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // save info from form
-    const formImages = formData.getAll("images") as File[];
+    // save info from form (omit empty entries from multipart parsing)
+    const rawImages = formData.getAll("images") as File[];
+    const formImages = rawImages.filter((f) => f instanceof File && f.size > 0);
+    if (formImages.length === 0) {
+      return withRequestId(
+        NextResponse.json(
+          { error: "At least one image is required." },
+          { status: 400 },
+        ),
+        requestId,
+      );
+    }
     if (formImages.length > MAX_IMAGES) {
       return withRequestId(
         NextResponse.json(
@@ -236,9 +247,11 @@ export async function POST(request: NextRequest) {
           email: getOptionalString(formData, "contributor-email"),
         },
         reviewed: false,
+        map_visibility: true,
       },
       { returnDocuments: true },
     );
+    revalidateTag("building");
     logEvent("info", "buildings.created", {
       requestId,
       ip,

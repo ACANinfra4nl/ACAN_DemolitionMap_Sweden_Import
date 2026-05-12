@@ -15,8 +15,16 @@ export const building: SchemaTypeDefinition = {
       type: "boolean",
       title: "Reviewed",
       description:
-        "The reviewed buildings are displayed on the map and in the list on the website.",
+        "Reviewed buildings appear in the public list. They always appear on the map when published; unreviewed buildings may appear on the map only when Map visibility is on.",
       initialValue: false,
+    },
+    {
+      name: "map_visibility",
+      type: "boolean",
+      title: "Map visibility",
+      description:
+        "When off, this building is hidden from the public map until it is reviewed. Reviewed buildings stay visible on the map regardless.",
+      initialValue: true,
     },
     {
       name: "location",
@@ -120,6 +128,8 @@ export const building: SchemaTypeDefinition = {
       type: "array",
       title: "Images",
       of: [{ type: "image" }],
+      validation: (Rule) =>
+        Rule.required().min(1).error("Add at least one image."),
     },
     {
       name: "sources",

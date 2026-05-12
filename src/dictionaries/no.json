@@ -8,6 +8,14 @@
     "addTwo": "bygning",
     "language": "no"
   },
+  "landing": {
+    "partnersHeading": "Partnere",
+    "supportersHeading": "Støttespillere",
+    "partnerLogoPlaceholder": "Partner",
+    "supporterLogoPlaceholder": "Støttespiller",
+    "placeholderStripAnnouncement": "Logoplassholdere — grafikk kommer senere.",
+    "crdLogoAlt": "CRD — utførende bidragsyter (logoplassholder)"
+  },
   "search": "søk",
   "sort": {
     "added": "lagt til",
@@ -31,7 +39,10 @@
     "addLocation": "Velg sted på kartet",
     "addBuilding": "legg til bygning",
     "imageInput": "dra og slipp bildene dine her for opplasting",
+    "imageLabel": "bilder",
     "imageMaxSize": "Den totale størrelsen på alle bildene må ikke overstige 4 MB.",
+    "imageRequired": "Last opp minst ett bilde.",
+    "draftRestoreImagesHint": "Kladd gjenopprettet i denne nettleseren — legg ved bildene på nytt før du sender.",
     "category": "kategori",
     "state": "status",
     "buildingName": "bygningsnavn",

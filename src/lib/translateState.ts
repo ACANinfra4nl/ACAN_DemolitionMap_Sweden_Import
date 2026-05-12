@@ -7,6 +7,7 @@ export const translateState = <
     state: string;
     status?: string;
     category: string;
+    reviewed?: unknown;
   },
 >(
   properties: T,

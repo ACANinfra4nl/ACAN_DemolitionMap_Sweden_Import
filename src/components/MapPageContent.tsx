@@ -12,6 +12,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { MessagePanel } from "@/components/MessagePanel";
 import { Button } from "@/components/Button";
 import { buildingToQueryParams } from "@/lib/buildingToQueryParams";
+import { clearAddBuildingDraft } from "@/lib/addBuildingDraft";
 
 export const MapPageContent: FC<
   SettingsType & {
@@ -53,14 +54,16 @@ export const MapPageContent: FC<
     } else {
       setHasSelectedFeature(false);
     }
-  }, [selectedId]);
+  }, [selectedId, buildings.features]);
 
-  const handleAddMarker = useCallback((latLng: LatLng) => {
-    // show popup with form
-    setAddingLocation(latLng);
-    setShowNewBuildingForm(true);
-    router.replace(pathname);
-  }, []);
+  const handleAddMarker = useCallback(
+    (latLng: LatLng) => {
+      setAddingLocation(latLng);
+      setShowNewBuildingForm(true);
+      router.replace(pathname);
+    },
+    [pathname, router],
+  );
   const handleCancelFeature = useCallback(() => {
     setIsAdding(false);
     setShowNewBuildingForm(false);
@@ -92,6 +95,8 @@ export const MapPageContent: FC<
           setIsAdding(false);
           setSubmitError(undefined);
           setAddedBuilding(true);
+          clearAddBuildingDraft();
+          router.refresh();
         })
         .catch((error) => {
           // Keep the existing UI behavior, but expose details in dev tools for faster debugging.
@@ -106,7 +111,7 @@ export const MapPageContent: FC<
           document.body.classList.remove("waiting");
         });
     },
-    [],
+    [router],
   );
 
   const handleClickFeature: (id: string) => void = useCallback(
@@ -117,12 +122,12 @@ export const MapPageContent: FC<
       setHasSelectedFeature(true);
       router.push(`${pathname}?${buildingToQueryParams(feature.properties)}`);
     },
-    [buildings],
+    [buildings?.features, pathname, router],
   );
   const clearSelectedFeature = useCallback(() => {
     setHasSelectedFeature(false);
     router.push(pathname);
-  }, []);
+  }, [pathname, router]);
   const handleClickAddBuilding: MouseEventHandler<HTMLButtonElement> =
     useCallback((e) => {
       e.stopPropagation();
@@ -190,7 +195,7 @@ export const MapPageContent: FC<
       </main>
       <Transition
         show={hasSelectedFeature}
-        className="relative z-10 col-span-12 col-start-1 row-span-2 row-start-1 grid overflow-scroll scroll-smooth bg-white sm:col-span-6 sm:col-start-1 md:col-span-5 md:col-start-1"
+        className="relative z-10 col-span-12 col-start-1 row-span-2 row-start-1 flex min-h-0 flex-col overflow-y-auto scroll-smooth bg-white sm:col-span-6 sm:col-start-1 md:col-span-5 md:col-start-1"
         enter="transition-transform duration-300 ease-out"
         enterFrom="-translate-x-full"
         enterTo="translate-none"
@@ -209,7 +214,7 @@ export const MapPageContent: FC<
       </Transition>
       <Transition
         show={showNewBuildingForm}
-        className="relative z-10 col-span-12 col-start-1 row-span-2 row-start-1 grid overflow-scroll scroll-smooth bg-white p-5 sm:col-span-6 sm:col-start-1 md:col-span-5 md:col-start-1"
+        className="relative z-10 col-span-12 col-start-1 row-span-2 row-start-1 flex min-h-0 flex-col overflow-y-auto scroll-smooth bg-white p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] sm:col-span-6 sm:col-start-1 md:col-span-5 md:col-start-1"
         enter="transition-transform duration-300 ease-out"
         enterFrom="-translate-x-full"
         enterTo="translate-none"

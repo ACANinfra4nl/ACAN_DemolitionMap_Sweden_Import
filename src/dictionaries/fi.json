@@ -8,6 +8,14 @@
     "addTwo": "rakennus",
     "language": "fi"
   },
+  "landing": {
+    "partnersHeading": "Kumppanit",
+    "supportersHeading": "Tukijat",
+    "partnerLogoPlaceholder": "Kumppani",
+    "supporterLogoPlaceholder": "Tukija",
+    "placeholderStripAnnouncement": "Logojen paikkamerkit — grafiikka lisätään myöhemmin.",
+    "crdLogoAlt": "CRD — toteuttava kumppani (logopaikkamerkki)"
+  },
   "search": "hae",
   "sort": {
     "added": "lisätty",
@@ -31,7 +39,10 @@
     "addLocation": "Valitse paikka kartalta",
     "addBuilding": "lisää rakennus",
     "imageInput": "raahaa ja pudota kuvasi tähän",
+    "imageLabel": "kuvat",
     "imageMaxSize": "Kuvien yhteenlaskettu koko ei saa ylittää 4 Mt.",
+    "imageRequired": "Lataa vähintään yksi kuva.",
+    "draftRestoreImagesHint": "Luonnos palautettu tässä selaimessa — liitä kuvat uudelleen ennen lähetystä.",
     "category": "kategoria",
     "state": "status",
     "buildingName": "rakennuksen nimi",

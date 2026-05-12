@@ -7,14 +7,18 @@ export const toFeature = <
     state: string;
     status?: string;
     category: string;
+    reviewed?: unknown;
   },
 >(
   properties: T,
   dict?: Dictionary,
-): Feature<Point, T> => {
+): Feature<Point, T & { reviewed: boolean }> => {
   if (dict) {
     properties = translateState(properties, dict);
   }
+
+  const reviewed =
+    properties.reviewed === true || properties.reviewed === "true";
 
   return {
     type: "Feature",
@@ -22,6 +26,9 @@ export const toFeature = <
       type: "Point",
       coordinates: [properties.location.lng, properties.location.lat],
     },
-    properties,
+    properties: {
+      ...(properties as object),
+      reviewed,
+    } as T & { reviewed: boolean },
   };
 };

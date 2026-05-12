@@ -2,9 +2,9 @@ import { PortableText } from "@portabletext/react";
 import { SanityDocument } from "next-sanity";
 import { FC } from "react";
 import { Image } from "@/components/portableText/Image";
-import { SallyLogo } from "./SallyLogo";
-import { AcanLogoText } from "./Logo/AcanLogoText";
 import { IntroText } from "./IntroText";
+import { LandingFooterSection } from "./LandingFooterSection";
+import { LandingPartnerSupporterCarousels } from "./LandingPartnerSupporterCarousels";
 import { Navigation } from "./Navigation";
 import Link from "next/link";
 import { PolicyFooter } from "./PolicyFooter";
@@ -66,14 +66,11 @@ export const ManifestPageContent: FC<{
               }}
             />
           </div>
-          <div className="w-column col-span-3 col-start-2 mb-32 mt-16 flex flex-col gap-14 sm:col-span-1 sm:col-start-3">
-            <AcanLogoText />
-
-            <Link href="https://sally.doberman.co/" rel="noopener noreferrer">
-              <SallyLogo />
-            </Link>
+          <div className="w-column col-span-3 col-start-2 mt-16 sm:col-span-1 sm:col-start-3">
+            <LandingFooterSection dict={dict} />
           </div>
         </div>
+        <LandingPartnerSupporterCarousels dict={dict} />
       </main>
       <PolicyFooter />
     </>

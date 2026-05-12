@@ -8,6 +8,14 @@
     "addTwo": "gebouw toe",
     "language": "nl"
   },
+  "landing": {
+    "partnersHeading": "Partners",
+    "supportersHeading": "Supporters",
+    "partnerLogoPlaceholder": "Partner",
+    "supporterLogoPlaceholder": "Supporter",
+    "placeholderStripAnnouncement": "Logo-placeholders — beeldmerken volgen later.",
+    "crdLogoAlt": "CRD — uitvoerende partner (logo-placeholder)"
+  },
   "search": "zoeken",
   "sort": {
     "added": "toegevoegd",
@@ -31,7 +39,10 @@
     "addLocation": "Selecteer locatie op kaart",
     "addBuilding": "voeg gebouw toe",
     "imageInput": "sleep en zet uw afbeeldingen hier neer om te uploaden",
+    "imageLabel": "afbeeldingen",
     "imageMaxSize": "De totale grootte van alle afbeeldingen mag niet meer dan 4 MB bedragen.",
+    "imageRequired": "Upload minst één afbeelding.",
+    "draftRestoreImagesHint": "Concept hersteld in deze browser — voeg afbeeldingen opnieuw toe voordat u verzendt.",
     "category": "categorie",
     "state": "status",
     "buildingName": "gebouwnaam",

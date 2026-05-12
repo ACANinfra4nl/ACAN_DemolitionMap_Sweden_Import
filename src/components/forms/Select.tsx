@@ -19,8 +19,18 @@ export const Select: FC<
     options: TitledListValue<string>[];
     formList: Categories | States;
   }
-> = ({ label, onChange, autoFocus, options, formList, ...props }) => {
-  const [hasValue, setHasValue] = useState(false);
+> = ({
+  label,
+  onChange,
+  autoFocus,
+  options,
+  formList,
+  defaultValue,
+  ...props
+}) => {
+  const [hasValue, setHasValue] = useState(
+    () => typeof defaultValue === "string" && defaultValue.length > 0,
+  );
   const [interacted, setInteracted] = useState(false);
   const handleChange: ChangeEventHandler<HTMLSelectElement> = useCallback(
     (e) => {
@@ -35,6 +45,7 @@ export const Select: FC<
     <div className="relative">
       <select
         {...props}
+        defaultValue={defaultValue}
         id={props.name}
         className="peer w-full appearance-none border-b border-current text-body outline-none first-letter:uppercase focus-within:border-acan-blue"
         onChange={handleChange}

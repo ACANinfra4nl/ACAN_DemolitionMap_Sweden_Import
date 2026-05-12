@@ -8,6 +8,14 @@
     "addTwo": "building",
     "language": "en"
   },
+  "landing": {
+    "partnersHeading": "Partners",
+    "supportersHeading": "Supporters",
+    "partnerLogoPlaceholder": "Partner",
+    "supporterLogoPlaceholder": "Supporter",
+    "placeholderStripAnnouncement": "Logo placeholders — artwork to be added.",
+    "crdLogoAlt": "CRD — executing contributor (logo placeholder)"
+  },
   "search": "search",
   "sort": {
     "added": "added",
@@ -31,7 +39,10 @@
     "addLocation": "Select location on map",
     "addBuilding": "add building",
     "imageInput": "upload images",
+    "imageLabel": "images",
     "imageMaxSize": "The total size of all images must not exceed 4MB.",
+    "imageRequired": "Upload at least one image.",
+    "draftRestoreImagesHint": "Draft restored from this browser — please attach images again before submitting.",
     "category": "category",
     "state": "status",
     "buildingName": "building name (if applicable)",

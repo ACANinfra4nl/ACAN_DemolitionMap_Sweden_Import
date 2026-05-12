@@ -3,6 +3,7 @@ import {
   FormEventHandler,
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -15,8 +16,10 @@ import { TextArea } from "./forms/TextArea";
 import { formatAddress } from "../lib/formatAddress";
 import { ImageInput } from "./forms/ImageInput";
 import { Button } from "./Button";
-import { useClickOutside } from "@/app/hooks/useClickOutside";
-import classNames from "clsx";
+import {
+  loadAddBuildingDraft,
+  persistAddBuildingDraft,
+} from "@/lib/addBuildingDraft";
 
 interface NewFeatureFormProps {
   latLng: LatLng;
@@ -35,18 +38,48 @@ export const NewFeatureForm = ({
 }: NewFeatureFormProps) => {
   const panelEl = useRef<HTMLDivElement>(null);
   const formEl = useRef<HTMLFormElement>(null);
+  const draftTimerRef = useRef<number | undefined>(undefined);
+  const hadImagesRef = useRef(false);
+
+  const { fields: draftFields, hadImages: draftHadImages } = useMemo(
+    () => loadAddBuildingDraft(latLng),
+    [latLng.lat, latLng.lng],
+  );
+
   const [lookupResult, setLookupResult] = useState<ReverseGeocodeResult>();
-  const [isDemolished, setIsDemolished] = useState(false);
+  const [isDemolished, setIsDemolished] = useState(
+    () => draftFields.state === "riven",
+  );
   const [isFormValid, setIsFormValid] = useState(false);
-  useClickOutside(panelEl, onCancel);
+
+  useEffect(() => {
+    hadImagesRef.current = draftHadImages;
+  }, [draftHadImages]);
+
+  const flushDraftTimer = useCallback(() => {
+    if (draftTimerRef.current !== undefined) {
+      window.clearTimeout(draftTimerRef.current);
+      draftTimerRef.current = undefined;
+    }
+  }, []);
+
+  const scheduleDraftPersist = useCallback(() => {
+    flushDraftTimer();
+    draftTimerRef.current = window.setTimeout(() => {
+      if (formEl.current) {
+        persistAddBuildingDraft(formEl.current, hadImagesRef.current);
+      }
+    }, 400);
+  }, [flushDraftTimer]);
+
+  useEffect(() => () => flushDraftTimer(), [flushDraftTimer]);
 
   const updateFormValidity = useCallback(() => {
     setIsFormValid(formEl.current?.checkValidity() ?? false);
   }, []);
+
   useEffect(() => {
     const controller = new AbortController();
-
-    // do reverse geocoding of latlng and populate address fields
     fetch(`/api/reverse?lat=${latLng.lat}&lng=${latLng.lng}`, {
       signal: controller.signal,
     })
@@ -64,17 +97,45 @@ export const NewFeatureForm = ({
           console.error("Reverse geocoding failed:", error);
         }
       });
-    // focus first enabled input
+    return () => controller.abort();
+  }, [latLng.lat, latLng.lng]);
+
+  useEffect(() => {
     (
       panelEl.current?.querySelector(
         "form *:is(input, textarea, select):not([type=hidden], :disabled)",
       ) as HTMLElement | undefined
     )?.focus();
     return () => {
-      controller.abort();
       document.body.classList.remove("waiting");
     };
   }, []);
+
+  useEffect(() => {
+    const form = formEl.current;
+    if (!form) return;
+    const setNamed = (name: string, value: string) => {
+      const el = form.elements.namedItem(name) as HTMLInputElement | null;
+      if (el) el.value = value;
+    };
+    if (lookupResult) {
+      setNamed("address", lookupResult.address ?? "");
+      setNamed("postcode", lookupResult.postcode ?? "");
+      setNamed("city", lookupResult.city ?? "");
+    } else {
+      setNamed("address", draftFields.address ?? "");
+      setNamed("postcode", draftFields.postcode ?? "");
+      setNamed("city", draftFields.city ?? "");
+    }
+    if (formEl.current) {
+      persistAddBuildingDraft(formEl.current, hadImagesRef.current);
+    }
+  }, [
+    lookupResult,
+    draftFields.address,
+    draftFields.postcode,
+    draftFields.city,
+  ]);
 
   const handleChangeState: ChangeEventHandler<HTMLSelectElement> = useCallback(
     (e) => {
@@ -86,15 +147,25 @@ export const NewFeatureForm = ({
 
   const handleFormChange = useCallback(() => {
     updateFormValidity();
-  }, [updateFormValidity]);
+    scheduleDraftPersist();
+  }, [scheduleDraftPersist, updateFormValidity]);
+
+  const handleImagesCountChange = useCallback(
+    (count: number) => {
+      hadImagesRef.current = count > 0;
+      scheduleDraftPersist();
+    },
+    [scheduleDraftPersist],
+  );
 
   useEffect(() => {
     updateFormValidity();
   }, [isDemolished, updateFormValidity]);
 
-  // throw new Error(
-  //   "fixa så att cursor är progress på hela sidan när man sparar, fattar inte riktigt hur man ska göra, kanske med nån portal?",
-  // );
+  const readonlyAddressKey = lookupResult
+    ? `geo-${lookupResult.address}-${lookupResult.postcode}`
+    : `draft-${draftFields.address ?? ""}-${draftFields.postcode ?? ""}`;
+
   return (
     <div ref={panelEl}>
       <CloseButton onClick={onCancel} close={dict.ariaLabels.close} />
@@ -116,10 +187,20 @@ export const NewFeatureForm = ({
           <input type="hidden" name="lng" value={latLng.lng} />
           <div>
             <ImageInput
+              label={dict.newFeatureForm.imageLabel}
               text={dict.newFeatureForm.imageInput}
               maxSizeText={dict.newFeatureForm.imageMaxSize}
+              required
+              requiredMessage={dict.newFeatureForm.imageRequired}
               ariaLabels={dict.ariaLabels}
+              onValidityChange={updateFormValidity}
+              onImagesCountChange={handleImagesCountChange}
             />
+            {draftHadImages ? (
+              <p className="mt-2 text-sm text-demolished first-letter:uppercase">
+                {dict.newFeatureForm.draftRestoreImagesHint}
+              </p>
+            ) : null}
           </div>
 
           <div>
@@ -129,6 +210,7 @@ export const NewFeatureForm = ({
               options={categories}
               required
               formList={dict.categories}
+              defaultValue={draftFields.category ?? ""}
             />
           </div>
           <div>
@@ -137,6 +219,7 @@ export const NewFeatureForm = ({
               name="state"
               options={states}
               required
+              defaultValue={draftFields.state ?? ""}
               onChange={handleChangeState}
               formList={dict.states}
             />
@@ -145,16 +228,18 @@ export const NewFeatureForm = ({
             <Input
               label={dict.newFeatureForm.buildingName}
               name="buildingName"
+              defaultValue={draftFields.buildingName ?? ""}
             />
           </div>
           <div>
             <Input
+              key={readonlyAddressKey}
               label={dict.newFeatureForm.address}
               name=""
               defaultValue={formatAddress(
-                lookupResult?.address,
-                lookupResult?.postcode,
-                lookupResult?.city,
+                lookupResult?.address ?? draftFields.address,
+                lookupResult?.postcode ?? draftFields.postcode,
+                lookupResult?.city ?? draftFields.city,
               )}
               readOnly
               disabled
@@ -162,26 +247,31 @@ export const NewFeatureForm = ({
             <input
               type="hidden"
               name="address"
-              defaultValue={lookupResult?.address}
+              defaultValue={draftFields.address ?? ""}
             />
             <input
               type="hidden"
               name="postcode"
-              defaultValue={lookupResult?.postcode}
+              defaultValue={draftFields.postcode ?? ""}
             />
             <input
               type="hidden"
               name="city"
-              defaultValue={lookupResult?.city}
+              defaultValue={draftFields.city ?? ""}
             />
           </div>
           <div>
-            <Input label={dict.newFeatureForm.blockName} name="blockName" />
+            <Input
+              label={dict.newFeatureForm.blockName}
+              name="blockName"
+              defaultValue={draftFields.blockName ?? ""}
+            />
           </div>
           <div>
             <Input
               label={dict.newFeatureForm.propertyDesignation}
               name="propertyDesignation"
+              defaultValue={draftFields.propertyDesignation ?? ""}
             />
           </div>
           <div>
@@ -190,15 +280,21 @@ export const NewFeatureForm = ({
               name="size"
               type="number"
               min={0}
+              defaultValue={draftFields.size ?? ""}
             />
           </div>
           <div>
-            <Input label={dict.newFeatureForm.architect} name="architect" />
+            <Input
+              label={dict.newFeatureForm.architect}
+              name="architect"
+              defaultValue={draftFields.architect ?? ""}
+            />
           </div>
           <div>
             <Input
               label={dict.newFeatureForm.propertyOwner}
               name="propertyOwner"
+              defaultValue={draftFields.propertyOwner ?? ""}
             />
           </div>
           <div className="flex gap-4">
@@ -209,6 +305,7 @@ export const NewFeatureForm = ({
                 type="number"
                 min={0}
                 max={9999}
+                defaultValue={draftFields.buildYear ?? ""}
               />
             </div>
             <div className="flex-grow">
@@ -220,6 +317,7 @@ export const NewFeatureForm = ({
                 max={9999}
                 disabled={!isDemolished}
                 required={isDemolished}
+                defaultValue={draftFields.demolitionYear ?? ""}
               />
             </div>
           </div>
@@ -228,6 +326,7 @@ export const NewFeatureForm = ({
               label={dict.newFeatureForm.description}
               name="description"
               rows={3}
+              defaultValue={draftFields.description ?? ""}
             />
           </div>
           <div>
@@ -236,6 +335,7 @@ export const NewFeatureForm = ({
               name="demolitionCause"
               rows={3}
               required
+              defaultValue={draftFields.demolitionCause ?? ""}
             />
           </div>
           <div>
@@ -243,37 +343,8 @@ export const NewFeatureForm = ({
               label={dict.newFeatureForm.sources}
               name="sources"
               rows={3}
+              defaultValue={draftFields.sources ?? ""}
             />
-          </div>
-          <div>
-            <div className="mb-4 text-body first-letter:uppercase">
-              {dict.newFeatureForm.sender}
-            </div>
-            <div className="flex w-full flex-col items-stretch justify-stretch gap-4 md:flex-row">
-              <div className="flex-grow">
-                <Input
-                  label={dict.newFeatureForm.contributor}
-                  name="contributor"
-                />
-              </div>
-              <div className="flex-grow">
-                <Input
-                  label={dict.newFeatureForm.email}
-                  name="contributor-email"
-                  type="email"
-                  required
-                />
-              </div>
-            </div>
-            <p className="mt-2 text-sm first-letter:uppercase">
-              {dict.newFeatureForm.addEmail}
-            </p>
-          </div>
-          <div className="hidden" aria-hidden>
-            <label className="first-letter:uppercase" htmlFor="accept">
-              {dict.newFeatureForm.accept}
-            </label>
-            <input type="checkbox" name="accept" id="accept" />
           </div>
           <div className="acan-text-body">
             <label
@@ -285,7 +356,7 @@ export const NewFeatureForm = ({
                 name="privacyConsent"
                 type="checkbox"
                 required
-                className="mt-1"
+                className="mt-1 h-4 w-4 shrink-0 accent-[#2637f3]"
               />
               <span>
                 {dict.newFeatureForm.accept}{" "}
@@ -301,7 +372,33 @@ export const NewFeatureForm = ({
               </span>
             </label>
           </div>
-          <div className="flex gap-5">
+          <div>
+            <div className="mb-4 text-body first-letter:uppercase">
+              {dict.newFeatureForm.sender}
+            </div>
+            <div className="flex w-full flex-col items-stretch justify-stretch gap-4 md:flex-row">
+              <div className="flex-grow">
+                <Input
+                  label={dict.newFeatureForm.contributor}
+                  name="contributor"
+                  defaultValue={draftFields.contributor ?? ""}
+                />
+              </div>
+              <div className="flex-grow">
+                <Input
+                  label={dict.newFeatureForm.email}
+                  name="contributor-email"
+                  type="email"
+                  required
+                  defaultValue={draftFields["contributor-email"] ?? ""}
+                />
+              </div>
+            </div>
+            <p className="mt-2 text-sm first-letter:uppercase">
+              {dict.newFeatureForm.addEmail}
+            </p>
+          </div>
+          <div className="flex gap-5 pb-[env(safe-area-inset-bottom)]">
             <Button type="button" onClick={onCancel}>
               {dict.newFeatureForm.cancel}
             </Button>
