@@ -16,6 +16,15 @@ Built using [Next.js](https://nextjs.org/) with [Sanity](https://www.sanity.io/)
 
 | Variable | Role |
 |---------|------|
+| `NEXT_PUBLIC_SANITY_PROJECT_ID` | Sanity project ID (required at build/runtime) |
+| `NEXT_PUBLIC_SANITY_DATASET` | Sanity dataset (e.g. `production`) |
+| `NEXT_PUBLIC_SANITY_API_VERSION` | Sanity API version (see `.env.example`) |
+| `NEXT_PUBLIC_MAPTILER_STYLE_URL` | MapLibre style URL for the map |
+| `NEXT_PUBLIC_MIN_DEMOLITION_YEAR` | Minimum year shown on the submission form |
+| `SANITY_AUTH_TOKEN` | Write-capable token for creating buildings (`/api/buildings`) |
+| `SANITY_READ_TOKEN` | Used by `sanityFetch` when preview/draft reads need authenticated API |
+| `GEOAPIFY_TOKEN` | Forward + reverse geocoding (`geocode` / `reverse`) |
+| `LANGUAGE` | Active locale for dictionaries (`sv`, `en`, `nl`, …) |
 | `SANITY_PREVIEW_SECRET` | Server: enables `/api/preview` when `?secret=` matches |
 | `NEXT_PUBLIC_SANITY_PREVIEW_SECRET` | Same secret value exposed to Studio’s Preview iframe (`sanity/lib/preview.ts`); **must equal** `SANITY_PREVIEW_SECRET` |
 | `SANITY_REVALIDATE_SECRET` | Webhook `/api/revalidate` signature verification (fallback if preview secret omitted) |
@@ -26,6 +35,15 @@ If Studio shows “Failed to fetch iframe URL” after enabling preview gate, ve
 ## Production setup
 
 Deployed from the repo (e.g. Vercel). Configure secrets in the host’s environment-variable UI. Build is `npm run build`; run `npm test` locally before tagging releases.
+
+### Web Analytics (Vercel Hobby)
+
+The app includes [`@vercel/analytics`](https://www.npmjs.com/package/@vercel/analytics) with `<Analytics />` in the root layout (`src/app/layout.tsx`). After deployment:
+
+1. In the Vercel dashboard open **your project → Analytics → Web Analytics**.
+2. Click **Enable** so traffic is recorded.
+
+No extra environment variables are required. Page views are collected **only on Vercel production deployments** (local `npm run dev` does not send analytics). If you publish a privacy notice, mention aggregate analytics in line with your legal guidance ([Vercel Web Analytics overview](https://vercel.com/docs/analytics)).
 
 ## Load testing (optional)
 

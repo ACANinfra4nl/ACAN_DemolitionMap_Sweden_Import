@@ -7,8 +7,6 @@ import { ShareButton } from "./ShareButton";
 import { useClickOutside } from "@/app/hooks/useClickOutside";
 import { Image } from "./Image";
 import { Linkify } from "./Linkify";
-import { formatAddress } from "@/lib/formatAddress";
-import Link from "next/link";
 
 const Detail: FC<{ label: string; value: string | number | ReactNode }> = ({
   label,
@@ -123,18 +121,10 @@ export const DetailsPanel: FC<DetailsProps> = ({
             {dict.detailsPanel.share}
           </ShareButton>
           {feedbackEmail && (
-            <Link
-              href={`mailto:${feedbackEmail}?subject=${encodeURIComponent(
-                `${dict.detailsPanel.emailSubject} ${formatAddress(
-                  properties.address,
-                  properties.postcode,
-                  properties.city,
-                )}`,
-              )}`}
-              className="text-body underline first-letter:uppercase hover:text-acan-blue focus-visible:text-acan-blue"
-            >
-              {dict.detailsPanel.add}
-            </Link>
+            <span className="max-w-[min(100%,18rem)] text-right font-condensed text-body font-normal normal-case tracking-normal text-black">
+              {dict.detailsPanel.add}{" "}
+              <span className="break-all">{feedbackEmail}</span>
+            </span>
           )}
         </div>
       </div>
