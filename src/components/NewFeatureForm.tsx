@@ -366,7 +366,7 @@ export const NewFeatureForm = ({
                   rel="noopener noreferrer"
                   className="underline"
                 >
-                  Policy, Licensing & Disclaimer
+                  Algemene voorwaarden
                 </a>
                 <span className="text-demolished"> *</span>
               </span>

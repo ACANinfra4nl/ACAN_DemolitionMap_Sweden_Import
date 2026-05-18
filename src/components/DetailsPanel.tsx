@@ -123,7 +123,14 @@ export const DetailsPanel: FC<DetailsProps> = ({
           {feedbackEmail && (
             <span className="max-w-[min(100%,18rem)] text-right font-condensed text-body font-normal normal-case tracking-normal text-black">
               {dict.detailsPanel.add}{" "}
-              <span className="break-all">{feedbackEmail}</span>
+              <a
+                href={`mailto:${feedbackEmail}?subject=${encodeURIComponent(
+                  `${dict.detailsPanel.emailSubject} ${properties.name ?? properties.address ?? ""}`.trim(),
+                )}`}
+                className="break-all underline"
+              >
+                {feedbackEmail}
+              </a>
             </span>
           )}
         </div>

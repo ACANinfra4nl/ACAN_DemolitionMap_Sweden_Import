@@ -24,7 +24,7 @@ export const PolicyFooter = () => {
           rel="noopener noreferrer"
           className="uppercase tracking-wide text-black/70 hover:text-acan-blue focus-visible:text-acan-blue"
         >
-          Policy, Licensing & Disclaimer
+          Algemene voorwaarden
         </a>
         <span aria-hidden className="text-black/35">
           ·
