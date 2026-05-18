@@ -3,6 +3,9 @@ import type { FC, ReactNode } from "react";
 const PARTNER_PLACEHOLDER_COUNT = 10;
 const SUPPORTER_PLACEHOLDER_COUNT = 10;
 
+/** Flip to `true` to show the full partners & supporters section. */
+const SHOW_PARTNERS_SECTION = false;
+
 /** Flip to `true` when the supporters carousel should appear under partners. */
 const SHOW_SUPPORTERS_CAROUSEL = false;
 
@@ -67,6 +70,8 @@ export const LandingPartnerSupporterCarousels: FC<{ dict: Dictionary }> = ({
   dict,
 }) => {
   const L = dict.landing;
+  if (!SHOW_PARTNERS_SECTION) return null;
+
   return (
     <FullBleedStrip className="mt-14 pb-28 sm:pb-32">
       <LogoCarouselRow
@@ -82,6 +87,7 @@ export const LandingPartnerSupporterCarousels: FC<{ dict: Dictionary }> = ({
           slotLabel={L.supporterLogoPlaceholder}
           sectionAnnouncement={L.placeholderStripAnnouncement}
         />
-      ) : null}    </FullBleedStrip>
+      ) : null}
+    </FullBleedStrip>
   );
 };
