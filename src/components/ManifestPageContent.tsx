@@ -30,7 +30,7 @@ export const ManifestPageContent: FC<{
       <header className="pointer-events-none sticky top-0 z-10">
         <Navigation scaleLogo dict={dict} />
       </header>
-      <main className="mt-column">
+      <main className="mt-column pb-28 sm:pb-32">
         <div className="mx-5">
           <div className="grid grid-cols-6 items-end gap-10">
             <div className="acan-text-intro col-span-6 sm:col-span-4">
