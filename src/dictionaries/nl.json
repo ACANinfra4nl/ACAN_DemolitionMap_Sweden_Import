@@ -104,6 +104,10 @@
   },
   "map": {
     "bounds": [3.2, 50.7, 7.2, 53.7]
+  },
+  "footer": {
+    "policyLabel": "Algemene voorwaarden",
+    "policyEmail": "info@sloopkaart.nl"
   }
 }
 

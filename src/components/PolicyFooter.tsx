@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { FC } from "react";
 
-export const PolicyFooter = () => {
+export const PolicyFooter: FC<{ dict: Dictionary }> = ({ dict }) => {
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
@@ -24,16 +25,16 @@ export const PolicyFooter = () => {
           rel="noopener noreferrer"
           className="uppercase tracking-wide text-black/70 hover:text-acan-blue focus-visible:text-acan-blue"
         >
-          Algemene voorwaarden
+          {dict.footer.policyLabel}
         </a>
         <span aria-hidden className="text-black/35">
           ·
         </span>
         <a
-          href="mailto:info@sloopkaart.nl"
+          href={`mailto:${dict.footer.policyEmail}`}
           className="text-black/70 hover:text-acan-blue focus-visible:text-acan-blue"
         >
-          info@sloopkaart.nl
+          {dict.footer.policyEmail}
         </a>
       </span>
     </footer>

@@ -72,7 +72,7 @@ export const ManifestPageContent: FC<{
         </div>
         <LandingPartnerSupporterCarousels dict={dict} />
       </main>
-      <PolicyFooter />
+      <PolicyFooter dict={dict} />
     </>
   );
 };

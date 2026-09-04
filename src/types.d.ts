@@ -119,6 +119,11 @@ interface LandingDict {
   crdLogoAlt: string;
 }
 
+interface FooterDict {
+  policyLabel: string;
+  policyEmail: string;
+}
+
 interface Dictionary {
   nav: {
     title: string;
@@ -130,6 +135,7 @@ interface Dictionary {
     language: string;
   };
   landing: LandingDict;
+  footer: FooterDict;
   search: string;
   sort: {
     added: string;
