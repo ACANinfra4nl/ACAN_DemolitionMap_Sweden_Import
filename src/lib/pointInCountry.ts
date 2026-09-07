@@ -33,6 +33,7 @@ const pointInPolygon = (lng: number, lat: number, polygon: Polygon): boolean => 
   return !holes.some((hole) => pointInRing(lng, lat, hole));
 };
 
+/** True when lat/lng sits inside that country's outline in `countryPolygons.json`. */
 export const isPointInCountry = (
   lat: number,
   lng: number,
@@ -50,4 +51,14 @@ export const isPointInCountry = (
     return false;
   }
   return outline.polygons.some((polygon) => pointInPolygon(lng, lat, polygon));
+};
+
+export const isBuildingInCountry = (
+  building: { location?: { lat?: number; lng?: number } },
+  country: CountrySanityLocale,
+): boolean => {
+  const lat = building.location?.lat;
+  const lng = building.location?.lng;
+  if (typeof lat !== "number" || typeof lng !== "number") return false;
+  return isPointInCountry(lat, lng, country);
 };

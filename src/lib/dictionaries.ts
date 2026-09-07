@@ -1,4 +1,5 @@
 import "server-only";
+import { cookies } from "next/headers";
 
 const locale = (process.env.LANGUAGE as string | undefined) || "en";
 const dictionaries = {
@@ -32,8 +33,33 @@ const dictionaries = {
     ),
 };
 
-export const getDictionary = async () => {
-  const loader =
-    dictionaries[locale as keyof typeof dictionaries] || dictionaries.en;
+type DictKey = keyof typeof dictionaries;
+
+const loadDictionary = async (key: string) => {
+  const loader = dictionaries[key as DictKey] || dictionaries.en;
   return loader();
+};
+
+const readUiLangCookie = () => {
+  try {
+    return cookies().get("ui-lang")?.value;
+  } catch {
+    return undefined;
+  }
+};
+
+/** Dictionary for the deployed country (`LANGUAGE`). Use this for slugs and static params. */
+export const getHomeDictionary = async () => loadDictionary(locale);
+
+/** UI strings. May overlay English from the `ui-lang` cookie; slugs and map bounds stay home. */
+export const getDictionary = async () => {
+  const home = await getHomeDictionary();
+  const wantsEnglish = readUiLangCookie() === "en";
+  if (!wantsEnglish || home.nav.language === "en") return home;
+  const english = await loadDictionary("en");
+  return {
+    ...english,
+    slugs: home.slugs,
+    map: home.map,
+  };
 };

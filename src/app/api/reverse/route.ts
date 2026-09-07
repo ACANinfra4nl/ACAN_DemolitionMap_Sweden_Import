@@ -7,6 +7,8 @@ import {
   logEvent,
   withRequestId,
 } from "@/lib/server/ops";
+import { getHomeCountryCode } from "@/lib/countrySanity";
+import { isPointInCountry } from "@/lib/pointInCountry";
 
 export async function GET(req: NextRequest) {
   const requestId = getRequestId(req);
@@ -36,6 +38,14 @@ export async function GET(req: NextRequest) {
   ) {
     return withRequestId(
       NextResponse.json({ message: "Invalid parameters" }, { status: 400 }),
+      requestId,
+    );
+  }
+
+  const homeCountry = getHomeCountryCode();
+  if (homeCountry && !isPointInCountry(lat, lng, homeCountry)) {
+    return withRequestId(
+      NextResponse.json({ message: "Not found" }, { status: 404 }),
       requestId,
     );
   }

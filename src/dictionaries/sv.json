@@ -6,7 +6,9 @@
     "about": "om kartan",
     "addOne": "lägg till",
     "addTwo": "byggnad",
-    "language": "sv"
+    "language": "sv",
+    "langEn": "EN",
+    "langLocal": "SV"
   },
   "landing": {
     "partnersHeading": "Partners",

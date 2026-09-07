@@ -18,6 +18,8 @@ x-import-secret: <IMPORT_ADMIN_SECRET>
 
 Set `IMPORT_ADMIN_SECRET` in `.env.local` (fallback: same value as `SANITY_REVALIDATE_SECRET` if unset). Add this header to every `curl` below.
 
+Geocoding is locked to the active `LANGUAGE` country. Rows whose coordinates fall outside that outline are rejected. Existing outliers stay in Sanity but are hidden on the public map and list; list them with `scripts/list-out-of-country-buildings.js`.
+
 ## Supported File Formats
 
 - **CSV files** (.csv) - Comma-separated values

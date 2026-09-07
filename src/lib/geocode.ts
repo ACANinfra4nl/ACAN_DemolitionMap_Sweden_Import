@@ -1,3 +1,11 @@
+import {
+  COUNTRY_DEPLOYMENTS,
+  getHomeCountryCode,
+  isCountrySanityLocale,
+  type CountrySanityLocale,
+} from "./countrySanity";
+import { isPointInCountry } from "./pointInCountry";
+
 interface GeocodeResult {
   lat: number;
   lng: number;
@@ -24,6 +32,13 @@ const fetchWithTimeout = async (url: string, timeoutMs: number) => {
   }
 };
 
+const resolveSearchCountry = (
+  countryCode?: string,
+): CountrySanityLocale | undefined => {
+  const iso = (countryCode ?? getHomeCountryCode() ?? "").toLowerCase().trim();
+  return isCountrySanityLocale(iso) ? iso : undefined;
+};
+
 export const buildAddressString = (parts: AddressParts): string => {
   const segments = [
     parts.address,
@@ -44,14 +59,19 @@ export const geocode = async (
   const apiKey = process.env.GEOAPIFY_TOKEN;
   if (!apiKey || !address.trim()) return undefined;
 
+  const country = resolveSearchCountry(countryCode);
+  const lang = country
+    ? COUNTRY_DEPLOYMENTS[country].geocodeLang
+    : "en";
+
   const params = new URLSearchParams({
     text: address,
-    lang: "nl",
+    lang,
     apiKey,
   });
 
-  if (countryCode) {
-    params.set("filter", `countrycode:${countryCode.toLowerCase()}`);
+  if (country) {
+    params.set("filter", `countrycode:${country}`);
   }
 
   const url = `https://api.geoapify.com/v1/geocode/search?${params.toString()}`;
@@ -60,7 +80,10 @@ export const geocode = async (
     try {
       const response = await fetchWithTimeout(url, 5000);
       if (!response.ok) {
-        if ((response.status === 429 || response.status >= 500) && attempt < maxAttempts) {
+        if (
+          (response.status === 429 || response.status >= 500) &&
+          attempt < maxAttempts
+        ) {
           await sleep(200 * attempt);
           continue;
         }
@@ -79,6 +102,10 @@ export const geocode = async (
 
       const first = json.features?.[0]?.properties;
       if (typeof first?.lat !== "number" || typeof first?.lon !== "number") {
+        return undefined;
+      }
+
+      if (country && !isPointInCountry(first.lat, first.lon, country)) {
         return undefined;
       }
 

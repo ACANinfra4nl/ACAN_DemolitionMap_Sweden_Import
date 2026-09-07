@@ -6,7 +6,9 @@
     "about": "about the map",
     "addOne": "add",
     "addTwo": "building",
-    "language": "en"
+    "language": "en",
+    "langEn": "EN",
+    "langLocal": "EN"
   },
   "landing": {
     "partnersHeading": "Partners",

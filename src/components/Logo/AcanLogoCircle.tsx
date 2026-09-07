@@ -15,6 +15,10 @@ export const AcanLogoCircle: FC<{ language: string }> = ({ language }) => {
       return <AcanLogoCircleNo />;
     case "nl":
       return <AcanLogoCircleNL />;
+    case "au":
+    case "dk":
+    case "en":
+      return <AcanLogoCircleUK />;
     default:
       return <AcanLogoCircleUK />;
   }

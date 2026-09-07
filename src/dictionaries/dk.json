@@ -6,7 +6,9 @@
     "about": "om kortet",
     "addOne": "tilføj",
     "addTwo": "bygning",
-    "language": "da"
+    "language": "da",
+    "langEn": "EN",
+    "langLocal": "DA"
   },
   "search": "søg",
   "sort": {

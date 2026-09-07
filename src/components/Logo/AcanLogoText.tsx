@@ -15,6 +15,10 @@ export const AcanLogoText: FC = () => {
       return <AcanLogoTextNo />;
     case "nl":
       return <AcanLogoTextNL />;
+    case "au":
+    case "dk":
+    case "en":
+      return <AcanLogoTextUK />;
     default:
       return <AcanLogoTextUK />;
   }

@@ -1,16 +1,34 @@
-# Rivningskartan
+# ACAN demolition maps
 
-Shows threatened, demolished, and saved buildings in Sweden.
+Maps of threatened, demolished, and saved buildings. The Netherlands (Sloopkaart) is the live deployment. Australia and Denmark share this codebase and are **not published yet**.
 
-Built using [Next.js](https://nextjs.org/) with [Sanity](https://www.sanity.io/) as CMS.
+Built with [Next.js](https://nextjs.org/) and [Sanity](https://www.sanity.io/). One git branch (`kauter-dev`) serves every country. What differs is environment and config, not a fork.
 
 ## Development setup
 
 - Install Node.js 18+
 - Run `npm ci`
 - Create a `.env.local` file by copying [`.env.example`](./.env.example) and filling in all variables (see below)
+- Set `LANGUAGE` to `nl`, `au`, or `dk` and use that country’s Sanity project id and tokens
 - Start the dev server with `npm run dev`
 - By default: app at http://localhost:3000 · Studio at http://localhost:3000/studio
+
+### Local compare (all three countries)
+
+From this checkout:
+
+```powershell
+.\scripts\start-local-compare.ps1
+```
+
+| Site | URL | Map / list |
+|------|-----|------------|
+| Netherlands | http://localhost:3000 | `/kaart` `/lijst` |
+| Australia | http://localhost:3001 | `/map` `/list` |
+| Denmark | http://localhost:3002 | `/kort` `/liste` |
+| Hub | http://localhost:3999/local-compare-hub.html | side-by-side |
+
+Each process overrides `LANGUAGE` and `NEXT_PUBLIC_SANITY_PROJECT_ID` and uses its own `.next-nl` / `.next-au` / `.next-dk` folder. Shared secrets still come from `.env.local`. Write tokens must belong to the project you submit to.
 
 ## Environment variables (Vercel / `.env.local`)
 
@@ -51,17 +69,54 @@ See [`load-tests/README.md`](./load-tests/README.md). Requires local [k6](https:
 
 ## Country deployments
 
-All current maps run from **`kauter-dev`**. Country differences are configuration (`LANGUAGE`, Sanity project, dictionary), not separate product branches. `kauter-dev-AU` and `kauter-dev-DK` are historical catch-up forks and should not receive new work.
+All maps run from **`kauter-dev`**. Country differences live in [`src/lib/countrySanity.ts`](./src/lib/countrySanity.ts) plus `LANGUAGE` and Sanity env. Historic branches `kauter-dev-AU` and `kauter-dev-DK` are archived (`archive/kauter-dev-AU`, `archive/kauter-dev-DK` tags) and must not receive new work.
 
-Set `LANGUAGE` and `NEXT_PUBLIC_SANITY_PROJECT_ID` together. Dataset is `production` for all current maps. Project IDs are also coded in [`src/lib/countrySanity.ts`](./src/lib/countrySanity.ts); if the env ID is omitted, `LANGUAGE` selects the matching project.
+Set `LANGUAGE` and `NEXT_PUBLIC_SANITY_PROJECT_ID` together. Dataset is `production` for all current maps. If the env project id is omitted, `LANGUAGE` selects the mapped project.
 
-| Country | `LANGUAGE` | Sanity project ID |
-|---------|------------|-------------------|
-| Netherlands | `nl` | `q9jkymv5` |
-| Australia | `au` | `yps8kvw9` |
-| Denmark | `dk` | `obfbyt9x` |
+| Country | `LANGUAGE` | Sanity project ID | Live? |
+|---------|------------|-------------------|-------|
+| Netherlands | `nl` | `q9jkymv5` | yes |
+| Australia | `au` | `yps8kvw9` | no — wait for the AU group |
+| Denmark | `dk` | `obfbyt9x` | no — wait for the DK group |
 
-Each country uses its **own** Sanity project (and Studio) and is a separate hosting deployment of this branch. Tokens (`SANITY_AUTH_TOKEN`, `SANITY_READ_TOKEN`) must belong to that project. New pins can only be placed inside that country’s outline. 
+Each country has its own Sanity project and Studio. `SANITY_AUTH_TOKEN` / `SANITY_READ_TOKEN` must belong to **that** project. Do not reuse the Netherlands token on AU or DK.
+
+### How country behaviour is shared
+
+| Shared in code | Per country |
+|----------------|-------------|
+| Map, list, form, overlay UI | Dictionary (`nl.json` / `au.json` / `dk.json`) |
+| Pin-in-country check | Country outline in `src/data/countryPolygons.json` |
+| Geocoding (Geoapify) | Forced `countrycode` filter for the active `LANGUAGE` |
+| Feature flags | `overlayLayers`, `englishToggle` in `COUNTRY_DEPLOYMENTS` |
+| Overlay pin click-through | Local URLs until AU/DK are live |
+
+- New pins cannot be placed outside the home country. The add form does not open.
+- Existing out-of-country records stay in Sanity but are hidden on the public map and list.
+- Overlay layers are off by default. NL/DK can switch the UI to English (`EN` / local in the nav) without changing slugs, Sanity, or map bounds. AU is already English, so that toggle is off.
+- AU/DK still use the generic ACAN mark until those groups supply logos.
+
+List stored outliers (does not delete anything):
+
+```sh
+LANGUAGE=au NEXT_PUBLIC_SANITY_PROJECT_ID=yps8kvw9 node scripts/list-out-of-country-buildings.js
+```
+
+Known AU outliers (wrong geocode): Jolimont Street rows landed near Montevideo; 197 Bouverie Street has truncated coordinates (`37,48` instead of Melbourne). Fix in the AU Studio when ready.
+
+### Git
+
+- Long-lived branch: `kauter-dev`
+- New work: short feature branches off `kauter-dev`, then merge back
+- Hosting: one Vercel (or other) project per country, same git branch, different env
+- Do not reopen `kauter-dev-AU` / `kauter-dev-DK` for features
+
+### Later
+
+- Publish AU and DK with those groups; then point overlay URLs at the live sites
+- OpenFreeMap / Protomaps only after the basemap matches the current black-and-white satellite look (borders, roads, names). Extra underlays (building outlines, parcels) can be country-specific, optional, and opacity-toggled — do not build that until the base style is right
+- IP-based language later; English toggle is enough for now
+- Open source later (building data already lives in Sanity, not in git) 
 
 ## Importing content
 

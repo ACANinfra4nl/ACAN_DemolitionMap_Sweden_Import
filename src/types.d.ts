@@ -133,6 +133,8 @@ interface Dictionary {
     addOne: string;
     addTwo: string;
     language: string;
+    langEn: string;
+    langLocal: string;
   };
   landing: LandingDict;
   footer: FooterDict;

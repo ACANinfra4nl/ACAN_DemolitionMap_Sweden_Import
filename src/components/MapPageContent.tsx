@@ -15,6 +15,7 @@ import { buildingToQueryParams } from "@/lib/buildingToQueryParams";
 import { clearAddBuildingDraft } from "@/lib/addBuildingDraft";
 import { LayerSettings } from "@/components/Map/LayerSettings";
 import {
+  COUNTRY_DEPLOYMENTS,
   getHomeCountryCode,
   type CountrySanityLocale,
 } from "@/lib/countrySanity";
@@ -258,7 +259,8 @@ export const MapPageContent: FC<
           />
         </div>
         <div className="relative col-start-1 row-start-2 mx-5 mb-5">
-          {homeCountry ? (
+          {homeCountry &&
+          COUNTRY_DEPLOYMENTS[homeCountry].features.overlayLayers ? (
             <LayerSettings
               homeCountry={homeCountry}
               enabledCountries={overlayCountries}

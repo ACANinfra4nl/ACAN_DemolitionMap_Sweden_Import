@@ -4,6 +4,8 @@ import { Suspense } from "react";
 import { buildingsListQuery, settingsQuery } from "../../../sanity/lib/queries";
 import { toFeature } from "@/lib/toFeature";
 import { getDictionary } from "@/lib/dictionaries";
+import { getHomeCountryCode } from "@/lib/countrySanity";
+import { isBuildingInCountry } from "@/lib/pointInCountry";
 
 export const ListPage = async () => {
   const settings = await sanityFetch<SettingsType>({
@@ -15,9 +17,12 @@ export const ListPage = async () => {
     tags: ["building"],
   });
   const dict = await getDictionary();
+  const homeCountry = getHomeCountryCode();
+  const visible = homeCountry
+    ? buildings.filter((building) => isBuildingInCountry(building, homeCountry))
+    : buildings;
 
-  // transform to features
-  const features = buildings.map((b) => toFeature(b, dict));
+  const features = visible.map((b) => toFeature(b, dict));
 
   return (
     <Suspense>

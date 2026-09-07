@@ -9,6 +9,11 @@ import { states } from './states';
 import type { ColumnMapping, ImportConfig } from './importConfig';
 import type { ParsedRow } from './excelParser';
 import { geocode, buildAddressString } from './geocode';
+import {
+  COUNTRY_DEPLOYMENTS,
+  getHomeCountryCode,
+} from './countrySanity';
+import { isPointInCountry } from './pointInCountry';
 
 const clean = (str: string | number | undefined): string =>
   str ? String(str).toLowerCase().trim() : '';
@@ -60,7 +65,7 @@ const isLikelyNlPoint = (lat: number, lng: number): boolean =>
 
 const shouldUseNlRescue = (): boolean => {
   const language = (process.env.LANGUAGE || '').toLowerCase().trim();
-  return language === 'nl' || language === '';
+  return language === 'nl';
 };
 
 const rescueLikelyNlCoordinates = (
@@ -343,21 +348,18 @@ export async function csvDataToSanityBuilding_v2(
 
     // Build address string if we have address components
     if (address || city || postcode) {
+      const home = getHomeCountryCode();
       const addressString = buildAddressString({
         address: address ? String(address).trim() : undefined,
         city: city ? String(city).trim() : undefined,
         postcode: postcode ? String(postcode).trim() : undefined,
         blockName: blockName ? String(blockName).trim() : undefined,
-        country: process.env.LANGUAGE === 'au' ? 'AU' : undefined,
+        country: home ? COUNTRY_DEPLOYMENTS[home].code : undefined,
       });
 
       if (addressString) {
         try {
-          // Attempt to geocode the address
-          const geocodeResult = await geocode(
-            addressString,
-            process.env.LANGUAGE === 'au' ? 'AU' : undefined,
-          );
+          const geocodeResult = await geocode(addressString, home);
 
           if (geocodeResult) {
             lat = geocodeResult.lat;
@@ -391,6 +393,12 @@ export async function csvDataToSanityBuilding_v2(
   }
   lat = rescuedCoordinates.lat;
   lng = rescuedCoordinates.lng;
+
+  const homeCountry = getHomeCountryCode();
+  if (homeCountry && !isPointInCountry(lat, lng, homeCountry)) {
+    errors.push('Location is outside the map country.');
+    return { building: null, errors };
+  }
 
   const location: GeopointValue = {
     _type: 'geopoint',

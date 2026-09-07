@@ -6,7 +6,9 @@
     "about": "tietoja kartasta",
     "addOne": "lisää",
     "addTwo": "rakennus",
-    "language": "fi"
+    "language": "fi",
+    "langEn": "EN",
+    "langLocal": "FI"
   },
   "landing": {
     "partnersHeading": "Kumppanit",

@@ -1,4 +1,8 @@
 import { logEvent } from "@/lib/server/ops";
+import {
+  COUNTRY_DEPLOYMENTS,
+  getHomeCountryCode,
+} from "@/lib/countrySanity";
 
 type ReverseOptions = {
   requestId?: string;
@@ -23,7 +27,18 @@ export const reverse = async (
 ) => {
   if (!process.env.GEOAPIFY_TOKEN) return undefined;
   const requestId = options?.requestId;
-  const url = `https://api.geoapify.com/v1/geocode/reverse?lat=${lat}&lon=${lng}&lang=nl&apiKey=${process.env.GEOAPIFY_TOKEN}`;
+  const country = getHomeCountryCode();
+  const lang = country ? COUNTRY_DEPLOYMENTS[country].geocodeLang : "en";
+  const params = new URLSearchParams({
+    lat: String(lat),
+    lon: String(lng),
+    lang,
+    apiKey: process.env.GEOAPIFY_TOKEN,
+  });
+  if (country) {
+    params.set("filter", `countrycode:${country}`);
+  }
+  const url = `https://api.geoapify.com/v1/geocode/reverse?${params.toString()}`;
   const maxAttempts = 3;
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {

@@ -1,22 +1,42 @@
-/** Canonical Sanity project IDs and local preview URLs per country deployment. */
+/**
+ * Single-branch country config. Deployments share kauter-dev; LANGUAGE selects
+ * a row here (Sanity project, map slug, local overlay URL, geocode language,
+ * feature flags). AU/DK overlay URLs stay localhost until those sites go live.
+ * Turn `overlayLayers` / `englishToggle` off per operating group as needed.
+ */
 export const COUNTRY_DEPLOYMENTS = {
   nl: {
     projectId: "q9jkymv5",
     mapSlug: "kaart",
     localOrigin: "http://localhost:3000",
     code: "NL",
+    geocodeLang: "nl",
+    features: {
+      overlayLayers: true,
+      englishToggle: true,
+    },
   },
   au: {
     projectId: "yps8kvw9",
     mapSlug: "map",
     localOrigin: "http://localhost:3001",
     code: "AU",
+    geocodeLang: "en",
+    features: {
+      overlayLayers: true,
+      englishToggle: false,
+    },
   },
   dk: {
     projectId: "obfbyt9x",
     mapSlug: "kort",
     localOrigin: "http://localhost:3002",
     code: "DK",
+    geocodeLang: "da",
+    features: {
+      overlayLayers: true,
+      englishToggle: true,
+    },
   },
 } as const;
 

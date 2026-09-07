@@ -1,4 +1,4 @@
-import { getDictionary } from "@/lib/dictionaries";
+import { getDictionary, getHomeDictionary } from "@/lib/dictionaries";
 import dynamic from "next/dynamic";
 
 const ListPage = dynamic(() =>
@@ -10,13 +10,13 @@ const MapPage = dynamic(() =>
 const NotFound = dynamic(() => import("../not-found"));
 
 export async function generateStaticParams() {
-  const dict = await getDictionary();
+  const dict = await getHomeDictionary();
   return [{ slug: dict.slugs.list }, { slug: dict.slugs.map }];
 }
 
 export default async function SlugPage({ params }: { params: { slug: string } }) {
   const dict = await getDictionary();
-  
+
   switch (params.slug) {
     case dict.slugs.list:
       return <ListPage />;

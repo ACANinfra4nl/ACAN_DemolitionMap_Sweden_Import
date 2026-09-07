@@ -6,7 +6,9 @@
     "about": "over de kaart",
     "addOne": "voeg",
     "addTwo": "gebouw toe",
-    "language": "nl"
+    "language": "nl",
+    "langEn": "EN",
+    "langLocal": "NL"
   },
   "landing": {
     "partnersHeading": "Partners",

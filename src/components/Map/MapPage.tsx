@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import { toFeature } from "@/lib/toFeature";
 import { getDictionary } from "@/lib/dictionaries";
 import { getHomeCountryCode } from "@/lib/countrySanity";
+import { isBuildingInCountry } from "@/lib/pointInCountry";
 
 export const MapPage = async () => {
   const settings = await sanityFetch<SettingsType>({
@@ -18,9 +19,12 @@ export const MapPage = async () => {
   });
 
   const dict = await getDictionary();
+  const homeCountry = getHomeCountryCode();
+  const visible = homeCountry
+    ? buildings.filter((building) => isBuildingInCountry(building, homeCountry))
+    : buildings;
 
-  // transform to features
-  const features = buildings.map((b) => toFeature(b, dict));
+  const features = visible.map((b) => toFeature(b, dict));
   return (
     <div className="grid h-screen grid-cols-12 grid-rows-[auto_1fr]">
       <Suspense>
@@ -28,7 +32,7 @@ export const MapPage = async () => {
           {...settings}
           buildings={{ type: "FeatureCollection", features }}
           dict={dict}
-          countryCode={getHomeCountryCode()}
+          countryCode={homeCountry}
         />
       </Suspense>
     </div>

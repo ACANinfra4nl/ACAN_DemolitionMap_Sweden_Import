@@ -6,7 +6,9 @@
     "about": "om kartet",
     "addOne": "legg til",
     "addTwo": "bygning",
-    "language": "no"
+    "language": "no",
+    "langEn": "EN",
+    "langLocal": "NO"
   },
   "landing": {
     "partnersHeading": "Partnere",
