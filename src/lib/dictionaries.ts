@@ -22,6 +22,14 @@ const dictionaries = {
     import("../dictionaries/nl.json").then(
       (module) => module.default as unknown as Dictionary,
     ),
+  au: () =>
+    import("../dictionaries/au.json").then(
+      (module) => module.default as unknown as Dictionary,
+    ),
+  dk: () =>
+    import("../dictionaries/dk.json").then(
+      (module) => module.default as unknown as Dictionary,
+    ),
 };
 
 export const getDictionary = async () => {

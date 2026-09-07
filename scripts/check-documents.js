@@ -1,6 +1,7 @@
 const { createClient } = require("@sanity/client");
 const fs = require("fs");
 const path = require("path");
+const { resolveSanityProjectId } = require("./countrySanity");
 
 // Read .env.local file
 const envPath = path.join(__dirname, "..", ".env.local");
@@ -20,7 +21,7 @@ envFile.split("\n").forEach((line) => {
 });
 
 const client = createClient({
-  projectId: envVars.NEXT_PUBLIC_SANITY_PROJECT_ID,
+  projectId: resolveSanityProjectId(envVars),
   dataset: envVars.NEXT_PUBLIC_SANITY_DATASET,
   apiVersion: envVars.NEXT_PUBLIC_SANITY_API_VERSION || "2023-09-01",
   token: envVars.SANITY_AUTH_TOKEN,
@@ -30,7 +31,7 @@ const client = createClient({
 async function checkDocuments() {
   try {
     console.log("Checking for documents...");
-    console.log("Project ID:", envVars.NEXT_PUBLIC_SANITY_PROJECT_ID);
+    console.log("Project ID:", resolveSanityProjectId(envVars));
     console.log("Dataset:", envVars.NEXT_PUBLIC_SANITY_DATASET);
     
     const docs = await client.fetch('*[_type == "manifest" || _type == "settings"]');

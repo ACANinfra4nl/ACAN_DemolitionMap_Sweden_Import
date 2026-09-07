@@ -108,6 +108,17 @@
   "footer": {
     "policyLabel": "Algemene voorwaarden",
     "policyEmail": "info@sloopkaart.nl"
+  },
+  "layers": {
+    "button": "lagen",
+    "heading": "Andere landen",
+    "thisCountryHint": "Deze kaart blijft altijd zichtbaar. Overige landen staan standaard uit.",
+    "openInCountry": "Klik op een buitenlands punt om die landensite te openen.",
+    "countries": {
+      "nl": "Nederland",
+      "au": "Australië",
+      "dk": "Denemarken"
+    }
   }
 }
 

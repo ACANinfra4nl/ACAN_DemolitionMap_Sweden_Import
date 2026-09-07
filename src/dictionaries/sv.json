@@ -104,5 +104,16 @@
   },
   "map": {
     "bounds": [3.2, 50.7, 7.2, 53.7]
+  },
+  "layers": {
+    "button": "lager",
+    "heading": "Andra länder",
+    "thisCountryHint": "Den här kartan syns alltid. Övriga länder är av som standard.",
+    "openInCountry": "Klicka på en utländsk punkt för att öppna det landets karta.",
+    "countries": {
+      "nl": "Nederländerna",
+      "au": "Australien",
+      "dk": "Danmark"
+    }
   }
 }

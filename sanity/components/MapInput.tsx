@@ -9,6 +9,8 @@ import ReactMapGl, {
 } from "react-map-gl/maplibre";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { mapStyle } from "@/components/Map/style";
+import { getHomeCountryCode } from "@/lib/countrySanity";
+import { isPointInCountry } from "@/lib/pointInCountry";
 
 interface MapInputProps {
   value: {
@@ -22,15 +24,25 @@ interface MapInputProps {
 
 export const MapInput: FC<MapInputProps> = (props) => {
   const mapRef = useRef<MapRef>(null);
+  const homeCountry = getHomeCountryCode();
+  const onChange = props.onChange;
 
-  const handleMapClick = useCallback((e: MapLayerMouseEvent) => {
-    const patch = set({
-      _type: "geopoint",
-      lat: e.lngLat.lat,
-      lng: e.lngLat.lng,
-    });
-    props.onChange(PatchEvent.from(patch));
-  }, []);
+  const handleMapClick = useCallback(
+    (e: MapLayerMouseEvent) => {
+      const lat = e.lngLat.lat;
+      const lng = e.lngLat.lng;
+      if (homeCountry && !isPointInCountry(lat, lng, homeCountry)) {
+        return;
+      }
+      const patch = set({
+        _type: "geopoint",
+        lat,
+        lng,
+      });
+      onChange(PatchEvent.from(patch));
+    },
+    [homeCountry, onChange],
+  );
   const handleCenterMapClick: MouseEventHandler = useCallback(() => {
     if (!props.value) return;
     mapRef.current?.flyTo({ center: props.value, zoom: 15 });
@@ -50,11 +62,11 @@ export const MapInput: FC<MapInputProps> = (props) => {
           initialViewState={
             hasValue
               ? {
-                  latitude: props.value.lat,
-                  longitude: props.value.lng,
-                  zoom: 15,
-                }
-              : { bounds: [3.2, 50.7, 7.2, 53.7] }
+                latitude: props.value.lat,
+                longitude: props.value.lng,
+                zoom: 15,
+              }
+              : { bounds: [8.0, 54.5, 12.7, 57.8] }
           }
           attributionControl={false}
           onClick={props.readOnly ? undefined : handleMapClick}

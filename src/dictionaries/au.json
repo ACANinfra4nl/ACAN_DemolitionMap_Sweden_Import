@@ -8,14 +8,6 @@
     "addTwo": "building",
     "language": "en"
   },
-  "landing": {
-    "partnersHeading": "Partners",
-    "supportersHeading": "Supporters",
-    "partnerLogoPlaceholder": "Partner",
-    "supporterLogoPlaceholder": "Supporter",
-    "placeholderStripAnnouncement": "Logo placeholders — artwork to be added.",
-    "crdLogoAlt": "CRD — executing contributor (logo placeholder)"
-  },
   "search": "search",
   "sort": {
     "added": "added",
@@ -39,10 +31,7 @@
     "addLocation": "Select location on map",
     "addBuilding": "add building",
     "imageInput": "upload images",
-    "imageLabel": "images",
     "imageMaxSize": "The total size of all images must not exceed 4MB.",
-    "imageRequired": "Upload at least one image.",
-    "draftRestoreImagesHint": "Draft restored from this browser — please attach images again before submitting.",
     "category": "category",
     "state": "status",
     "buildingName": "building name (if applicable)",
@@ -63,7 +52,10 @@
     "addEmail": "add contact email address",
     "accept": "accept",
     "cancel": "cancel",
-    "save": "save"
+    "save": "save",
+    "imageLabel": "images",
+    "imageRequired": "Upload at least one image.",
+    "draftRestoreImagesHint": "Draft restored from this browser - please attach images again before submitting."
   },
   "detailsPanel": {
     "description": "description",
@@ -72,7 +64,7 @@
     "share": "share",
     "linkCopied": "link copied",
     "shareFailed": "share failed",
-    "add": "Want to add a story?",
+    "add": "add",
     "emailSubject": "Stories about",
     "pendingReviewBanner": "Entry is still to be reviewed"
   },
@@ -104,11 +96,23 @@
   },
   "map": {
     "bounds": [
-      3.2,
-      50.7,
-      7.2,
-      53.7
+      112.9,
+      -43.7,
+      153.7,
+      -10.5
     ]
+  },
+  "landing": {
+    "partnersHeading": "Partners",
+    "supportersHeading": "Supporters",
+    "partnerLogoPlaceholder": "Partner",
+    "supporterLogoPlaceholder": "Supporter",
+    "placeholderStripAnnouncement": "Logo placeholders - artwork to be added.",
+    "crdLogoAlt": "CRD - executing contributor (logo placeholder)"
+  },
+  "footer": {
+    "policyLabel": "Terms & conditions",
+    "policyEmail": "info@demolitionmap.au"
   },
   "layers": {
     "button": "layers",

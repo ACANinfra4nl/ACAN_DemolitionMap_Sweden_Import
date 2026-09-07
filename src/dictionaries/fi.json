@@ -105,5 +105,16 @@
   },
   "map": {
     "bounds": [3.2, 50.7, 7.2, 53.7]
+  },
+  "layers": {
+    "button": "tasot",
+    "heading": "Muut maat",
+    "thisCountryHint": "Tämä kartta näkyy aina. Muut maat ovat oletuksena pois.",
+    "openInCountry": "Napsauta ulkomaista pistettä avataksesi sen maan kartan.",
+    "countries": {
+      "nl": "Alankomaat",
+      "au": "Australia",
+      "dk": "Tanska"
+    }
   }
 }

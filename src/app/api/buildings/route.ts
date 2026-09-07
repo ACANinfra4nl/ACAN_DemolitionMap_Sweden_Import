@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { revalidateTag } from "next/cache";
 import { toFeature } from "@/lib/toFeature";
 import { nanoid } from "nanoid";
+import { getHomeCountryCode } from "@/lib/countrySanity";
+import { isPointInCountry } from "@/lib/pointInCountry";
 import {
   checkRateLimit,
   getClientIp,
@@ -128,6 +130,16 @@ export async function POST(request: NextRequest) {
             error:
               "Missing or invalid required fields: lat, lng, category, or state",
           },
+          { status: 400 },
+        ),
+        requestId,
+      );
+    }
+    const homeCountry = getHomeCountryCode();
+    if (homeCountry && !isPointInCountry(lat, lng, homeCountry)) {
+      return withRequestId(
+        NextResponse.json(
+          { error: "Location is outside the map country." },
           { status: 400 },
         ),
         requestId,

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Demolition Map — local compare</title>
+  <style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      background: #f4f4f1;
+      color: #111;
+    }
+    header {
+      padding: 16px 20px 12px;
+      border-bottom: 1px solid #ddd;
+      background: #fff;
+    }
+    h1 { margin: 0 0 6px; font-size: 20px; }
+    p { margin: 0; color: #555; font-size: 13px; }
+    .sites {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      padding: 12px 16px 16px;
+      min-height: calc(100vh - 78px);
+    }
+    .site {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      background: #fff;
+      border: 1px solid #ddd;
+    }
+    .site-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+      padding: 10px 12px;
+      border-bottom: 1px solid #eee;
+    }
+    .site-head strong { font-size: 14px; }
+    .site-head span { font-size: 12px; color: #666; }
+    .site-head a { font-size: 12px; color: #2637f3; }
+    iframe {
+      flex: 1;
+      width: 100%;
+      border: 0;
+      min-height: 70vh;
+      background: #fff;
+    }
+    @media (max-width: 1100px) {
+      .sites { grid-template-columns: 1fr; }
+      iframe { min-height: 60vh; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Local compare — NL / AU / DK</h1>
+    <p>Three local Next.js apps. Use the links if an iframe is blocked. Same Sanity project locally; language, slugs, and map bounds differ per country.</p>
+  </header>
+  <div class="sites">
+    <section class="site">
+      <div class="site-head">
+        <div>
+          <strong>Netherlands</strong>
+          <span>kauter-dev · LANGUAGE=nl · /kaart</span>
+        </div>
+        <a href="http://localhost:3000/" target="_blank" rel="noreferrer">Open</a>
+      </div>
+      <iframe src="http://localhost:3000/" title="Netherlands demolition map"></iframe>
+    </section>
+    <section class="site">
+      <div class="site-head">
+        <div>
+          <strong>Australia</strong>
+          <span>kauter-dev-AU · LANGUAGE=au · /map</span>
+        </div>
+        <a href="http://localhost:3001/" target="_blank" rel="noreferrer">Open</a>
+      </div>
+      <iframe src="http://localhost:3001/" title="Australia demolition map"></iframe>
+    </section>
+    <section class="site">
+      <div class="site-head">
+        <div>
+          <strong>Denmark</strong>
+          <span>kauter-dev-DK · LANGUAGE=dk · /kort</span>
+        </div>
+        <a href="http://localhost:3002/" target="_blank" rel="noreferrer">Open</a>
+      </div>
+      <iframe src="http://localhost:3002/" title="Denmark demolition map"></iframe>
+    </section>
+  </div>
+</body>
+</html>

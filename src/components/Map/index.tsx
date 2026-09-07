@@ -13,6 +13,10 @@ import classNames from "clsx";
 import {
   CLUSTERED_COUNT_LAYER_STYLE,
   CLUSTERED_LAYER_STYLE,
+  OVERLAY_CLUSTERED_COUNT_LAYER_STYLE,
+  OVERLAY_CLUSTERED_LAYER_STYLE,
+  OVERLAY_COUNTRY_LABEL_STYLE,
+  OVERLAY_UNCLUSTERED_LAYER_STYLE,
   UNCLUSTERED_LAYER_STYLE,
 } from "./layers";
 import { mapStyle } from "./style";
@@ -25,20 +29,24 @@ import "./style.css";
 
 interface MapProps {
   features: BuildingCollection;
+  overlayFeatures?: BuildingCollection;
   isAdding: boolean;
   addingLocation?: LatLng;
-  onAddMarker: (latLng: LatLng) => void;
+  onAddMarker: (latLng: LatLng) => boolean;
   onClickFeature: (id: string) => void;
+  onClickOverlay?: (siteUrl: string) => void;
   className?: string;
   bounds: LngLatBoundsLike;
 }
 
 export const Map: FC<MapProps> = ({
   features,
+  overlayFeatures,
   isAdding,
   addingLocation,
   onAddMarker,
   onClickFeature,
+  onClickOverlay,
   className,
   bounds,
 }) => {
@@ -50,29 +58,46 @@ export const Map: FC<MapProps> = ({
       e.preventDefault();
       if (isAdding) {
         const coords = { lat: e.lngLat.lat, lng: e.lngLat.lng };
-        onAddMarker(coords);
-        mapRef.current?.flyTo({ center: coords });
-      } else if (e.features?.length === 1) {
-        // clicked an existing building, show info
-        const feature = e.features[0];
-        if (feature.properties.cluster === true) {
-          // clicked cluster, zoom in
-          mapRef.current?.flyTo({
-            zoom: mapRef.current.getZoom() + 2,
-            center: e.lngLat,
-          });
-        } else {
-          // show info panel for feature
-          setTimeout(
-            onClickFeature,
-            0,
-            (feature as unknown as Feature<Point, FeatureBuilding>).properties
-              ._id,
-          );
+        if (onAddMarker(coords)) {
+          mapRef.current?.flyTo({ center: coords });
         }
+        return;
       }
+
+      const hits = e.features ?? [];
+      if (hits.length === 0) return;
+
+      const local =
+        hits.find((feature) => feature.layer?.id === "unclustered-points") ??
+        hits.find((feature) => feature.layer?.id === "cluster");
+      const overlay =
+        hits.find(
+          (feature) => feature.layer?.id === "overlay-unclustered-points",
+        ) ?? hits.find((feature) => feature.layer?.id === "overlay-cluster");
+      const feature = local ?? overlay;
+      if (!feature) return;
+
+      if (feature.properties?.cluster === true) {
+        mapRef.current?.flyTo({
+          zoom: (mapRef.current.getZoom() ?? 0) + 2,
+          center: e.lngLat,
+        });
+        return;
+      }
+
+      if (feature.layer?.id === "overlay-unclustered-points") {
+        const siteUrl = feature.properties?.siteUrl as string | undefined;
+        if (siteUrl) onClickOverlay?.(siteUrl);
+        return;
+      }
+
+      setTimeout(
+        onClickFeature,
+        0,
+        (feature as unknown as Feature<Point, FeatureBuilding>).properties._id,
+      );
     },
-    [isAdding, onAddMarker, onClickFeature],
+    [isAdding, onAddMarker, onClickFeature, onClickOverlay],
   );
 
   const handleMouseEnter = useCallback(() => setCursor("pointer"), []);
@@ -88,7 +113,12 @@ export const Map: FC<MapProps> = ({
         }}
         onClick={handleClickMap}
         ref={mapRef}
-        interactiveLayerIds={["cluster", "unclustered-points"]}
+        interactiveLayerIds={[
+          "cluster",
+          "unclustered-points",
+          "overlay-cluster",
+          "overlay-unclustered-points",
+        ]}
         cursor={
           isAdding
             ? addingLocation
@@ -111,6 +141,21 @@ export const Map: FC<MapProps> = ({
           <Layer {...CLUSTERED_COUNT_LAYER_STYLE} />
           <Layer {...UNCLUSTERED_LAYER_STYLE} />
         </Source>
+        {overlayFeatures && overlayFeatures.features.length > 0 && (
+          <Source
+            id="overlay-annotations"
+            type="geojson"
+            data={overlayFeatures}
+            cluster
+            clusterMaxZoom={11}
+            clusterRadius={20}
+          >
+            <Layer {...OVERLAY_CLUSTERED_LAYER_STYLE} />
+            <Layer {...OVERLAY_CLUSTERED_COUNT_LAYER_STYLE} />
+            <Layer {...OVERLAY_UNCLUSTERED_LAYER_STYLE} />
+            <Layer {...OVERLAY_COUNTRY_LABEL_STYLE} />
+          </Source>
+        )}
         {isAdding && addingLocation && (
           <Marker
             latitude={addingLocation.lat}

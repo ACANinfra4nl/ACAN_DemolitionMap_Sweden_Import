@@ -13,6 +13,13 @@ import { MessagePanel } from "@/components/MessagePanel";
 import { Button } from "@/components/Button";
 import { buildingToQueryParams } from "@/lib/buildingToQueryParams";
 import { clearAddBuildingDraft } from "@/lib/addBuildingDraft";
+import { LayerSettings } from "@/components/Map/LayerSettings";
+import {
+  getHomeCountryCode,
+  type CountrySanityLocale,
+} from "@/lib/countrySanity";
+import { toFeature } from "@/lib/toFeature";
+import { isPointInCountry } from "@/lib/pointInCountry";
 
 export const MapPageContent: FC<
   SettingsType & {
@@ -21,8 +28,16 @@ export const MapPageContent: FC<
       features: Feature<Point, FeatureBuilding>[];
     };
     dict: Dictionary;
+    countryCode?: CountrySanityLocale;
   }
-> = ({ feedbackEmail, confirmationMessage, errorMessage, buildings, dict }) => {
+> = ({
+  feedbackEmail,
+  confirmationMessage,
+  errorMessage,
+  buildings,
+  dict,
+  countryCode,
+}) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -38,6 +53,14 @@ export const MapPageContent: FC<
   const [addedBuilding, setAddedBuilding] = useState<boolean | undefined>();
   const [savingBuilding, setSavingBuilding] = useState(false);
   const [submitError, setSubmitError] = useState<string>();
+  const homeCountry = countryCode ?? getHomeCountryCode();
+  const [overlayCountries, setOverlayCountries] = useState<
+    CountrySanityLocale[]
+  >([]);
+  const [overlayBuildings, setOverlayBuildings] = useState<BuildingCollection>({
+    type: "FeatureCollection",
+    features: [],
+  });
 
   // this is for handling menu click when already on map page
   if (shouldAdd && !isAdding) {
@@ -56,13 +79,56 @@ export const MapPageContent: FC<
     }
   }, [selectedId, buildings.features]);
 
+  useEffect(() => {
+    if (overlayCountries.length === 0) {
+      setOverlayBuildings({ type: "FeatureCollection", features: [] });
+      return;
+    }
+
+    const params = new URLSearchParams({
+      countries: overlayCountries.join(","),
+    });
+    let cancelled = false;
+    fetch(`/api/global-buildings?${params.toString()}`, { cache: "no-store" })
+      .then(async (response) => {
+        if (!response.ok) throw new Error(response.statusText);
+        return response.json() as Promise<BuildingCollection>;
+      })
+      .then((collection) => {
+        if (cancelled) return;
+        setOverlayBuildings({
+          type: "FeatureCollection",
+          features: (collection.features ?? []).map((feature) =>
+            toFeature(feature.properties as FeatureBuilding, dict),
+          ),
+        });
+      })
+      .catch((error) => {
+        console.error("Overlay buildings failed:", error);
+        if (!cancelled) {
+          setOverlayBuildings({ type: "FeatureCollection", features: [] });
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [overlayCountries, dict]);
+
   const handleAddMarker = useCallback(
     (latLng: LatLng) => {
+      if (
+        !homeCountry ||
+        !isPointInCountry(latLng.lat, latLng.lng, homeCountry)
+      ) {
+        return false;
+      }
       setAddingLocation(latLng);
       setShowNewBuildingForm(true);
       router.replace(pathname);
+      return true;
     },
-    [pathname, router],
+    [homeCountry, pathname, router],
   );
   const handleCancelFeature = useCallback(() => {
     setIsAdding(false);
@@ -135,12 +201,34 @@ export const MapPageContent: FC<
       setIsAdding(true);
     }, []);
 
+  const handleToggleOverlayCountry = useCallback(
+    (country: CountrySanityLocale) => {
+      setOverlayCountries((current) =>
+        current.includes(country)
+          ? current.filter((value) => value !== country)
+          : [...current, country],
+      );
+    },
+    [],
+  );
+
+  const handleClickOverlay = useCallback((siteUrl: string) => {
+    window.open(siteUrl, "_blank", "noopener,noreferrer");
+  }, []);
+
   const filteredFeatures: BuildingCollection = {
     type: "FeatureCollection",
     features:
       buildings?.features.filter(
         (f) => typeof filter === "undefined" || f.properties.state === filter,
       ) ?? [],
+  };
+
+  const filteredOverlay: BuildingCollection = {
+    type: "FeatureCollection",
+    features: overlayBuildings.features.filter(
+      (f) => typeof filter === "undefined" || f.properties.state === filter,
+    ),
   };
 
   return (
@@ -170,6 +258,14 @@ export const MapPageContent: FC<
           />
         </div>
         <div className="relative col-start-1 row-start-2 mx-5 mb-5">
+          {homeCountry ? (
+            <LayerSettings
+              homeCountry={homeCountry}
+              enabledCountries={overlayCountries}
+              onToggle={handleToggleOverlayCountry}
+              dict={dict}
+            />
+          ) : null}
           <div className="absolute bottom-12 left-5 z-10 sm:bottom-[40px]">
             <Button onClick={handleClickAddBuilding}>
               {isAdding ? (
@@ -185,10 +281,12 @@ export const MapPageContent: FC<
           <Map
             className="h-full w-full"
             features={filteredFeatures}
+            overlayFeatures={filteredOverlay}
             isAdding={isAdding}
             addingLocation={addingLocation}
             onAddMarker={handleAddMarker}
             onClickFeature={handleClickFeature}
+            onClickOverlay={handleClickOverlay}
             bounds={dict.map.bounds}
           />
         </div>

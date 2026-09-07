@@ -1,6 +1,7 @@
 const { createClient } = require("@sanity/client");
 const fs = require("fs");
 const path = require("path");
+const { resolveSanityProjectId } = require("./countrySanity");
 
 // Read .env.local file
 const envPath = path.join(__dirname, "..", ".env.local");
@@ -19,7 +20,7 @@ envFile.split("\n").forEach((line) => {
 });
 
 const client = createClient({
-  projectId: envVars.NEXT_PUBLIC_SANITY_PROJECT_ID,
+  projectId: resolveSanityProjectId(envVars),
   dataset: envVars.NEXT_PUBLIC_SANITY_DATASET,
   apiVersion: envVars.NEXT_PUBLIC_SANITY_API_VERSION || "2023-09-01",
   token: envVars.SANITY_READ_TOKEN || envVars.SANITY_AUTH_TOKEN,

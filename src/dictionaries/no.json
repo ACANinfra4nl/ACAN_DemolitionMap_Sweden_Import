@@ -104,5 +104,16 @@
   },
   "map": {
     "bounds": [3.2, 50.7, 7.2, 53.7]
+  },
+  "layers": {
+    "button": "lag",
+    "heading": "Andre land",
+    "thisCountryHint": "Dette kartet er alltid synlig. Andre land er av som standard.",
+    "openInCountry": "Klikk på et utenlandsk punkt for å åpne det landets kart.",
+    "countries": {
+      "nl": "Nederland",
+      "au": "Australia",
+      "dk": "Danmark"
+    }
   }
 }

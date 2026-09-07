@@ -16,7 +16,7 @@ Built using [Next.js](https://nextjs.org/) with [Sanity](https://www.sanity.io/)
 
 | Variable | Role |
 |---------|------|
-| `NEXT_PUBLIC_SANITY_PROJECT_ID` | Sanity project ID (required at build/runtime) |
+| `NEXT_PUBLIC_SANITY_PROJECT_ID` | Sanity project ID. Known deployments: NL `q9jkymv5`, AU `yps8kvw9`, DK `obfbyt9x` (see `src/lib/countrySanity.ts`) |
 | `NEXT_PUBLIC_SANITY_DATASET` | Sanity dataset (e.g. `production`) |
 | `NEXT_PUBLIC_SANITY_API_VERSION` | Sanity API version (see `.env.example`) |
 | `NEXT_PUBLIC_MAPTILER_STYLE_URL` | MapLibre style URL for the map |
@@ -24,7 +24,7 @@ Built using [Next.js](https://nextjs.org/) with [Sanity](https://www.sanity.io/)
 | `SANITY_AUTH_TOKEN` | Write-capable token for creating buildings (`/api/buildings`) |
 | `SANITY_READ_TOKEN` | Used by `sanityFetch` when preview/draft reads need authenticated API |
 | `GEOAPIFY_TOKEN` | Forward + reverse geocoding (`geocode` / `reverse`) |
-| `LANGUAGE` | Active locale for dictionaries (`sv`, `en`, `nl`, …) |
+| `LANGUAGE` | Deployment locale (`nl`, `au`, `dk`, plus `sv` / `en` / …) |
 | `SANITY_PREVIEW_SECRET` | Server: enables `/api/preview` when `?secret=` matches |
 | `NEXT_PUBLIC_SANITY_PREVIEW_SECRET` | Same secret value exposed to Studio’s Preview iframe (`sanity/lib/preview.ts`); **must equal** `SANITY_PREVIEW_SECRET` |
 | `SANITY_REVALIDATE_SECRET` | Webhook `/api/revalidate` signature verification (fallback if preview secret omitted) |
@@ -48,6 +48,20 @@ No extra environment variables are required. Page views are collected **only on 
 ## Load testing (optional)
 
 See [`load-tests/README.md`](./load-tests/README.md). Requires local [k6](https://k6.io/) and optionally Artillery (see devDependencies).
+
+## Country deployments
+
+All current maps run from **`kauter-dev`**. Country differences are configuration (`LANGUAGE`, Sanity project, dictionary), not separate product branches. `kauter-dev-AU` and `kauter-dev-DK` are historical catch-up forks and should not receive new work.
+
+Set `LANGUAGE` and `NEXT_PUBLIC_SANITY_PROJECT_ID` together. Dataset is `production` for all current maps. Project IDs are also coded in [`src/lib/countrySanity.ts`](./src/lib/countrySanity.ts); if the env ID is omitted, `LANGUAGE` selects the matching project.
+
+| Country | `LANGUAGE` | Sanity project ID |
+|---------|------------|-------------------|
+| Netherlands | `nl` | `q9jkymv5` |
+| Australia | `au` | `yps8kvw9` |
+| Denmark | `dk` | `obfbyt9x` |
+
+Each country uses its **own** Sanity project (and Studio) and is a separate hosting deployment of this branch. Tokens (`SANITY_AUTH_TOKEN`, `SANITY_READ_TOKEN`) must belong to that project. New pins can only be placed inside that country’s outline. 
 
 ## Importing content
 

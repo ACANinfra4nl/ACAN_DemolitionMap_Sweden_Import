@@ -163,6 +163,17 @@ interface Dictionary {
   map: {
     bounds: [number, number, number, number];
   };
+  layers: {
+    button: string;
+    heading: string;
+    thisCountryHint: string;
+    openInCountry: string;
+    countries: {
+      nl: string;
+      au: string;
+      dk: string;
+    };
+  };
 }
 
 interface Categories {

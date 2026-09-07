@@ -4,6 +4,7 @@ import { buildingsMapQuery, settingsQuery } from "../../../sanity/lib/queries";
 import { Suspense } from "react";
 import { toFeature } from "@/lib/toFeature";
 import { getDictionary } from "@/lib/dictionaries";
+import { getHomeCountryCode } from "@/lib/countrySanity";
 
 export const MapPage = async () => {
   const settings = await sanityFetch<SettingsType>({
@@ -27,6 +28,7 @@ export const MapPage = async () => {
           {...settings}
           buildings={{ type: "FeatureCollection", features }}
           dict={dict}
+          countryCode={getHomeCountryCode()}
         />
       </Suspense>
     </div>
