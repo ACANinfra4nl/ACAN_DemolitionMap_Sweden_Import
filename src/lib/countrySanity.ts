@@ -2,7 +2,7 @@
  * Single-branch country config. Deployments share kauter-dev; LANGUAGE selects
  * a row here (Sanity project, map slug, local overlay URL, geocode language,
  * feature flags). AU/DK overlay URLs stay localhost until those sites go live.
- * Turn `overlayLayers` / `englishToggle` / `studioLogo` off per operating group as needed.
+ * `overlayLayers` is off for every country until we turn it on per group.
  */
 export const COUNTRY_DEPLOYMENTS = {
   nl: {
@@ -12,7 +12,7 @@ export const COUNTRY_DEPLOYMENTS = {
     code: "NL",
     geocodeLang: "nl",
     features: {
-      overlayLayers: true,
+      overlayLayers: false,
       englishToggle: true,
       studioLogo: false,
     },
@@ -24,7 +24,7 @@ export const COUNTRY_DEPLOYMENTS = {
     code: "AU",
     geocodeLang: "en",
     features: {
-      overlayLayers: true,
+      overlayLayers: false,
       englishToggle: false,
       studioLogo: true,
     },
@@ -36,7 +36,7 @@ export const COUNTRY_DEPLOYMENTS = {
     code: "DK",
     geocodeLang: "da",
     features: {
-      overlayLayers: true,
+      overlayLayers: false,
       englishToggle: true,
       studioLogo: true,
     },

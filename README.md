@@ -93,7 +93,7 @@ Each country has its own Sanity project and Studio. `SANITY_AUTH_TOKEN` / `SANIT
 
 - New pins cannot be placed outside the home country. The add form does not open.
 - Existing out-of-country records stay in Sanity but are hidden on the public map and list.
-- Overlay layers are off by default. NL/DK can switch the UI to English (`EN` / local in the nav) without changing slugs, Sanity, or map bounds. AU is already English, so that toggle is off.
+- Overlay layers are off for NL, AU, and DK. The control stays in the codebase behind `overlayLayers` if a group wants it later. NL/DK can switch the UI to English (`EN` / local in the nav) without changing slugs, Sanity, or map bounds. AU is already English, so that toggle is off.
 - AU/DK can upload an SVG logo in Studio **Settings**. Until a file is uploaded, they use the generic ACAN mark. NL keeps the hardcoded logo.
 
 List stored outliers (does not delete anything):
