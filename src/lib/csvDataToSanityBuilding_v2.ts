@@ -63,17 +63,16 @@ const isLikelyNlPoint = (lat: number, lng: number): boolean =>
   lng >= NL_BOUNDS.lngMin &&
   lng <= NL_BOUNDS.lngMax;
 
-const shouldUseNlRescue = (): boolean => {
-  const language = (process.env.LANGUAGE || '').toLowerCase().trim();
-  return language === 'nl';
-};
+const shouldUseNlRescue = (country: string | undefined): boolean =>
+  country === "nl";
 
 const rescueLikelyNlCoordinates = (
   lat: number | undefined,
   lng: number | undefined,
+  country: string | undefined,
 ): { lat: number; lng: number } | undefined => {
   if (typeof lat !== 'number' || typeof lng !== 'number') return undefined;
-  if (!shouldUseNlRescue()) return { lat, lng };
+  if (!shouldUseNlRescue(country)) return { lat, lng };
   if (isLikelyNlPoint(lat, lng)) return { lat, lng };
 
   const scales = [1, 10, 100];
@@ -308,6 +307,7 @@ export async function csvDataToSanityBuilding_v2(
   errors: string[];
 }> {
   const errors: string[] = [];
+  const homeCountry = config.country ?? getHomeCountryCode();
 
   // Get location (required) - handle both combined and separate fields
   // Prefer separate fields if both are available, otherwise use combined
@@ -348,18 +348,17 @@ export async function csvDataToSanityBuilding_v2(
 
     // Build address string if we have address components
     if (address || city || postcode) {
-      const home = getHomeCountryCode();
       const addressString = buildAddressString({
         address: address ? String(address).trim() : undefined,
         city: city ? String(city).trim() : undefined,
         postcode: postcode ? String(postcode).trim() : undefined,
         blockName: blockName ? String(blockName).trim() : undefined,
-        country: home ? COUNTRY_DEPLOYMENTS[home].code : undefined,
+        country: homeCountry ? COUNTRY_DEPLOYMENTS[homeCountry].code : undefined,
       });
 
       if (addressString) {
         try {
-          const geocodeResult = await geocode(addressString, home);
+          const geocodeResult = await geocode(addressString, homeCountry);
 
           if (geocodeResult) {
             lat = geocodeResult.lat;
@@ -386,7 +385,7 @@ export async function csvDataToSanityBuilding_v2(
     }
   }
 
-  const rescuedCoordinates = rescueLikelyNlCoordinates(lat, lng);
+  const rescuedCoordinates = rescueLikelyNlCoordinates(lat, lng, homeCountry);
   if (!rescuedCoordinates) {
     errors.push('Invalid location after coordinate normalization.');
     return { building: null, errors };
@@ -394,7 +393,6 @@ export async function csvDataToSanityBuilding_v2(
   lat = rescuedCoordinates.lat;
   lng = rescuedCoordinates.lng;
 
-  const homeCountry = getHomeCountryCode();
   if (homeCountry && !isPointInCountry(lat, lng, homeCountry)) {
     errors.push('Location is outside the map country.');
     return { building: null, errors };

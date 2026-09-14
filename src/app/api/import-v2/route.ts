@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { client } from '@/lib/sanityClient';
 import * as papa from 'papaparse';
 import { notFound } from 'next/navigation';
 import { GeopointValue } from 'sanity';
@@ -22,6 +21,16 @@ import {
   mapWithConcurrency,
   withRequestId,
 } from '@/lib/server/ops';
+import {
+  COUNTRY_DEPLOYMENTS,
+} from '@/lib/countrySanity';
+import {
+  createImportClient,
+  getCountryWriteToken,
+  IMPORT_COUNTRY_LABELS,
+  listImportCountries,
+  resolveImportCountry,
+} from '@/lib/importCountry';
 
 const ensureDevImportAccess = (request: NextRequest, requestId: string) => {
   if (process.env.NODE_ENV !== 'development') notFound();
@@ -39,17 +48,12 @@ const ensureDevImportAccess = (request: NextRequest, requestId: string) => {
 };
 
 export async function GET() {
+  if (process.env.NODE_ENV !== 'development') notFound();
   return NextResponse.json({
     message: 'Import V2 API',
-    usage: 'Use POST method with form-data containing "file" and optional "config"',
-    example: {
-      method: 'POST',
-      url: '/api/import-v2',
-      body: {
-        file: 'File (CSV or Excel)',
-        config: 'JSON string with mode: "preview" | "dry-run" | "import"',
-      },
-    },
+    homeCountry: resolveImportCountry(),
+    countries: listImportCountries(),
+    usage: 'Use POST with form-data: file, config JSON (mode, country), header x-import-secret',
   });
 }
 
@@ -74,7 +78,36 @@ export async function POST(request: NextRequest) {
     // Parse config
     const config: ImportConfig = configJson
       ? { ...DEFAULT_IMPORT_CONFIG, ...JSON.parse(configJson) }
-      : DEFAULT_IMPORT_CONFIG;
+      : { ...DEFAULT_IMPORT_CONFIG };
+
+    const country = resolveImportCountry(config.country);
+    if (!country) {
+      return NextResponse.json(
+        {
+          error: 'Select a country (nl, au, or dk)',
+          countries: listImportCountries(),
+        },
+        { status: 400 },
+      );
+    }
+    config.country = country;
+
+    const countryMeta = {
+      country,
+      label: IMPORT_COUNTRY_LABELS[country],
+      projectId: COUNTRY_DEPLOYMENTS[country].projectId,
+      hasWriteToken: Boolean(getCountryWriteToken(country)),
+    };
+
+    if (config.mode === 'import' && !countryMeta.hasWriteToken) {
+      return NextResponse.json(
+        {
+          error: `No write token for ${countryMeta.label}. Set SANITY_AUTH_TOKEN_${country.toUpperCase()} in .env.local, or run the ${country.toUpperCase()} app with that project's SANITY_AUTH_TOKEN.`,
+          ...countryMeta,
+        },
+        { status: 400 },
+      );
+    }
 
     // Read file
     const buffer = Buffer.from(await file.arrayBuffer());
@@ -159,6 +192,7 @@ export async function POST(request: NextRequest) {
         successful: 0,
         failed: 0,
         errors: [],
+        ...countryMeta,
         preview: {
           sampleRows,
           mappings,
@@ -217,6 +251,7 @@ export async function POST(request: NextRequest) {
     if (config.mode === 'dry-run') {
       return NextResponse.json({
         ...result,
+        ...countryMeta,
         dryRun: {
           validRows: validBuildings.map((vb) => vb.building),
           invalidRows: result.errors.map((err) => ({
@@ -227,7 +262,7 @@ export async function POST(request: NextRequest) {
       } as ImportResult);
     }
 
-    // Import mode - create documents
+    const client = createImportClient(country);
     const createResults = await mapWithConcurrency(
       validBuildings,
       3,
@@ -265,7 +300,7 @@ export async function POST(request: NextRequest) {
 
     result.created = created;
 
-    return withRequestId(NextResponse.json(result), requestId);
+    return withRequestId(NextResponse.json({ ...result, ...countryMeta }), requestId);
   } catch (error) {
     logEvent('error', 'import-v2.failed', {
       requestId,

@@ -18,7 +18,20 @@ x-import-secret: <IMPORT_ADMIN_SECRET>
 
 Set `IMPORT_ADMIN_SECRET` in `.env.local` (fallback: same value as `SANITY_REVALIDATE_SECRET` if unset). Add this header to every `curl` below.
 
-Geocoding is locked to the active `LANGUAGE` country. Rows whose coordinates fall outside that outline are rejected. Existing outliers stay in Sanity but are hidden on the public map and list; list them with `scripts/list-out-of-country-buildings.js`.
+Geocoding and the in-country pin check follow the **selected import country** (`nl` / `au` / `dk`), not whichever app you happened to start. Rows whose coordinates fall outside that outline are rejected.
+
+### HTML page (local)
+
+With the app running:
+
+[http://localhost:3000/test-import.html](http://localhost:3000/test-import.html) (or `:3001` / `:3002`)
+
+1. Choose **Netherlands / Australia / Denmark**
+2. Paste the import secret
+3. Select a CSV or Excel file
+4. **Preview** → **Dry-run** → **Import**
+
+Import writes to that country’s Sanity project. For a country other than the running app’s `LANGUAGE`, set `SANITY_AUTH_TOKEN_AU` / `SANITY_AUTH_TOKEN_DK` / `SANITY_AUTH_TOKEN_NL` in `.env.local`. Preview and dry-run work without a write token.
 
 ## Supported File Formats
 
@@ -120,7 +133,7 @@ Import mode actually creates the building documents:
 curl -X POST http://localhost:3000/api/import-v2 \
   -H "x-import-secret: YOUR_IMPORT_ADMIN_SECRET" \
   -F "file=@your-data.csv" \
-  -F 'config={"mode":"preview"}'
+  -F 'config={"mode":"preview","country":"au"}'
 ```
 
 #### 2. Test Import (Dry-Run)
@@ -129,7 +142,7 @@ curl -X POST http://localhost:3000/api/import-v2 \
 curl -X POST http://localhost:3000/api/import-v2 \
   -H "x-import-secret: YOUR_IMPORT_ADMIN_SECRET" \
   -F "file=@your-data.csv" \
-  -F 'config={"mode":"dry-run"}'
+  -F 'config={"mode":"dry-run","country":"au"}'
 ```
 
 #### 3. Import Data
@@ -138,7 +151,7 @@ curl -X POST http://localhost:3000/api/import-v2 \
 curl -X POST http://localhost:3000/api/import-v2 \
   -H "x-import-secret: YOUR_IMPORT_ADMIN_SECRET" \
   -F "file=@your-data.csv" \
-  -F 'config={"mode":"import"}'
+  -F 'config={"mode":"import","country":"au"}'
 ```
 
 ### Manual Column Mapping

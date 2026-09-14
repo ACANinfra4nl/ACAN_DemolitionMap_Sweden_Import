@@ -2,6 +2,8 @@
  * Configuration types and defaults for CSV/Excel import v2
  */
 
+import type { CountrySanityLocale } from "./countrySanity";
+
 export interface ColumnMapping {
   // Sanity field name -> CSV column name (exact match)
   [sanityField: string]: string;
@@ -20,9 +22,11 @@ export interface ImportConfig {
   mode?: 'preview' | 'dry-run' | 'import';
   /** Number of rows to show in preview mode */
   previewRows?: number;
+  /** Sanity country to write to (nl / au / dk). Defaults to LANGUAGE. */
+  country?: CountrySanityLocale;
 }
 
-export const DEFAULT_IMPORT_CONFIG: Required<ImportConfig> = {
+export const DEFAULT_IMPORT_CONFIG: Required<Omit<ImportConfig, "country">> = {
   mapping: {},
   appendUnmappedToDescription: true,
   descriptionSeparator: ' & ',

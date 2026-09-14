@@ -1,6 +1,6 @@
 # ACAN demolition maps
 
-Maps of threatened, demolished, and saved buildings. The Netherlands (Sloopkaart) is the live deployment. Australia and Denmark share this codebase and are **not published yet**.
+Maps of threatened, demolished, and saved buildings. The Netherlands (Sloopkaart) and Australia (Demolition Atlas) are live. Denmark shares this codebase and is **not published yet**.
 
 Built with [Next.js](https://nextjs.org/) and [Sanity](https://www.sanity.io/). One git branch (`kauter-dev`) serves every country. What differs is environment and config, not a fork.
 
@@ -45,7 +45,7 @@ Each process overrides `LANGUAGE` and `NEXT_PUBLIC_SANITY_PROJECT_ID` and uses i
 | `LANGUAGE` | Deployment locale (`nl`, `au`, `dk`, plus `sv` / `en` / …) |
 | `SANITY_PREVIEW_SECRET` | Server: enables `/api/preview` when `?secret=` matches |
 | `NEXT_PUBLIC_SANITY_PREVIEW_SECRET` | Same secret value exposed to Studio’s Preview iframe (`sanity/lib/preview.ts`); **must equal** `SANITY_PREVIEW_SECRET` |
-| `SANITY_REVALIDATE_SECRET` | Webhook `/api/revalidate` signature verification (fallback if preview secret omitted) |
+| `SANITY_REVALIDATE_SECRET` | Secret for the Sanity webhook `POST /api/revalidate`. Must match the webhook secret in that country’s Sanity project. Without this webhook, Studio edits (buildings, settings, logo) do not show on the live site. |
 | `IMPORT_ADMIN_SECRET` | Dev-only `/api/import` and `/api/import-v2`; send header `x-import-secret` |
 
 If Studio shows “Failed to fetch iframe URL” after enabling preview gate, verify both preview secrets match on deployment and redeploy after changing `.env.local`.
@@ -76,10 +76,24 @@ Set `LANGUAGE` and `NEXT_PUBLIC_SANITY_PROJECT_ID` together. Dataset is `product
 | Country | `LANGUAGE` | Sanity project ID | Live? |
 |---------|------------|-------------------|-------|
 | Netherlands | `nl` | `q9jkymv5` | yes |
-| Australia | `au` | `yps8kvw9` | no — wait for the AU group |
+| Australia | `au` | `yps8kvw9` | yes — [demolitionmap.au](https://demolitionmap.au) |
 | Denmark | `dk` | `obfbyt9x` | no — wait for the DK group |
 
 Each country has its own Sanity project and Studio. `SANITY_AUTH_TOKEN` / `SANITY_READ_TOKEN` must belong to **that** project. Do not reuse the Netherlands token on AU or DK.
+
+### Sanity webhook (required for Studio)
+
+Studio itself can save without this, but **the live Next.js site will not update** until a webhook tells Vercel to revalidate. Create one webhook **per country Sanity project**, pointed at **that country’s** production URL.
+
+| Field | Value |
+|-------|--------|
+| Name | `Studio Update: Next.js revalidate` |
+| URL | `https://<country-domain>/api/revalidate` (AU: `https://demolitionmap.au/api/revalidate`) |
+| Dataset | `production` |
+| Trigger | Document create / update / delete (`building`, `settings`, `manifest`, …) |
+| Secret | Same value as `SANITY_REVALIDATE_SECRET` on that Vercel project |
+
+AU is wired this way (AU-only Sanity tokens on Vercel plus this webhook). Logo SVG upload in AU Studio Settings is working. Repeat the same pair (project tokens + webhook) when DK goes live.
 
 ### How country behaviour is shared
 
@@ -89,7 +103,7 @@ Each country has its own Sanity project and Studio. `SANITY_AUTH_TOKEN` / `SANIT
 | Pin-in-country check | Country outline in `src/data/countryPolygons.json` |
 | Geocoding (Geoapify) | Forced `countrycode` filter for the active `LANGUAGE` |
 | Feature flags | `overlayLayers`, `englishToggle`, `studioLogo` in `COUNTRY_DEPLOYMENTS` |
-| Overlay pin click-through | Local URLs until AU/DK are live |
+| Overlay pin click-through | Local URLs until overlay layers are turned on and pointed at live sites |
 
 - New pins cannot be placed outside the home country. The add form does not open.
 - Existing out-of-country records stay in Sanity but are hidden on the public map and list.
@@ -113,14 +127,14 @@ Known AU outliers (wrong geocode): Jolimont Street rows landed near Montevideo; 
 
 ### Later
 
-- Publish AU and DK with those groups; then point overlay URLs at the live sites
+- Publish DK with that group (AU-only Sanity tokens + `Studio Update: Next.js revalidate` webhook, same as AU); then point overlay URLs at the live sites
 - OpenFreeMap / Protomaps only after the basemap matches the current black-and-white satellite look (borders, roads, names). Extra underlays (building outlines, parcels) can be country-specific, optional, and opacity-toggled — do not build that until the base style is right
 - IP-based language later; English toggle is enough for now
 - Open source later (building data already lives in Sanity, not in git) 
 
 ## Importing content
 
-Bulk endpoints are **local development only** and require header `x-import-secret` (see [IMPORT_GUIDE.md](./IMPORT_GUIDE.md)).
+Bulk endpoints are **local development only** and require header `x-import-secret` (see [IMPORT_GUIDE.md](./IMPORT_GUIDE.md)). Use [http://localhost:3000/test-import.html](http://localhost:3000/test-import.html) (or the AU/DK ports) to pick a country, preview a CSV/Excel file, and import.
 
 ### Legacy CSV (`/api/import`)
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Import V2</title>
+    <title>Import buildings</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -41,43 +41,40 @@
             max-height: 500px;
             overflow-y: auto;
         }
-        .error {
-            color: red;
+        .error { color: red; }
+        .success { color: green; }
+        label { display: block; margin: 8px 0 4px; font-weight: bold; }
+        input[type="file"], input[type="password"], select {
+            margin: 4px 0 10px;
+            padding: 6px;
+            max-width: 100%;
         }
-        .success {
-            color: green;
-        }
-        input[type="file"] {
-            margin: 10px 0;
-        }
-        select {
-            padding: 5px;
-            margin: 5px;
-        }
+        .hint { color: #555; font-size: 0.9em; margin: 0; }
     </style>
 </head>
 <body>
-    <h1>Import V2 Test Page</h1>
-    
+    <h1>Import buildings</h1>
+    <p class="hint">Local / development only. Choose the Sanity country, then Preview → Dry-run → Import.</p>
+
     <div class="section">
-        <h2>1. Select File</h2>
+        <h2>1. Country and secret</h2>
+        <label for="countrySelect">Write to Sanity</label>
+        <select id="countrySelect"></select>
+        <p id="countryHint" class="hint">Loading countries…</p>
+        <label for="secretInput">Import secret (<code>x-import-secret</code>)</label>
+        <input type="password" id="secretInput" autocomplete="off" placeholder="IMPORT_ADMIN_SECRET">
+    </div>
+
+    <div class="section">
+        <h2>2. Select file</h2>
         <input type="file" id="fileInput" accept=".csv,.xlsx,.xls">
         <p>Selected: <span id="fileName">No file selected</span></p>
     </div>
 
     <div class="section">
-        <h2>2. Select Mode</h2>
-        <select id="modeSelect">
-            <option value="preview">Preview (show first 5 rows)</option>
-            <option value="dry-run">Dry-Run (validate all, no import)</option>
-            <option value="import">Import (create documents)</option>
-        </select>
-    </div>
-
-    <div class="section">
-        <h2>3. Test Import</h2>
+        <h2>3. Run</h2>
         <button id="previewBtn" onclick="testImport('preview')">Preview</button>
-        <button id="dryRunBtn" onclick="testImport('dry-run')">Dry-Run</button>
+        <button id="dryRunBtn" onclick="testImport('dry-run')">Dry-run</button>
         <button id="importBtn" onclick="testImport('import')">Import</button>
     </div>
 
@@ -89,17 +86,65 @@
     <script>
         const fileInput = document.getElementById('fileInput');
         const fileName = document.getElementById('fileName');
-        const modeSelect = document.getElementById('modeSelect');
         const resultDiv = document.getElementById('result');
+        const countrySelect = document.getElementById('countrySelect');
+        const countryHint = document.getElementById('countryHint');
+        const secretInput = document.getElementById('secretInput');
+        const importBtn = document.getElementById('importBtn');
+
+        const savedSecret = sessionStorage.getItem('importSecret');
+        if (savedSecret) secretInput.value = savedSecret;
+        secretInput.addEventListener('change', () => {
+            sessionStorage.setItem('importSecret', secretInput.value);
+        });
 
         fileInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
-            if (file) {
-                fileName.textContent = file.name;
-            } else {
-                fileName.textContent = 'No file selected';
-            }
+            fileName.textContent = file ? file.name : 'No file selected';
         });
+
+        function selectedCountry() {
+            return countrySelect.value;
+        }
+
+        function updateCountryHint() {
+            const option = countrySelect.selectedOptions[0];
+            if (!option) return;
+            const hasToken = option.dataset.hasWriteToken === 'true';
+            const projectId = option.dataset.projectId;
+            countryHint.textContent = hasToken
+                ? `Project ${projectId}. Write token is available.`
+                : `Project ${projectId}. No write token for this country in .env.local — Preview and Dry-run still work; Import will fail until SANITY_AUTH_TOKEN_${option.value.toUpperCase()} is set.`;
+            importBtn.disabled = !hasToken;
+        }
+
+        countrySelect.addEventListener('change', () => {
+            sessionStorage.setItem('importCountry', countrySelect.value);
+            updateCountryHint();
+        });
+
+        async function loadCountries() {
+            try {
+                const response = await fetch('/api/import-v2');
+                const data = await response.json();
+                const saved = sessionStorage.getItem('importCountry');
+                const preferred = saved || data.homeCountry || 'au';
+                countrySelect.innerHTML = '';
+                (data.countries || []).forEach((country) => {
+                    const option = document.createElement('option');
+                    option.value = country.id;
+                    option.textContent = `${country.label} (${country.id})`;
+                    option.dataset.projectId = country.projectId;
+                    option.dataset.hasWriteToken = String(country.hasWriteToken);
+                    if (country.id === preferred) option.selected = true;
+                    countrySelect.appendChild(option);
+                });
+                updateCountryHint();
+            } catch (error) {
+                countryHint.textContent = 'Could not load countries. Is the local app running?';
+                countryHint.className = 'hint error';
+            }
+        }
 
         async function testImport(mode) {
             const file = fileInput.files[0];
@@ -107,119 +152,91 @@
                 resultDiv.innerHTML = '<p class="error">Please select a file first</p>';
                 return;
             }
+            const secret = secretInput.value.trim();
+            if (!secret) {
+                resultDiv.innerHTML = '<p class="error">Enter the import secret from .env.local</p>';
+                return;
+            }
+            const country = selectedCountry();
+            if (!country) {
+                resultDiv.innerHTML = '<p class="error">Select a country</p>';
+                return;
+            }
 
-            // Update mode select
-            modeSelect.value = mode;
-
-            // Disable buttons
-            document.querySelectorAll('button').forEach(btn => btn.disabled = true);
-            resultDiv.innerHTML = '<p>Processing... Please wait.</p>';
+            document.querySelectorAll('button').forEach((btn) => { btn.disabled = true; });
+            resultDiv.innerHTML = '<p>Processing…</p>';
 
             try {
                 const formData = new FormData();
                 formData.append('file', file);
-                formData.append('config', JSON.stringify({ mode }));
+                formData.append('config', JSON.stringify({ mode, country }));
 
                 const response = await fetch('/api/import-v2', {
                     method: 'POST',
+                    headers: { 'x-import-secret': secret },
                     body: formData,
                 });
-
                 const result = await response.json();
-
-                if (response.ok) {
-                    displayResult(result, true);
-                } else {
-                    displayResult(result, false);
-                }
+                displayResult(result, response.ok);
             } catch (error) {
                 resultDiv.innerHTML = `<p class="error">Error: ${error.message}</p>`;
             } finally {
-                // Re-enable buttons
-                document.querySelectorAll('button').forEach(btn => btn.disabled = false);
+                document.querySelectorAll('button').forEach((btn) => { btn.disabled = false; });
+                updateCountryHint();
             }
         }
 
         function displayResult(result, success) {
             let html = '';
-            
+            if (result.label || result.country) {
+                html += `<p>Target: <strong>${result.label || result.country}</strong> (${result.projectId || ''})</p>`;
+            }
             if (success) {
-                html += '<p class="success">✅ Request successful!</p>';
-                
+                html += '<p class="success">Request successful</p>';
                 if (result.preview) {
-                    html += '<h3>Preview Results</h3>';
-                    html += `<p>Total rows in file: ${result.totalRows}</p>`;
-                    html += `<p>Sample rows shown: ${result.sampleRows.length}</p>`;
-                    
-                    html += '<h4>Column Mappings:</h4>';
-                    html += '<pre>' + JSON.stringify(result.mappings, null, 2) + '</pre>';
-                    
-                    if (result.unmappedColumns && result.unmappedColumns.length > 0) {
-                        html += '<h4>Unmapped Columns (will be added to description):</h4>';
-                        html += '<ul>';
-                        result.unmappedColumns.forEach(col => {
-                            html += `<li>${col}</li>`;
-                        });
+                    html += '<h3>Preview</h3>';
+                    html += `<p>Total rows: ${result.totalRows}</p>`;
+                    html += '<h4>Column mappings</h4>';
+                    html += '<pre>' + JSON.stringify(result.preview.mappings || result.mappings, null, 2) + '</pre>';
+                    const unmapped = result.preview.unmappedColumns || result.unmappedColumns;
+                    if (unmapped && unmapped.length) {
+                        html += '<h4>Unmapped (added to description)</h4><ul>';
+                        unmapped.forEach((col) => { html += `<li>${col}</li>`; });
                         html += '</ul>';
                     }
-                    
-                    html += '<h4>Sample Data:</h4>';
-                    html += '<pre>' + JSON.stringify(result.sampleRows, null, 2) + '</pre>';
+                    html += '<h4>Sample</h4>';
+                    html += '<pre>' + JSON.stringify(result.preview.sampleRows, null, 2) + '</pre>';
                 } else if (result.dryRun) {
-                    html += '<h3>Dry-Run Results</h3>';
-                    html += `<p>Total rows: ${result.totalRows}</p>`;
-                    html += `<p class="success">Valid rows: ${result.successful}</p>`;
-                    html += `<p class="error">Invalid rows: ${result.failed}</p>`;
-                    
-                    if (result.errors && result.errors.length > 0) {
-                        html += '<h4>Errors:</h4>';
-                        html += '<pre>' + JSON.stringify(result.errors, null, 2) + '</pre>';
+                    html += '<h3>Dry-run</h3>';
+                    html += `<p>Total: ${result.totalRows}</p>`;
+                    html += `<p class="success">Valid: ${result.successful}</p>`;
+                    html += `<p class="error">Invalid: ${result.failed}</p>`;
+                    if (result.errors && result.errors.length) {
+                        html += '<h4>Errors</h4><pre>' + JSON.stringify(result.errors, null, 2) + '</pre>';
                     }
                 } else {
-                    html += '<h3>Import Results</h3>';
-                    html += `<p>Total rows: ${result.totalRows}</p>`;
-                    html += `<p class="success">Successfully imported: ${result.successful}</p>`;
+                    html += '<h3>Import</h3>';
+                    html += `<p>Total: ${result.totalRows}</p>`;
+                    html += `<p class="success">Imported: ${result.successful}</p>`;
                     html += `<p class="error">Failed: ${result.failed}</p>`;
-                    
-                    if (result.errors && result.errors.length > 0) {
-                        html += '<h4>Errors:</h4>';
-                        html += '<pre>' + JSON.stringify(result.errors, null, 2) + '</pre>';
+                    if (result.errors && result.errors.length) {
+                        html += '<h4>Errors</h4><pre>' + JSON.stringify(result.errors, null, 2) + '</pre>';
                     }
                 }
             } else {
-                html += '<p class="error">❌ Request failed</p>';
-                html += `<p class="error">Error: ${result.error || 'Unknown error'}</p>`;
-                
+                html += '<p class="error">Request failed</p>';
+                html += `<p class="error">${result.error || 'Unknown error'}</p>`;
                 if (result.missingFields) {
-                    html += '<h4>Missing Required Fields:</h4>';
-                    html += '<ul>';
-                    result.missingFields.forEach(field => {
-                        html += `<li>${field}</li>`;
-                    });
-                    html += '</ul>';
-                }
-                
-                if (result.mappings) {
-                    html += '<h4>Detected Mappings:</h4>';
-                    html += '<pre>' + JSON.stringify(result.mappings, null, 2) + '</pre>';
-                }
-                
-                if (result.unmappedColumns) {
-                    html += '<h4>Unmapped Columns:</h4>';
-                    html += '<ul>';
-                    result.unmappedColumns.forEach(col => {
-                        html += `<li>${col}</li>`;
-                    });
+                    html += '<h4>Missing required fields</h4><ul>';
+                    result.missingFields.forEach((field) => { html += `<li>${field}</li>`; });
                     html += '</ul>';
                 }
             }
-
-            html += '<h4>Full Response:</h4>';
-            html += '<pre>' + JSON.stringify(result, null, 2) + '</pre>';
-            
+            html += '<h4>Full response</h4><pre>' + JSON.stringify(result, null, 2) + '</pre>';
             resultDiv.innerHTML = html;
         }
+
+        loadCountries();
     </script>
 </body>
 </html>
-
