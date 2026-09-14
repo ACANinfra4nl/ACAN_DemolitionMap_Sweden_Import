@@ -12,7 +12,8 @@ import { PolicyFooter } from "./PolicyFooter";
 export const ManifestPageContent: FC<{
   data: SanityDocument<ManifestDocumentType> | null;
   dict: Dictionary;
-}> = ({ data, dict }) => {
+  logoUrl?: string;
+}> = ({ data, dict, logoUrl }) => {
   if (!data) {
     return (
       <div className="p-8">
@@ -28,7 +29,7 @@ export const ManifestPageContent: FC<{
         {/* HACK: this is a hack to fix a bug with NextJS scroll restoration */}
       </div>
       <header className="pointer-events-none sticky top-0 z-10">
-        <Navigation scaleLogo dict={dict} />
+        <Navigation scaleLogo dict={dict} logoUrl={logoUrl} />
       </header>
       <main className="mt-column pb-28 sm:pb-32">
         <div className="mx-5">
@@ -67,7 +68,7 @@ export const ManifestPageContent: FC<{
             />
           </div>
           <div className="w-column col-span-3 col-start-2 mt-16 sm:col-span-1 sm:col-start-3">
-            <LandingFooterSection dict={dict} />
+            <LandingFooterSection dict={dict} logoUrl={logoUrl} />
           </div>
         </div>
         <LandingPartnerSupporterCarousels dict={dict} />

@@ -1,19 +1,25 @@
 import { SanityDocument } from "next-sanity";
 import { draftMode } from "next/headers";
 import PreviewProvider from "@/components/PreviewProvider";
-import { manifestQuery } from "../../sanity/lib/queries";
+import { manifestQuery, settingsQuery } from "../../sanity/lib/queries";
 import { readToken, sanityFetch } from "@/lib/sanityFetch";
 import { ManifestPageContent } from "@/components/ManifestPageContent";
 import { PreviewManifestPageContent } from "@/components/PreviewManifestPageContent";
 import { getDictionary } from "@/lib/dictionaries";
+import { getSettingsLogoUrl } from "@/lib/countryLogo";
 
 export default async function ManifestPage() {
   const data = await sanityFetch<SanityDocument<ManifestDocumentType> | null>({
     query: manifestQuery,
     tags: ["manifest"],
   });
+  const settings = await sanityFetch<SettingsType>({
+    query: settingsQuery,
+    tags: ["settings"],
+  });
   const isDraftMode = draftMode().isEnabled;
   const dict = await getDictionary();
+  const logoUrl = getSettingsLogoUrl(settings);
 
   if (!data) {
     return (
@@ -36,10 +42,11 @@ export default async function ManifestPage() {
           data={data}
           query={manifestQuery}
           dict={dict}
+          logoUrl={logoUrl}
         />
       </PreviewProvider>
     );
   }
 
-  return <ManifestPageContent data={data} dict={dict} />;
+  return <ManifestPageContent data={data} dict={dict} logoUrl={logoUrl} />;
 }

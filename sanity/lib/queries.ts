@@ -77,6 +77,13 @@ export const buildingMetaQuery = groq`*[_type == "building" && _id == $id] {
 
 export const settingsQuery = groq`*[_id == "settings"][0] {
   ...,
+  logo {
+    asset-> {
+      url,
+      mimeType,
+      originalFilename
+    }
+  },
   confirmationMessage {
     heading,
     body,

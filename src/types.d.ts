@@ -104,6 +104,13 @@ interface SettingsType {
   feedbackEmail?: string;
   confirmationMessage: MessageType;
   errorMessage: MessageType;
+  logo?: {
+    asset?: {
+      url?: string;
+      mimeType?: string;
+      originalFilename?: string;
+    };
+  };
   seo: {
     description: string;
     image: SanityImageType;

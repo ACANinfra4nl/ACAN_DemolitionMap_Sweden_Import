@@ -30,6 +30,7 @@ export const MapPageContent: FC<
     };
     dict: Dictionary;
     countryCode?: CountrySanityLocale;
+    logoUrl?: string;
   }
 > = ({
   feedbackEmail,
@@ -38,6 +39,7 @@ export const MapPageContent: FC<
   buildings,
   dict,
   countryCode,
+  logoUrl,
 }) => {
   const router = useRouter();
   const pathname = usePathname();
@@ -235,7 +237,7 @@ export const MapPageContent: FC<
   return (
     <>
       <header className="col-span-12 col-start-1 row-start-1">
-        <Navigation dict={dict} />
+          <Navigation dict={dict} logoUrl={logoUrl} />
       </header>
       <main className="col-span-12 col-start-1 row-start-2 grid w-full grid-cols-1 grid-rows-[auto_1fr]">
         <div className="col-start-1 row-start-1 mx-5 flex gap-2 pb-2">

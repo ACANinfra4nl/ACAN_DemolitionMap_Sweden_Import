@@ -10,9 +10,10 @@ export const PreviewManifestPageContent: FC<{
   data: SanityDocument<ManifestDocumentType>;
   query: string;
   dict: Dictionary;
-}> = ({ data, query, dict }) => {
+  logoUrl?: string;
+}> = ({ data, query, dict, logoUrl }) => {
   const params = useParams();
   const [liveData] = useLiveQuery(data, query);
 
-  return <ManifestPageContent data={liveData} dict={dict} />;
+  return <ManifestPageContent data={liveData} dict={dict} logoUrl={logoUrl} />;
 };

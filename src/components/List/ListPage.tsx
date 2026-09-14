@@ -6,6 +6,7 @@ import { toFeature } from "@/lib/toFeature";
 import { getDictionary } from "@/lib/dictionaries";
 import { getHomeCountryCode } from "@/lib/countrySanity";
 import { isBuildingInCountry } from "@/lib/pointInCountry";
+import { getSettingsLogoUrl } from "@/lib/countryLogo";
 
 export const ListPage = async () => {
   const settings = await sanityFetch<SettingsType>({
@@ -30,6 +31,7 @@ export const ListPage = async () => {
         {...settings}
         buildings={{ type: "FeatureCollection", features }}
         dict={dict}
+        logoUrl={getSettingsLogoUrl(settings)}
       />
     </Suspense>
   );

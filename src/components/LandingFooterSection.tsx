@@ -17,11 +17,15 @@ const CrdLogoPlaceholder: FC<{ label: string }> = ({ label }) => (  <div
   </div>
 );
 
-/** ACAN & Sally in the manifest column; CRD gated by SHOW_CRD_LOGO. */export const LandingFooterSection: FC<{ dict: Dictionary }> = ({ dict }) => {
+/** ACAN & Sally in the manifest column; CRD gated by SHOW_CRD_LOGO. */
+export const LandingFooterSection: FC<{ dict: Dictionary; logoUrl?: string }> = ({
+  dict,
+  logoUrl,
+}) => {
   const L = dict.landing;
   return (
     <div className="flex w-full flex-col gap-14">
-      <AcanLogoText />
+      <AcanLogoText logoUrl={logoUrl} />
       <Link href="https://sally.doberman.co/" rel="noopener noreferrer">
         <SallyLogo />
       </Link>

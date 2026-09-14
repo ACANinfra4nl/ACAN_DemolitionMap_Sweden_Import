@@ -35,10 +35,11 @@ const NavLink: FC<{
   </Link>
 );
 
-export const Navigation: FC<{ scaleLogo?: boolean; dict: Dictionary }> = ({
-  scaleLogo,
-  dict,
-}) => {
+export const Navigation: FC<{
+  scaleLogo?: boolean;
+  dict: Dictionary;
+  logoUrl?: string;
+}> = ({ scaleLogo, dict, logoUrl }) => {
   const path = usePathname();
   const mapHref = `/${dict.slugs.map}`;
   const listHref = `/${dict.slugs.list}`;
@@ -107,10 +108,10 @@ export const Navigation: FC<{ scaleLogo?: boolean; dict: Dictionary }> = ({
       </div>
       <div className="col-span-2">
         {scaleLogo ? (
-          <ScalingAcanLogo language={logoLanguage} />
+          <ScalingAcanLogo language={logoLanguage} logoUrl={logoUrl} />
         ) : (
           <div className="ml-auto w-logo">
-            <AcanLogoCircle language={logoLanguage} />
+            <AcanLogoCircle language={logoLanguage} logoUrl={logoUrl} />
           </div>
         )}
       </div>

@@ -1,5 +1,6 @@
 import { SchemaTypeDefinition } from "sanity";
 import { SettingsIcon } from "../components/SettingsIcon";
+import { countryUsesStudioLogo } from "../../src/lib/countrySanity";
 
 export const settings: SchemaTypeDefinition = {
   name: "settings",
@@ -58,6 +59,27 @@ export const settings: SchemaTypeDefinition = {
           validation: (Rule) => Rule.required(),
         },
       ],
+    },
+    {
+      name: "logo",
+      type: "file",
+      title: "Logo (SVG)",
+      description:
+        "Country logo shown in the header and on the about page. Upload an .svg file. The Netherlands still uses the built-in logo.",
+      hidden: () => !countryUsesStudioLogo(),
+      options: {
+        accept: "image/svg+xml,.svg",
+      },
+      validation: (Rule) =>
+        Rule.custom((value) => {
+          const ref = (value as { asset?: { _ref?: string } } | undefined)
+            ?.asset?._ref;
+          if (!ref) return true;
+          if (/-svg($|-)/i.test(ref) || ref.toLowerCase().endsWith("-svg")) {
+            return true;
+          }
+          return "Please upload an SVG file (.svg)";
+        }),
     },
     {
       name: "seo",

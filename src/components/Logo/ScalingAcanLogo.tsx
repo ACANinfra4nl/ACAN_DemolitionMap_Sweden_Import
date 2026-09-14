@@ -5,7 +5,10 @@ function easeInOutCubic(x: number): number {
   return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
 }
 
-export const ScalingAcanLogo: FC<{ language: string }> = ({ language }) => {
+export const ScalingAcanLogo: FC<{ language: string; logoUrl?: string }> = ({
+  language,
+  logoUrl,
+}) => {
   const el = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const resizeLogo = () => {
@@ -31,7 +34,7 @@ export const ScalingAcanLogo: FC<{ language: string }> = ({ language }) => {
   }, []);
   return (
     <div className="ml-auto w-logo origin-top-right" ref={el}>
-      <AcanLogoCircle language={language} />
+      <AcanLogoCircle language={language} logoUrl={logoUrl} />
     </div>
   );
 };

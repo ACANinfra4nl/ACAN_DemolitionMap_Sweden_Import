@@ -4,8 +4,20 @@ import { AcanLogoCircleNo } from "./AcanLogoCircleNo";
 import { AcanLogoCircleFin } from "./AcanLogoCircleFin";
 import { AcanLogoCircleNL } from "./AcanLogoCircleNL";
 import { AcanLogoCircleUK } from "./AcanLogoCircleUK";
+import { StudioSvgLogo } from "./StudioSvgLogo";
 
-export const AcanLogoCircle: FC<{ language: string }> = ({ language }) => {
+export const AcanLogoCircle: FC<{ language: string; logoUrl?: string }> = ({
+  language,
+  logoUrl,
+}) => {
+  if (logoUrl) {
+    return (
+      <StudioSvgLogo
+        src={logoUrl}
+        className="h-auto w-full object-contain object-right"
+      />
+    );
+  }
   switch (language) {
     case "fi":
       return <AcanLogoCircleFin />;

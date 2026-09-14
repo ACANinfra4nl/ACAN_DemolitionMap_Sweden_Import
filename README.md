@@ -88,13 +88,13 @@ Each country has its own Sanity project and Studio. `SANITY_AUTH_TOKEN` / `SANIT
 | Map, list, form, overlay UI | Dictionary (`nl.json` / `au.json` / `dk.json`) |
 | Pin-in-country check | Country outline in `src/data/countryPolygons.json` |
 | Geocoding (Geoapify) | Forced `countrycode` filter for the active `LANGUAGE` |
-| Feature flags | `overlayLayers`, `englishToggle` in `COUNTRY_DEPLOYMENTS` |
+| Feature flags | `overlayLayers`, `englishToggle`, `studioLogo` in `COUNTRY_DEPLOYMENTS` |
 | Overlay pin click-through | Local URLs until AU/DK are live |
 
 - New pins cannot be placed outside the home country. The add form does not open.
 - Existing out-of-country records stay in Sanity but are hidden on the public map and list.
 - Overlay layers are off by default. NL/DK can switch the UI to English (`EN` / local in the nav) without changing slugs, Sanity, or map bounds. AU is already English, so that toggle is off.
-- AU/DK still use the generic ACAN mark until those groups supply logos.
+- AU/DK can upload an SVG logo in Studio **Settings**. Until a file is uploaded, they use the generic ACAN mark. NL keeps the hardcoded logo.
 
 List stored outliers (does not delete anything):
 

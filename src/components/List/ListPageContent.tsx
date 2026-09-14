@@ -48,7 +48,8 @@ export const ListPageContent: FC<{
     features: Feature<Point, FeatureBuilding>[];
   };
   dict: Dictionary;
-}> = ({ feedbackEmail, buildings, dict }) => {
+  logoUrl?: string;
+}> = ({ feedbackEmail, buildings, dict, logoUrl }) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -104,7 +105,7 @@ export const ListPageContent: FC<{
       <div className="min-h-screen">
         <div className="min-h-[1px]"></div>
         <header className="sticky top-0 z-10">
-          <Navigation dict={dict} />
+          <Navigation dict={dict} logoUrl={logoUrl} />
           <ListFilter
             stateFilter={stateFilter}
             setStateFilter={setStateFilter}
