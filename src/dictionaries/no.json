@@ -43,6 +43,8 @@
     "imageInput": "dra og slipp bildene dine her for opplasting",
     "imageLabel": "bilder",
     "imageMaxSize": "Den totale størrelsen på alle bildene må ikke overstige 4 MB.",
+    "imageFormats": "Kun JPG eller PNG.",
+    "imageInvalidFormat": "Kun JPG- eller PNG-bilder godtas.",
     "imageRequired": "Last opp minst ett bilde.",
     "draftRestoreImagesHint": "Kladd gjenopprettet i denne nettleseren — legg ved bildene på nytt før du sender.",
     "category": "kategori",

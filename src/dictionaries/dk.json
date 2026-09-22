@@ -34,6 +34,8 @@
     "addBuilding": "tilføj bygning",
     "imageInput": "træk og slip dine billeder her for upload",
     "imageMaxSize": "Den samlede størrelse af alle billeder må ikke overstige 4 MB.",
+    "imageFormats": "Kun JPG eller PNG.",
+    "imageInvalidFormat": "Kun JPG- eller PNG-billeder accepteres.",
     "category": "kategori",
     "state": "status",
     "buildingName": "bygningsnavn",

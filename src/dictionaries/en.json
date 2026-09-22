@@ -43,6 +43,8 @@
     "imageInput": "upload images",
     "imageLabel": "images",
     "imageMaxSize": "The total size of all images must not exceed 4MB.",
+    "imageFormats": "JPG or PNG only.",
+    "imageInvalidFormat": "Only JPG or PNG images are accepted.",
     "imageRequired": "Upload at least one image.",
     "draftRestoreImagesHint": "Draft restored from this browser — please attach images again before submitting.",
     "category": "category",

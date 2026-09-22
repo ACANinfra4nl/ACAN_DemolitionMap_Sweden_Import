@@ -43,6 +43,8 @@
     "imageInput": "sleep en zet uw afbeeldingen hier neer om te uploaden",
     "imageLabel": "afbeeldingen",
     "imageMaxSize": "De totale grootte van alle afbeeldingen mag niet meer dan 4 MB bedragen.",
+    "imageFormats": "Alleen JPG of PNG.",
+    "imageInvalidFormat": "Alleen JPG- of PNG-afbeeldingen worden geaccepteerd.",
     "imageRequired": "Upload minst één afbeelding.",
     "draftRestoreImagesHint": "Concept hersteld in deze browser — voeg afbeeldingen opnieuw toe voordat u verzendt.",
     "category": "categorie",

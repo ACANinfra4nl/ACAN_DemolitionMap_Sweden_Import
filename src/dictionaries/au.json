@@ -34,6 +34,8 @@
     "addBuilding": "add building",
     "imageInput": "upload images",
     "imageMaxSize": "The total size of all images must not exceed 4MB.",
+    "imageFormats": "JPG or PNG only.",
+    "imageInvalidFormat": "Only JPG or PNG images are accepted.",
     "category": "category",
     "state": "status",
     "buildingName": "building name (if applicable)",

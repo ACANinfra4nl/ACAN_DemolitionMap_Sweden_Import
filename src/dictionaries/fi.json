@@ -43,6 +43,8 @@
     "imageInput": "raahaa ja pudota kuvasi tähän",
     "imageLabel": "kuvat",
     "imageMaxSize": "Kuvien yhteenlaskettu koko ei saa ylittää 4 Mt.",
+    "imageFormats": "Vain JPG tai PNG.",
+    "imageInvalidFormat": "Vain JPG- tai PNG-kuvat hyväksytään.",
     "imageRequired": "Lataa vähintään yksi kuva.",
     "draftRestoreImagesHint": "Luonnos palautettu tässä selaimessa — liitä kuvat uudelleen ennen lähetystä.",
     "category": "kategoria",

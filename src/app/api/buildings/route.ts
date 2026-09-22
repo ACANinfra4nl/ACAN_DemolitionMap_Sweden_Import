@@ -19,11 +19,33 @@ const MAX_IMAGE_SIZE_BYTES = 8 * 1024 * 1024;
 const MAX_TOTAL_IMAGE_BYTES = 20 * 1024 * 1024;
 const ALLOWED_IMAGE_TYPES = new Set([
   "image/jpeg",
+  "image/jpg",
   "image/png",
-  "image/webp",
-  "image/gif",
-  "image/svg+xml",
 ]);
+
+const IMAGE_TYPE_BY_EXT: Record<string, string> = {
+  jpg: "image/jpeg",
+  jpeg: "image/jpeg",
+  png: "image/png",
+};
+
+const resolveImageContentType = (file: File): string | undefined => {
+  const type = (file.type || "").toLowerCase();
+  if (type === "image/jpg") return "image/jpeg";
+  if (ALLOWED_IMAGE_TYPES.has(type) && type !== "image/jpg") return type;
+  const ext = file.name.split(".").pop()?.toLowerCase();
+  return ext ? IMAGE_TYPE_BY_EXT[ext] : undefined;
+};
+
+const compactRecord = <T extends Record<string, unknown>>(value: T): T => {
+  const next = {} as T;
+  for (const [key, entry] of Object.entries(value)) {
+    if (entry !== undefined) {
+      (next as Record<string, unknown>)[key] = entry;
+    }
+  }
+  return next;
+};
 
 const getOptionalString = (formData: FormData, key: string) => {
   const value = formData.get(key);
@@ -42,7 +64,12 @@ const getOptionalNumber = (formData: FormData, key: string) => {
 const uploadAssets = async (images: File[]) => {
   const uploaded = await mapWithConcurrency(images, 2, async (image) => {
     if (image.size <= 0) return null;
-    const imageAsset = await client.assets.upload("image", image);
+    const contentType = resolveImageContentType(image);
+    const buffer = Buffer.from(await image.arrayBuffer());
+    const imageAsset = await client.assets.upload("image", buffer, {
+      filename: image.name || "upload.jpg",
+      contentType: contentType || "image/jpeg",
+    });
     return {
       _type: "image",
       _key: nanoid(),
@@ -179,7 +206,7 @@ export async function POST(request: NextRequest) {
 
     let totalImageSize = 0;
     for (const file of formImages) {
-      if (!ALLOWED_IMAGE_TYPES.has(file.type)) {
+      if (!resolveImageContentType(file)) {
         return withRequestId(
           NextResponse.json(
             { error: "Unsupported file type uploaded." },
@@ -210,59 +237,41 @@ export async function POST(request: NextRequest) {
     }
 
     const imageAssets = await uploadAssets(formImages);
-    const createdBuilding = await client.create(
-        {
-        _type: "building",
-        location: {
-          _type: "geopoint",
-          lat,
-          lng,
-        },
-        // Kategori - bostad, kontor, kommersiell, samhällsfastighet, industri, övrig
-        category,
-        // Status - hotad (rivningslov), riven, räddad - färgkodad
-        state,
-        // Byggnadens namn, use `buildingName` instead of name to not trigger autocomplete
-        name: getOptionalString(formData, "buildingName"),
-        // Adress
-        address: getOptionalString(formData, "address"),
-        postcode: getOptionalString(formData, "postcode"),
-        city: getOptionalString(formData, "city"),
-        // Kvartersnamn
-        blockName: getOptionalString(formData, "blockName"),
-        // Fastighetsbeteckning
-        propertyDesignation: getOptionalString(formData, "propertyDesignation"),
-        // Storlek m2
-        size: getOptionalNumber(formData, "size"),
-        // (Inbunden C02)
-        boundCO2: getOptionalNumber(formData, "boundCO2"),
-        // Arkitekt
-        architect: getOptionalString(formData, "architect"),
-        // Fastighetsägare
-        propertyOwner: getOptionalString(formData, "propertyOwner"),
-        // Byggår
-        buildYear,
-        // Rivningsår
-        demolitionYear: getOptionalNumber(formData, "demolitionYear"),
-        // Arkitektur, historik - fritext (nuvarande verksamhet)
-        description: getOptionalString(formData, "description"),
-        // Anledning till rivning, fritext (vad planeras i dess ställe)
-        demolitionCause: getOptionalString(formData, "demolitionCause"),
-        // Bildkällor
-        sources: getOptionalString(formData, "sources"),
-        // (Datum för inlägget)
-        // Minnen, öppet för alla att lägga till
-        images: imageAssets.length > 0 ? imageAssets : undefined,
-        // Avsändare
-        contributor: {
-          name: getOptionalString(formData, "contributor"),
-          email: getOptionalString(formData, "contributor-email"),
-        },
-        reviewed: false,
-        map_visibility: true,
+    const contributor = compactRecord({
+      name: getOptionalString(formData, "contributor"),
+      email: getOptionalString(formData, "contributor-email"),
+    });
+    const newBuilding = compactRecord({
+      _type: "building" as const,
+      location: {
+        _type: "geopoint" as const,
+        lat,
+        lng,
       },
-      { returnDocuments: true },
-    );
+      category,
+      state,
+      name: getOptionalString(formData, "buildingName"),
+      address: getOptionalString(formData, "address"),
+      postcode: getOptionalString(formData, "postcode"),
+      city: getOptionalString(formData, "city"),
+      blockName: getOptionalString(formData, "blockName"),
+      propertyDesignation: getOptionalString(formData, "propertyDesignation"),
+      size: getOptionalNumber(formData, "size"),
+      boundCO2: getOptionalNumber(formData, "boundCO2"),
+      architect: getOptionalString(formData, "architect"),
+      propertyOwner: getOptionalString(formData, "propertyOwner"),
+      buildYear,
+      demolitionYear: getOptionalNumber(formData, "demolitionYear"),
+      description: getOptionalString(formData, "description"),
+      demolitionCause: getOptionalString(formData, "demolitionCause"),
+      sources: getOptionalString(formData, "sources"),
+      images: imageAssets.length > 0 ? imageAssets : undefined,
+      contributor:
+        Object.keys(contributor).length > 0 ? contributor : undefined,
+      reviewed: false,
+      map_visibility: true,
+    });
+    const createdBuilding = await client.create(newBuilding);
     revalidateTag("building");
     logEvent("info", "buildings.created", {
       requestId,
@@ -271,7 +280,17 @@ export async function POST(request: NextRequest) {
       imageCount: imageAssets.length,
       id: createdBuilding._id,
     });
-    return withRequestId(NextResponse.json(toFeature(createdBuilding)), requestId);
+    const created = createdBuilding as typeof newBuilding & { _id: string };
+    return withRequestId(
+      NextResponse.json(
+        toFeature({
+          ...newBuilding,
+          ...created,
+          location: created.location ?? newBuilding.location,
+        }),
+      ),
+      requestId,
+    );
   } catch (error) {
     logEvent("error", "buildings.create_failed", {
       requestId,

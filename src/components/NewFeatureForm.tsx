@@ -189,6 +189,8 @@ export const NewFeatureForm = ({
             <ImageInput
               label={dict.newFeatureForm.imageLabel}
               text={dict.newFeatureForm.imageInput}
+              formatText={dict.newFeatureForm.imageFormats}
+              invalidFormatText={dict.newFeatureForm.imageInvalidFormat}
               maxSizeText={dict.newFeatureForm.imageMaxSize}
               required
               requiredMessage={dict.newFeatureForm.imageRequired}
@@ -247,17 +249,17 @@ export const NewFeatureForm = ({
             <input
               type="hidden"
               name="address"
-              defaultValue={draftFields.address ?? ""}
+              value={lookupResult?.address ?? draftFields.address ?? ""}
             />
             <input
               type="hidden"
               name="postcode"
-              defaultValue={draftFields.postcode ?? ""}
+              value={lookupResult?.postcode ?? draftFields.postcode ?? ""}
             />
             <input
               type="hidden"
               name="city"
-              defaultValue={draftFields.city ?? ""}
+              value={lookupResult?.city ?? draftFields.city ?? ""}
             />
           </div>
           <div>

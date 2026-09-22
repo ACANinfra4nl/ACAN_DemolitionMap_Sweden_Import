@@ -16,6 +16,22 @@ interface ImageType {
   file: File;
 }
 
+const ACCEPTED_IMAGE_TYPES = new Set(["image/jpeg", "image/jpg", "image/png"]);
+const ACCEPTED_IMAGE_EXTS = new Set(["jpg", "jpeg", "png"]);
+
+const isJpgOrPng = (file: File) => {
+  const type = (file.type || "").toLowerCase();
+  if (ACCEPTED_IMAGE_TYPES.has(type)) return true;
+  const ext = file.name.split(".").pop()?.toLowerCase();
+  return Boolean(ext && ACCEPTED_IMAGE_EXTS.has(ext));
+};
+
+const toFileList = (files: File[]): FileList => {
+  const dataTransfer = new DataTransfer();
+  for (const file of files) dataTransfer.items.add(file);
+  return dataTransfer.files;
+};
+
 const filterFileList = (files: FileList, img: ImageType): FileList => {
   const dataTransfer = new DataTransfer();
   for (const f of files) if (f !== img.file) dataTransfer.items.add(f);
@@ -26,6 +42,8 @@ export const ImageInput: FC<
   Pick<Dictionary, "ariaLabels"> & {
     label: string;
     text: string;
+    formatText: string;
+    invalidFormatText: string;
     maxSizeText: string;
     required?: boolean;
     requiredMessage?: string;
@@ -35,6 +53,8 @@ export const ImageInput: FC<
 > = ({
   label,
   text,
+  formatText,
+  invalidFormatText,
   maxSizeText,
   ariaLabels,
   required,
@@ -46,10 +66,15 @@ export const ImageInput: FC<
   const inputRef = useRef<HTMLInputElement>(null);
   const [images, setImages] = useState<ImageType[]>([]);
   const [isInvalidSize, setIsInvalidSize] = useState(false);
+  const [isInvalidFormat, setIsInvalidFormat] = useState(false);
   const [dragging, setDragging] = useState(false);
   const [interacted, setInteracted] = useState(false);
   const processImages = useCallback((files: FileList) => {
-    for (const file of files) {
+    const incoming = Array.from(files);
+    const accepted = incoming.filter(isJpgOrPng);
+    setIsInvalidFormat(accepted.length !== incoming.length);
+    if (inputRef.current) inputRef.current.files = toFileList(accepted);
+    for (const file of accepted) {
       const fr = new FileReader();
       fr.onload = () => {
         const url = fr.result as string;
@@ -64,11 +89,7 @@ export const ImageInput: FC<
     e.preventDefault();
     e.stopPropagation();
     e.nativeEvent.stopImmediatePropagation();
-    if (inputRef.current) {
-      const files = e.dataTransfer.files;
-      inputRef.current.files = files;
-      processImages(files);
-    }
+    processImages(e.dataTransfer.files);
     setDragging(false);
   }, [processImages]);
   const handleDragEnter: DragEventHandler<HTMLLabelElement> = useCallback(
@@ -146,7 +167,7 @@ export const ImageInput: FC<
           className={classNames(
             "flex aspect-wide w-full flex-wrap items-center justify-center gap-5 overflow-scroll border border-current p-5 focus-within:border-acan-blue",
             dragging && "border-acan-blue",
-            (isInvalidSize || invalidEmptyVisual) &&
+            (isInvalidSize || invalidEmptyVisual || isInvalidFormat) &&
               "!border-demolished text-demolished",
           )}
         >
@@ -154,6 +175,7 @@ export const ImageInput: FC<
             id={inputId}
             type="file"
             name="images"
+            accept="image/jpeg,image/png,.jpg,.jpeg,.png"
             multiple
             ref={inputRef}
             className="sr-only"
@@ -183,13 +205,26 @@ export const ImageInput: FC<
               </figure>
             ))
           ) : (
-            <span className="acan-text-body first-letter:uppercase">{text}</span>
+            <span className="flex flex-col items-center gap-1 text-center">
+              <span className="acan-text-body first-letter:uppercase">{text}</span>
+              <span className="text-sm first-letter:uppercase">{formatText}</span>
+            </span>
           )}
         </span>
       </label>
       {invalidEmptyVisual && requiredMessage ? (
         <p className="mt-2 text-sm text-demolished first-letter:uppercase">
           {requiredMessage}
+        </p>
+      ) : null}
+      {images.length > 0 || isInvalidFormat ? (
+        <p
+          className={classNames(
+            "mt-2 text-sm first-letter:uppercase",
+            isInvalidFormat && "text-demolished",
+          )}
+        >
+          {isInvalidFormat ? invalidFormatText : formatText}
         </p>
       ) : null}
       <p

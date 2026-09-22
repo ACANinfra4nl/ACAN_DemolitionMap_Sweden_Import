@@ -218,6 +218,8 @@ interface NewFeatureForm {
   imageInput: string;
   imageLabel: string;
   imageMaxSize: string;
+  imageFormats: string;
+  imageInvalidFormat: string;
   imageRequired: string;
   draftRestoreImagesHint: string;
   category: string;

@@ -43,6 +43,8 @@
     "imageInput": "dra och släpp dina bilder här för att ladda upp",
     "imageLabel": "bilder",
     "imageMaxSize": "Den totala storleken på alla bilder får inte överstiga 4 MB.",
+    "imageFormats": "Endast JPG eller PNG.",
+    "imageInvalidFormat": "Endast JPG- eller PNG-bilder accepteras.",
     "imageRequired": "Ladda upp minst en bild.",
     "draftRestoreImagesHint": "Utkast återställt i denna webbläsare — bifoga bilderna igen innan du skickar.",
     "category": "kategori",
