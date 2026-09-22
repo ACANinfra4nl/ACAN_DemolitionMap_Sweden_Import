@@ -25,7 +25,13 @@ export const MapPage = async () => {
     ? buildings.filter((building) => isBuildingInCountry(building, homeCountry))
     : buildings;
 
-  const features = visible.map((b) => toFeature(b, dict));
+  const features = visible
+    .filter(
+      (building) =>
+        typeof building.location?.lat === "number" &&
+        typeof building.location?.lng === "number",
+    )
+    .map((b) => toFeature(b, dict));
   return (
     <div className="grid h-screen grid-cols-12 grid-rows-[auto_1fr]">
       <Suspense>

@@ -1,6 +1,6 @@
 import { client } from "@/lib/sanityClient";
 import { NextRequest, NextResponse } from "next/server";
-import { revalidateTag } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { toFeature } from "@/lib/toFeature";
 import { nanoid } from "nanoid";
 import { getHomeCountryCode } from "@/lib/countrySanity";
@@ -273,6 +273,7 @@ export async function POST(request: NextRequest) {
     });
     const createdBuilding = await client.create(newBuilding);
     revalidateTag("building");
+    revalidatePath("/", "layout");
     logEvent("info", "buildings.created", {
       requestId,
       ip,

@@ -1,11 +1,18 @@
 "use client";
-import { FC, FormEventHandler } from "react";
 import { DetailsPanel } from "@/components/DetailsPanel";
 import { Map } from "@/components/Map";
 import { Navigation } from "@/components/Navigation";
 import { NewFeatureForm } from "@/components/NewFeatureForm";
 import { Feature, Point } from "geojson";
-import { MouseEventHandler, useCallback, useEffect, useState } from "react";
+import {
+  FC,
+  FormEventHandler,
+  MouseEventHandler,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { FilterButton } from "@/components/FilterButton";
 import { Transition } from "@headlessui/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -64,6 +71,16 @@ export const MapPageContent: FC<
     type: "FeatureCollection",
     features: [],
   });
+  const [submittedFeatures, setSubmittedFeatures] = useState<
+    Feature<Point, FeatureBuilding>[]
+  >([]);
+  const mapFeatures = useMemo(() => {
+    const ids = new Set(buildings.features.map((f) => f.properties._id));
+    return [
+      ...buildings.features,
+      ...submittedFeatures.filter((f) => !ids.has(f.properties._id)),
+    ];
+  }, [buildings.features, submittedFeatures]);
 
   // this is for handling menu click when already on map page
   if (shouldAdd && !isAdding) {
@@ -72,15 +89,22 @@ export const MapPageContent: FC<
   }
 
   useEffect(() => {
+    const ids = new Set(buildings.features.map((f) => f.properties._id));
+    setSubmittedFeatures((current) =>
+      current.filter((f) => !ids.has(f.properties._id)),
+    );
+  }, [buildings.features]);
+
+  useEffect(() => {
     if (selectedId) {
       setSelectedFeature(
-        buildings.features.find((f) => f.properties._id === selectedId),
+        mapFeatures.find((f) => f.properties._id === selectedId),
       );
       setHasSelectedFeature(true);
     } else {
       setHasSelectedFeature(false);
     }
-  }, [selectedId, buildings.features]);
+  }, [selectedId, mapFeatures]);
 
   useEffect(() => {
     if (overlayCountries.length === 0) {
@@ -160,6 +184,27 @@ export const MapPageContent: FC<
             }
             throw new Error(message);
           }
+          try {
+            const created = (await r.json()) as Feature<
+              Point,
+              FeatureBuilding
+            >;
+            if (
+              created?.properties?._id &&
+              typeof created.properties.location?.lat === "number" &&
+              typeof created.properties.location?.lng === "number"
+            ) {
+              const feature = toFeature(created.properties, dict);
+              setSubmittedFeatures((current) => [
+                ...current.filter(
+                  (item) => item.properties._id !== feature.properties._id,
+                ),
+                feature,
+              ]);
+            }
+          } catch {
+            // Map still refreshes from the server if the create payload is unreadable.
+          }
           setAddingLocation(undefined);
           setIsAdding(false);
           setSubmitError(undefined);
@@ -180,18 +225,18 @@ export const MapPageContent: FC<
           document.body.classList.remove("waiting");
         });
     },
-    [router],
+    [dict, router],
   );
 
   const handleClickFeature: (id: string) => void = useCallback(
     (id) => {
-      const feature = buildings?.features.find((f) => f.properties._id === id);
+      const feature = mapFeatures.find((f) => f.properties._id === id);
       if (!feature) return;
       setSelectedFeature(feature);
       setHasSelectedFeature(true);
       router.push(`${pathname}?${buildingToQueryParams(feature.properties)}`);
     },
-    [buildings?.features, pathname, router],
+    [mapFeatures, pathname, router],
   );
   const clearSelectedFeature = useCallback(() => {
     setHasSelectedFeature(false);
@@ -222,9 +267,9 @@ export const MapPageContent: FC<
   const filteredFeatures: BuildingCollection = {
     type: "FeatureCollection",
     features:
-      buildings?.features.filter(
+      mapFeatures.filter(
         (f) => typeof filter === "undefined" || f.properties.state === filter,
-      ) ?? [],
+      ),
   };
 
   const filteredOverlay: BuildingCollection = {
